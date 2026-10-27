@@ -62,7 +62,7 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 		});
 
 		tasks.named("check", task -> task.dependsOn(checkMappings, "javadoc"));
-		
+
 		// checkMappings has no outputs, so it is not automatically ordered after clean
 		checkMappings.configure(task -> task.mustRunAfter("clean"));
 	}

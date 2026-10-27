@@ -71,7 +71,7 @@ public abstract class CheckMappingsTask extends DefaultTask {
 	static void format(Path input, Path output) throws IOException {
 		MemoryMappingTree tree = new MemoryMappingTree();
 		MappingReader.read(input, MappingFormat.ENIGMA_DIR, tree);
-	
+
 		try (MappingWriter writer = MappingWriter.create(output, MappingFormat.ENIGMA_DIR)) {
 			tree.accept(new EmptyElementFilter(writer), VisitOrder.createByName());
 		}
