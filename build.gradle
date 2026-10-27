@@ -1,9 +1,12 @@
+import groovy.json.JsonSlurper
+
 plugins {
 	id 'maven-publish'
 	id 'net.fabricmc.filament'
 }
 
-def minecraft_version = "26.3"
+def config = new JsonSlurper().parseText(providers.fileContents(layout.projectDirectory.file('config.json')).asText.get())
+def minecraft_version = config.version
 
 def ENV = System.getenv()
 // Fetch build number from Github Actions

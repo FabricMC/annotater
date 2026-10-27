@@ -12,6 +12,7 @@
 !.gitattributes
 !.gitignore
 !build.gradle
+!config.json
 !gradle.properties
 !gradlew
 !gradlew.bat
