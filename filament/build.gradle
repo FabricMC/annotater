@@ -1,0 +1,44 @@
+plugins {
+	id 'java-gradle-plugin'
+	id 'checkstyle'
+}
+
+group = 'net.fabricmc'
+
+repositories {
+	maven {
+		name = "Fabric Repository"
+		url = 'https://maven.fabricmc.net'
+	}
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'net.fabricmc:fabric-loom:1.19.1'
+
+	// Loom only exposes these at runtime, so they are still needed to compile against. Match the versions used by loom
+	implementation 'net.fabricmc:mapping-io:0.8.0'
+	implementation 'org.ow2.asm:asm:9.11'
+	implementation 'org.vineflower:vineflower:1.12.0'
+
+	compileOnly 'org.jspecify:jspecify:1.0.0'
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = "UTF-8"
+	options.release = 25
+}
+
+checkstyle {
+	configFile = file('checkstyle.xml')
+	toolVersion = '14.3.0'
+}
+
+gradlePlugin {
+	plugins {
+		filament {
+			id = 'net.fabricmc.filament'
+			implementationClass = 'net.fabricmc.filament.FilamentGradlePlugin'
+		}
+	}
+}

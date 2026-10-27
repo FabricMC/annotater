@@ -1,0 +1,9 @@
+CLASS net/minecraft/util/Mth
+	COMMENT Math utilities.
+	METHOD clamp (III)I
+		COMMENT Clamps `value` between `min` and `max` (inclusive).
+		COMMENT
+		COMMENT @param value the value to clamp
+		COMMENT @param min the minimum value
+		COMMENT @param max the maximum value
+		COMMENT @return the clamped value

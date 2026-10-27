@@ -1,0 +1,63 @@
+plugins {
+	id 'maven-publish'
+	id 'net.fabricmc.filament'
+}
+
+def minecraft_version = "26.3"
+
+def ENV = System.getenv()
+// Fetch build number from Github Actions
+def build_number = ENV.BUILD_NUMBER ?: "local"
+
+version = "${minecraft_version}+build.$build_number"
+
+dependencies {
+	minecraft "com.mojang:minecraft:${minecraft_version}"
+
+	// Annotations used by Minecraft that are not in its libraries, and @Environment added by Loom when merging the jars
+	decompileClasspath 'com.google.code.findbugs:jsr305:3.0.2'
+	decompileClasspath 'org.jetbrains:annotations:26.1.0'
+	decompileClasspath 'net.fabricmc:fabric-loader:0.19.5'
+}
+
+// Disable the default jar task
+jar {
+	enabled = false
+}
+
+tasks.register('mappingsJar', Jar) {
+	from(convertMappings) {
+		into "mappings"
+	}
+	manifest {
+		attributes("Minecraft-Version-Id": minecraft_version)
+	}
+}
+
+assemble.dependsOn mappingsJar
+
+tasks.withType(AbstractArchiveTask).configureEach {
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
+}
+
+publishing {
+	publications {
+		register("maven", MavenPublication) {
+			groupId = 'net.fabricmc'
+			artifactId = "annotater"
+			artifact mappingsJar
+		}
+	}
+	repositories {
+		if (ENV.MAVEN_URL) {
+			maven {
+				url = ENV.MAVEN_URL
+				credentials {
+					username = ENV.MAVEN_USERNAME
+					password = ENV.MAVEN_PASSWORD
+				}
+			}
+		}
+	}
+}

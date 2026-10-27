@@ -1,0 +1,20 @@
+# Ignore everything
+/*
+
+# Folders
+!/.github
+!/filament
+!/gradle
+!/mappings
+
+# Files
+!.editorconfig
+!.gitattributes
+!.gitignore
+!build.gradle
+!gradle.properties
+!gradlew
+!gradlew.bat
+!LICENSE
+!README.md
+!settings.gradle

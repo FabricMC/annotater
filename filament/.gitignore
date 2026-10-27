@@ -1,0 +1,11 @@
+# Ignore everything
+/*
+
+# Folders
+!/src
+
+# Files
+!.gitignore
+!build.gradle
+!checkstyle.xml
+!settings.gradle
