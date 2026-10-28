@@ -4,15 +4,21 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.jar.Manifest;
 
 import javax.inject.Inject;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.GradleException;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileSystemOperations;
@@ -99,16 +105,32 @@ public abstract class DecompileTask extends DefaultTask {
 
 			// The top level classes containing javadocs, the nested classes are in the same file
 			Set<String> documented = new HashSet<>();
+			// The elements with javadocs, the index is used to identify them in the decompiled source
+			List<MappingTree.ElementMapping> javadocs = new ArrayList<>();
 
 			for (MappingTree.ClassMapping cls : tree.getClasses()) {
 				documented.add(cls.getSrcName().split("\\$")[0]);
+				javadocs.add(cls);
+				javadocs.addAll(cls.getFields());
+				javadocs.addAll(cls.getMethods());
+			}
+
+			javadocs.removeIf(element -> element.getComment() == null);
+			Map<MappingTree.ElementMapping, Integer> ids = new HashMap<>();
+
+			for (int i = 0; i < javadocs.size(); i++) {
+				if (javadocs.get(i).getComment().contains(MARKER)) {
+					throw new GradleException("Javadoc contains the marker \"" + MARKER + "\": " + javadocs.get(i).getComment());
+				}
+
+				ids.put(javadocs.get(i), i);
 			}
 
 			Map<String, Object> options = new HashMap<>();
-			options.put(IFabricJavadocProvider.PROPERTY_NAME, new JavadocProvider(tree));
+			options.put(IFabricJavadocProvider.PROPERTY_NAME, new JavadocProvider(tree, ids));
 			options.put(IFernflowerPreferences.THREADS, String.valueOf(Runtime.getRuntime().availableProcessors()));
 
-			Saver saver = new Saver(getParameters().getOutput().get().getAsFile().toPath(), documented);
+			Saver saver = new Saver(getParameters().getOutput().get().getAsFile().toPath(), documented, ConcurrentHashMap.newKeySet());
 			GradleLogger logger = new GradleLogger(Logging.getLogger(DecompileTask.class));
 			Fernflower fernflower = new Fernflower(saver, options, logger);
 			getParameters().getMinecraftJars().forEach(fernflower::addSource);
@@ -118,6 +140,24 @@ public abstract class DecompileTask extends DefaultTask {
 				fernflower.decompileContext();
 			} finally {
 				fernflower.clearContext();
+			}
+
+			// A javadoc missing from the source is on a member hidden by the decompiler, such as a synthetic method or record accessor
+			List<String> unused = new ArrayList<>();
+
+			for (int i = 0; i < javadocs.size(); i++) {
+				if (saver.written().contains(i)) continue;
+
+				unused.add(switch (javadocs.get(i)) {
+				case MappingTree.ClassMapping cls -> cls.getSrcName();
+				case MappingTree.FieldMapping field -> field.getOwner().getSrcName() + "." + field.getSrcName() + ":" + field.getSrcDesc();
+				case MappingTree.MethodMapping method -> method.getOwner().getSrcName() + "." + method.getSrcName() + method.getSrcDesc();
+				default -> throw new IllegalStateException("Unexpected mapping type: " + javadocs.get(i).getClass());
+				});
+			}
+
+			if (!unused.isEmpty()) {
+				throw new GradleException("Javadocs not in the decompiled source:\n\t" + String.join("\n\t", unused));
 			}
 		}
 	}
@@ -154,23 +194,30 @@ public abstract class DecompileTask extends DefaultTask {
 		}
 	}
 
-	private record JavadocProvider(MappingTree tree) implements IFabricJavadocProvider {
+	/// Marks the first line of each javadoc with its id, as the decompiler may discard a member after its javadoc was requested.
+	private static final String MARKER = "annotater-javadoc:";
+	private static final Pattern MARKER_LINE = Pattern.compile("^[ \\t]*/// " + MARKER + "(\\d+)\\R", Pattern.MULTILINE);
+
+	private record JavadocProvider(MappingTree tree, Map<MappingTree.ElementMapping, Integer> ids) implements IFabricJavadocProvider {
+		private @Nullable String getCommentWithMarker(MappingTree.@Nullable ElementMapping mapping) {
+			if (mapping == null || mapping.getComment() == null) return null;
+
+			return MARKER + ids.get(mapping) + "\n" + mapping.getComment();
+		}
+
 		@Override
 		public @Nullable String getClassDoc(StructClass cls) {
-			MappingTree.ClassMapping mapping = tree.getClass(cls.qualifiedName);
-			return mapping != null ? mapping.getComment() : null;
+			return getCommentWithMarker(tree.getClass(cls.qualifiedName));
 		}
 
 		@Override
 		public @Nullable String getFieldDoc(StructClass cls, StructField field) {
-			MappingTree.FieldMapping mapping = tree.getField(cls.qualifiedName, field.getName(), field.getDescriptor());
-			return mapping != null ? mapping.getComment() : null;
+			return getCommentWithMarker(tree.getField(cls.qualifiedName, field.getName(), field.getDescriptor()));
 		}
 
 		@Override
 		public @Nullable String getMethodDoc(StructClass cls, StructMethod method) {
-			MappingTree.MethodMapping mapping = tree.getMethod(cls.qualifiedName, method.getName(), method.getDescriptor());
-			return mapping != null ? mapping.getComment() : null;
+			return getCommentWithMarker(tree.getMethod(cls.qualifiedName, method.getName(), method.getDescriptor()));
 		}
 
 		@Override
@@ -189,11 +236,18 @@ public abstract class DecompileTask extends DefaultTask {
 		}
 	}
 
-	/// Saves the sources of the documented classes, and nothing else.
-	private record Saver(Path output, Set<String> documented) implements IResultSaver {
+	/// Saves the sources of the documented classes with the markers removed, recording the ids of the javadocs written.
+	private record Saver(Path output, Set<String> documented, Set<Integer> written) implements IResultSaver {
 		@Override
 		public void saveClassEntry(String path, String archiveName, String qualifiedName, String entryName, @Nullable String content) {
 			if (content == null || !documented.contains(qualifiedName)) return;
+
+			// Strip the marker, recording that the marker was seen
+			Matcher matcher = MARKER_LINE.matcher(content);
+			content = matcher.replaceAll(result -> {
+				written.add(Integer.parseInt(result.group(1)));
+				return "";
+			});
 
 			try {
 				Path file = output.resolve(entryName);
