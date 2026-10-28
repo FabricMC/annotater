@@ -1,14 +1,15 @@
 CLASS net/minecraft/resources/Identifier
 	METHOD assertValidPath (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-		COMMENT Throws `IdentifierException` if the path contains a non [a-z0-9/._-] character.
+		COMMENT @throws IdentifierException If the path contains a non `[a-z0-9/._-]` character.
 	METHOD fromNamespaceAndPath (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-		COMMENT Creates an identifier from a namespace and a path. Throws `IdentifierException` if either string contains an invalid character.
-		COMMENT @param namespace The namespace of the Identifier. Note the character set is restricted to `[a-z0-9_.-]`.
-		COMMENT @param path The path of the Identifier. Note that the character set is restricted to `[a-z0-9/._-]`
+		COMMENT Creates an identifier from a namespace and a path.
+		COMMENT @param namespace The namespace of the `Identifier`. Note the character set is restricted to `[a-z0-9_.-]`.
+		COMMENT @param path The path of the `Identifier`. Note that the character set is restricted to `[a-z0-9/._-]`
+		COMMENT @throws IdentifierException If either string contains an invalid character.
 	METHOD tryBuild (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
 		COMMENT Creates an identifier from a namespace and a path. Returns `null` if either string contains an invalid character.
-		COMMENT @param namespace The namespace of the Identifier. Note the character set is restricted to `[a-z0-9_.-]`.
-		COMMENT @param path The path of the Identifier. Note that the character set is restricted to `[a-z0-9/._-]`
+		COMMENT @param namespace The namespace of the `Identifier`. Note the character set is restricted to `[a-z0-9_.-]`.
+		COMMENT @param path The path of the `Identifier`. Note that the character set is restricted to `[a-z0-9/._-]`
 	METHOD withDefaultNamespace (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-		COMMENT Creates an Identifier in the vanilla `minecraft` namespace.
-		COMMENT @param path The path of the Identifier. Note that the character set is restricted to `[a-z0-9/._-]`
+		COMMENT Creates an `Identifier` in the vanilla `minecraft` namespace.
+		COMMENT @param path The path of the `Identifier`. Note that the character set is restricted to `[a-z0-9/._-]`
