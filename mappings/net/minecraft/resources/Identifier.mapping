@@ -1,15 +1,40 @@
 CLASS net/minecraft/resources/Identifier
+	COMMENT `Identifier`s are used in Minecraft's code to identify a resource's location. 
+	COMMENT To avoid ambiguity, they consist of a namespace representing the creator of the resource and the path to the resource. 
+	COMMENT When converted to a string, the namespace and path are combined becoming `namespace:path`.
 	METHOD assertValidPath (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 		COMMENT @throws IdentifierException If the path contains a non `[a-z0-9/._-]` character.
 	METHOD fromNamespaceAndPath (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
 		COMMENT Creates an identifier from a namespace and a path.
-		COMMENT @param namespace The namespace of the `Identifier`. Note the character set is restricted to `[a-z0-9_.-]`.
-		COMMENT @param path The path of the `Identifier`. Note that the character set is restricted to `[a-z0-9/._-]`
+		COMMENT @param namespace The namespace, restricted to `[a-z0-9_.-]`.
+		COMMENT @param path The path, restricted to `[a-z0-9/._-]`
+		COMMENT @return An `Identifier` created from the namespace and path.
 		COMMENT @throws IdentifierException If either string contains an invalid character.
+	METHOD toLanguageKey ()Ljava/lang/String;
+		COMMENT @return A translation key in the format `namespace.path`.
+	METHOD toLanguageKey (Ljava/lang/String;)Ljava/lang/String;
+		COMMENT @return A translation key in the format `prefix.namespace.path`.
+	METHOD toLanguageKey (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+		COMMENT @return A translation key in the format `prefix.namespace.path.suffix`.
+	METHOD toShortLanguageKey ()Ljava/lang/String;
+		COMMENT @return A translation key in the format `namespace.path`. If the namespace is `minecraft`, the translation key is shortened to `path`.
 	METHOD tryBuild (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-		COMMENT Creates an identifier from a namespace and a path. Returns `null` if either string contains an invalid character.
-		COMMENT @param namespace The namespace of the `Identifier`. Note the character set is restricted to `[a-z0-9_.-]`.
-		COMMENT @param path The path of the `Identifier`. Note that the character set is restricted to `[a-z0-9/._-]`
+		COMMENT Creates an `Identifier` from a namespace and a path.
+		COMMENT @param namespace The namespace, restricted to `[a-z0-9_.-]`.
+		COMMENT @param path The path, restricted to `[a-z0-9/._-]`
+		COMMENT @return An `Identifier` created from the namespace and path, or `null` if either string contains an invalid character.
 	METHOD withDefaultNamespace (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
 		COMMENT Creates an `Identifier` in the vanilla `minecraft` namespace.
 		COMMENT @param path The path of the `Identifier`. Note that the character set is restricted to `[a-z0-9/._-]`
+	METHOD withPath (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
+		COMMENT @param newPath The path, restricted to `[a-z0-9/._-]`
+		COMMENT @return A new `Identifier` with the same namespace and a different path.
+	METHOD withPath (Ljava/util/function/UnaryOperator;)Lnet/minecraft/resources/Identifier;
+		COMMENT @param modifier A modifier to prepend to the existing path, with the result restricted to `[a-z0-9/._-]`
+		COMMENT @return Creates a new `Identifier` with the same namespace and a different path.
+	METHOD withPrefix (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
+		COMMENT @param prefix A string to prepend to the existing path, restricted to `[a-z0-9/._-]`
+		COMMENT @return a new `Identifier` with the same namespace and a different path.
+	METHOD withSuffix (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
+		COMMENT @param suffix A string to append to the existing path, restricted to `[a-z0-9/._-]`
+		COMMENT @return A new `Identifier` with the same namespace and a different path.
