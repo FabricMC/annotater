@@ -10,7 +10,7 @@ import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 
-import net.fabricmc.mappingio.MappingReader;
+import net.fabricmc.filament.util.Mappings;
 import net.fabricmc.mappingio.MappingWriter;
 import net.fabricmc.mappingio.format.MappingFormat;
 import net.fabricmc.mappingio.tree.MemoryMappingTree;
@@ -26,8 +26,7 @@ public abstract class ConvertMappingsTask extends DefaultTask {
 
 	@TaskAction
 	public void run() throws IOException {
-		MemoryMappingTree tree = new MemoryMappingTree();
-		MappingReader.read(getMappings().get().getAsFile().toPath(), MappingFormat.ENIGMA_DIR, tree);
+		MemoryMappingTree tree = Mappings.read(getMappings().get().getAsFile().toPath());
 		tree.setSrcNamespace("official");
 		tree.setDstNamespaces(List.of());
 		tree.visitMetadata("markdown", null);
