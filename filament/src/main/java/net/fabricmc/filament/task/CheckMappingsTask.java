@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -22,14 +21,13 @@ import org.gradle.api.tasks.TaskAction;
 import org.jspecify.annotations.Nullable;
 
 import net.fabricmc.filament.util.ClassPath;
+import net.fabricmc.filament.util.Mappings;
 import net.fabricmc.mappingio.MappedElementKind;
 import net.fabricmc.mappingio.MappingReader;
 import net.fabricmc.mappingio.MappingVisitor;
-import net.fabricmc.mappingio.MappingWriter;
-import net.fabricmc.mappingio.adapter.EmptyElementFilter;
+import net.fabricmc.mappingio.adapter.ForwardingMappingVisitor;
+import net.fabricmc.mappingio.adapter.NopMappingVisitor;
 import net.fabricmc.mappingio.format.MappingFormat;
-import net.fabricmc.mappingio.tree.MemoryMappingTree;
-import net.fabricmc.mappingio.tree.VisitOrder;
 
 /// Checks that the mappings only contain javadocs, have no duplicates, are formatted
 /// and only reference classes and members that exist in the Minecraft jars.
@@ -46,11 +44,11 @@ public abstract class CheckMappingsTask extends DefaultTask {
 		Set<String> errors = new LinkedHashSet<>();
 
 		try (ClassPath minecraft = new ClassPath(getMinecraftJars())) {
-			MappingReader.read(mappings, MappingFormat.ENIGMA_DIR, new Validator(minecraft, errors));
+			MappingReader.read(mappings, MappingFormat.ENIGMA_DIR, new Validator(new NopMappingVisitor(true), minecraft, errors));
 		}
 
 		Path formatted = getTemporaryDir().toPath();
-		CheckMappingsTask.format(mappings, formatted);
+		Mappings.write(Mappings.read(mappings), formatted);
 		Map<String, String> expected = readMappingFiles(formatted);
 		Map<String, String> actual = readMappingFiles(mappings);
 		Set<String> files = new HashSet<>(expected.keySet());
@@ -68,15 +66,6 @@ public abstract class CheckMappingsTask extends DefaultTask {
 		}
 	}
 
-	static void format(Path input, Path output) throws IOException {
-		MemoryMappingTree tree = new MemoryMappingTree();
-		MappingReader.read(input, MappingFormat.ENIGMA_DIR, tree);
-
-		try (MappingWriter writer = MappingWriter.create(output, MappingFormat.ENIGMA_DIR)) {
-			tree.accept(new EmptyElementFilter(writer), VisitOrder.createByName());
-		}
-	}
-
 	private static Map<String, String> readMappingFiles(Path dir) throws IOException {
 		Map<String, String> files = new HashMap<>();
 
@@ -89,7 +78,8 @@ public abstract class CheckMappingsTask extends DefaultTask {
 		return files;
 	}
 
-	private static final class Validator implements MappingVisitor {
+	/// Records the errors in the mappings, forwarding only the valid mappings to the next visitor.
+	static final class Validator extends ForwardingMappingVisitor {
 		private final ClassPath minecraft;
 		private final Set<String> errors;
 		private final Set<String> visited = new HashSet<>();
@@ -98,17 +88,14 @@ public abstract class CheckMappingsTask extends DefaultTask {
 		// The element currently being visited, used for error messages
 		private @Nullable String element;
 
-		private Validator(ClassPath minecraft, Set<String> errors) {
+		Validator(MappingVisitor next, ClassPath minecraft, Set<String> errors) {
+			super(next);
 			this.minecraft = minecraft;
 			this.errors = errors;
 		}
 
 		@Override
-		public void visitNamespaces(String srcNamespace, List<String> dstNamespaces) {
-		}
-
-		@Override
-		public boolean visitClass(String srcName) {
+		public boolean visitClass(String srcName) throws IOException {
 			// Classes may be visited more than once (e.g. after a nested class), so duplicates are checked by their comment
 			className = element = srcName;
 			members = minecraft.getMembers(srcName);
@@ -118,27 +105,28 @@ public abstract class CheckMappingsTask extends DefaultTask {
 				return false;
 			}
 
-			return true;
+			return super.visitClass(srcName);
 		}
 
 		@Override
-		public boolean visitField(String srcName, @Nullable String srcDesc) {
-			return visitMember(srcName + ":" + srcDesc);
+		public boolean visitField(String srcName, @Nullable String srcDesc) throws IOException {
+			return visitMember(srcName + ":" + srcDesc, Mappings.fieldKey(className, srcName, srcDesc)) && super.visitField(srcName, srcDesc);
 		}
 
 		@Override
-		public boolean visitMethod(String srcName, @Nullable String srcDesc) {
-			return visitMember(srcName + srcDesc);
+		public boolean visitMethod(String srcName, @Nullable String srcDesc) throws IOException {
+			return visitMember(srcName + srcDesc, Mappings.methodKey(className, srcName, srcDesc)) && super.visitMethod(srcName, srcDesc);
 		}
 
-		private boolean visitMember(String key) {
-			element = className + "." + key;
+		private boolean visitMember(String member, String key) {
+			element = key;
 
+			// Duplicates are still forwarded, merging them so only one is kept
 			if (!visited.add(element)) {
 				errors.add(element + " is duplicated");
 			}
 
-			if (!members.contains(key)) {
+			if (!members.contains(member)) {
 				errors.add(element + " does not exist");
 				return false;
 			}
@@ -164,10 +152,12 @@ public abstract class CheckMappingsTask extends DefaultTask {
 		}
 
 		@Override
-		public void visitComment(MappedElementKind targetKind, String comment) {
+		public void visitComment(MappedElementKind targetKind, String comment) throws IOException {
 			if (targetKind == MappedElementKind.CLASS && !visited.add(element)) {
 				errors.add(element + " has duplicate javadocs");
 			}
+
+			super.visitComment(targetKind, comment);
 		}
 	}
 }
