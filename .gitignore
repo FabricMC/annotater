@@ -13,6 +13,7 @@
 !.gitignore
 !build.gradle
 !config.json
+!CONVENTIONS.md
 !gradle.properties
 !gradlew
 !gradlew.bat
