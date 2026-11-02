@@ -13,11 +13,11 @@
 !.gitignore
 !build.gradle
 !config.json
+!CONTRIBUTING.md
 !CONVENTIONS.md
 !gradle.properties
 !gradlew
 !gradlew.bat
 !LICENSE
-!CONTRIBUTING.md
 !README.md
 !settings.gradle
