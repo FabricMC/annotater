@@ -60,3 +60,23 @@ For syntax reference, see [Oracle's JavaDoc Guide](https://docs.oracle.com/en/ja
 public static int veryGoodNumber() { /*...*/ }
 ```
 
+## Explain parameters and return values only when needed
+
+Use `@param`, `@return`, and `@throws` when they help the reader better understand a method's usage. Information may be repeated from the rest of the JavaDoc. **Use short phrases without an inital capital or final period.**
+
+Document only the parameters of a method that need explanation. A method may have both documented and undocumented parameters.
+
+Take special care to document special parameter cases (such as using `-1` to indicate no limit). 
+
+Use `@throws` to explain a relevent failure condition, not to list every exception that could be produced.
+
+```diff
++/// ...
++/// @param namespace the namespace, restricted to `[a-z0-9_.-]`
+public static Identifier fromNamespaceAndPath(String namespace, String path) {/*...*/}
+
++/// ...
++/// @param timeout the maximum wait in milliseconds, or `-1` to wait indefinitely
+public void waitForEndUpdate(long timeout) {/*...*/}
+```
+
