@@ -52,13 +52,18 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.getModules().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath().dir("jmods")));
 			task.getOutput().set(buildDir.file("javaRuntime/java-runtime.jar"));
 		});
-		tasks.register("syncRuntimeLibs", Sync.class, task -> {
+		var syncRuntimeLibs = tasks.register("syncRuntimeLibs", Sync.class, task -> {
 			task.setGroup("build");
 			task.setDescription("Syncs Minecraft dependencies and Java runtime classes, excluding the Minecraft jars.");
 			task.from(decompileClasspath);
 			task.from(javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
 			task.include("*.jar");
 			task.into(buildDir.dir("runtime_libs"));
+		});
+		tasks.register("prepareMcSrc", task -> {
+			task.setGroup("build");
+			task.setDescription("Prepares the project for mcsrc.");
+			task.dependsOn(syncRuntimeLibs);
 		});
 
 		final Directory unpickDefinitions = project.getLayout().getProjectDirectory().dir("unpick-definitions");
