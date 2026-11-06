@@ -1,4 +1,6 @@
 {
     "version": "26.3",
-    "mappings": "mappings"
+    "mappings": "mappings",
+    "runtimeLibraries": "build/runtime_libs",
+    "unpickDefinitions": "unpick-definitions"
 }

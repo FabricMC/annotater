@@ -7,10 +7,12 @@ import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.provider.Provider;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.Sync;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.external.javadoc.StandardJavadocDocletOptions;
+import org.gradle.jvm.toolchain.JavaToolchainService;
 
 import net.fabricmc.filament.task.CheckDecompileTask;
 import net.fabricmc.filament.task.CheckMappingsTask;
@@ -21,6 +23,9 @@ import net.fabricmc.filament.task.DropDecompileErrorsTask;
 import net.fabricmc.filament.task.DropJavadocErrorsTask;
 import net.fabricmc.filament.task.FixMappingsTask;
 import net.fabricmc.filament.task.FormatMappingsTask;
+import net.fabricmc.filament.task.JavaRuntimeJarTask;
+import net.fabricmc.filament.task.unpick.CheckUnpickDefinitionsTask;
+import net.fabricmc.filament.task.unpick.CombineUnpickDefinitionsTask;
 import net.fabricmc.filament.util.FilamentConstants;
 import net.fabricmc.loom.api.LoomGradleExtensionAPI;
 
@@ -39,6 +44,34 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 		final Configuration decompileClasspath = project.getConfigurations().create("decompileClasspath", configuration -> {
 			configuration.setCanBeConsumed(false);
 			configuration.extendsFrom(minecraftLibraries);
+		});
+
+		var toolchain = project.getExtensions().getByType(JavaPluginExtension.class).getToolchain();
+		var javaLauncher = project.getExtensions().getByType(JavaToolchainService.class).launcherFor(toolchain);
+		var javaRuntimeJar = tasks.register("javaRuntimeJar", JavaRuntimeJarTask.class, task -> {
+			task.getModules().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath().dir("jmods")));
+			task.getOutput().set(buildDir.file("javaRuntime/java-runtime.jar"));
+		});
+		tasks.register("syncRuntimeLibs", Sync.class, task -> {
+			task.setGroup("build");
+			task.setDescription("Syncs Minecraft dependencies and Java runtime classes, excluding the Minecraft jars.");
+			task.from(decompileClasspath);
+			task.from(javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
+			task.include("*.jar");
+			task.into(buildDir.dir("runtime_libs"));
+		});
+
+		final Directory unpickDefinitions = project.getLayout().getProjectDirectory().dir("unpick-definitions");
+		var checkUnpickDefinitions = tasks.register("checkUnpickDefinitions", CheckUnpickDefinitionsTask.class, task -> {
+			task.setGroup("unpick");
+			task.getInput().set(unpickDefinitions);
+			task.getClasspath().from(minecraftJars, decompileClasspath, javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
+		});
+		tasks.register("combineUnpickDefinitions", CombineUnpickDefinitionsTask.class, task -> {
+			task.setGroup("unpick");
+			task.dependsOn(checkUnpickDefinitions);
+			task.getInput().set(unpickDefinitions);
+			task.getOutput().set(buildDir.file("unpick/definitions.unpick"));
 		});
 
 		var checkMappings = tasks.register("checkMappings", CheckMappingsTask.class, task -> {
@@ -72,11 +105,12 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			FilamentConstants.JAVADOC_OPTIONS.forEach(flag -> options.addBooleanOption(flag.substring(1), true));
 		});
 
-		tasks.named("check", task -> task.dependsOn(checkMappings, checkDecompile, "javadoc"));
+		tasks.named("check", task -> task.dependsOn(checkMappings, checkDecompile, checkUnpickDefinitions, "javadoc"));
 
 		// The check tasks have no outputs, so they are not automatically ordered after clean
 		checkMappings.configure(task -> task.mustRunAfter("clean"));
 		checkDecompile.configure(task -> task.mustRunAfter("clean"));
+		checkUnpickDefinitions.configure(task -> task.mustRunAfter("clean"));
 
 		// A pipeline fixing the mappings, each step dropping the mappings failing one of the checks
 		var dropCheckMappingsErrors = tasks.register("dropCheckMappingsErrors", DropCheckMappingsErrorsTask.class, task -> {

@@ -6,6 +6,7 @@
 !/filament
 !/gradle
 !/mappings
+!/unpick-definitions
 
 # Files
 !.editorconfig
