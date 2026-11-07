@@ -32,6 +32,12 @@ tasks.register('mappingsJar', Jar) {
 	from(convertMappings) {
 		into "mappings"
 	}
+	from(combineUnpickDefinitions) {
+		into "extras"
+	}
+	from('unpick-definitions/unpick.json') {
+		into "extras"
+	}
 	manifest {
 		attributes("Minecraft-Version-Id": minecraft_version)
 	}

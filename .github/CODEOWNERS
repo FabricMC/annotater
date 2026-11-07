@@ -1,3 +1,20 @@
-* @FabricMC/toolchain-maintainers
 
-/mappings/ @FabricMC/annotater-maintainers @FabricMC/toolchain-maintainers
+# Folders
+/.github @FabricMC/toolchain-maintainers
+/filament @FabricMC/toolchain-maintainers
+/gradle @FabricMC/toolchain-maintainers
+/mappings @FabricMC/annotater-maintainers
+/unpick-definitions @FabricMC/annotater-maintainers
+
+# Files
+.editorconfig @FabricMC/toolchain-maintainers
+.gitattributes @FabricMC/toolchain-maintainers
+.gitignore @FabricMC/toolchain-maintainers
+build.gradle @FabricMC/toolchain-maintainers
+config.json @FabricMC/toolchain-maintainers
+gradle.properties @FabricMC/toolchain-maintainers
+gradlew @FabricMC/toolchain-maintainers
+gradlew.bat @FabricMC/toolchain-maintainers
+LICENSE @FabricMC/toolchain-maintainers
+README.md @FabricMC/toolchain-maintainers
+settings.gradle @FabricMC/toolchain-maintainers
