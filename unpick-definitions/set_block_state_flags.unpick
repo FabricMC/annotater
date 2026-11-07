@@ -1,0 +1,36 @@
+unpick v4
+
+#: Flags used by LevelWriter.setBlock.
+group int set_block_state_flags
+	@flags
+	net.minecraft.world.level.block.Block.UPDATE_SKIP_ALL_SIDEEFFECTS
+	net.minecraft.world.level.block.Block.UPDATE_NONE
+	net.minecraft.world.level.block.Block.UPDATE_ALL_IMMEDIATE
+	net.minecraft.world.level.block.Block.UPDATE_ALL
+	net.minecraft.world.level.block.Block.UPDATE_NEIGHBORS
+	net.minecraft.world.level.block.Block.UPDATE_CLIENTS
+	net.minecraft.world.level.block.Block.UPDATE_INVISIBLE
+	net.minecraft.world.level.block.Block.UPDATE_IMMEDIATE
+	net.minecraft.world.level.block.Block.UPDATE_KNOWN_SHAPE
+	net.minecraft.world.level.block.Block.UPDATE_SUPPRESS_DROPS
+	net.minecraft.world.level.block.Block.UPDATE_MOVE_BY_PISTON
+	net.minecraft.world.level.block.Block.UPDATE_SKIP_SHAPE_UPDATE_ON_WIRE
+	net.minecraft.world.level.block.Block.UPDATE_SKIP_BLOCK_ENTITY_SIDEEFFECTS
+	net.minecraft.world.level.block.Block.UPDATE_SKIP_ON_PLACE
+
+target_annotation net.minecraft.world.level.block.Block$UpdateFlags set_block_state_flags
+
+target_method net.minecraft.world.level.Level sendBlockUpdated (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;I)V
+	param 3 set_block_state_flags
+target_method net.minecraft.world.level.redstone.NeighborUpdater shapeUpdate (Lnet/minecraft/core/Direction;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;II)V
+	param 4 set_block_state_flags
+target_method net.minecraft.server.level.WorldGenRegion setBlock (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z
+	param 2 set_block_state_flags
+target_method net.minecraft.world.level.chunk.ChunkAccess setBlockState (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Lnet/minecraft/world/level/block/state/BlockState;
+	param 2 set_block_state_flags
+
+# Vanilla uses TYPE_USE annotations, which Unpick does not currently inspect.
+target_method net.minecraft.world.level.LevelWriter setBlock (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z
+	param 2 set_block_state_flags
+target_method net.minecraft.world.level.LevelWriter setBlock (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z
+	param 2 set_block_state_flags
