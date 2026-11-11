@@ -17,7 +17,7 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT @return the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int` or `0xFFFFFF` if the Entity is not part of a Team or the Team has no color
 	METHOD isSpectator ()Z
 		COMMENT Returns whether the Entity is an instance of [`Player`][net.minecraft.world.entity.player.Player] whose [`GameType`][net.minecraft.world.level.GameType] is set to [`GameType#SPECTATOR`][net.minecraft.world.level.GameType#SPECTATOR].
-		COMMENT @see [`Player#gameMode()`][net.minecraft.world.entity.player.Player#gameMode()]
+		COMMENT @see net.minecraft.world.entity.player.Player#gameMode() `Player#gameMode()`
 	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
 		COMMENT Kills this Entity.
 		COMMENT This removes this Entity from the [`Level`][net.minecraft.world.level.Level] it is in.
