@@ -1,0 +1,21 @@
+CLASS net/minecraft/world/entity/Entity
+	FIELD TAG_ID Ljava/lang/String;
+		COMMENT Auxiliary constants used to determine Stringification of components.\r
+		COMMENT @see ValueOutput
+	FIELD uuid Ljava/util/UUID;
+		COMMENT A [java.util.UUID] used to distinguish between different instances of Entity.
+	METHOD addTag (Ljava/lang/String;)Z
+		COMMENT Adds a tag to this Entity.\r
+		COMMENT @see net.minecraft.server.commands.TagCommand   
+	METHOD entityTags ()Ljava/util/Set;
+		COMMENT Returns this Entity's tags.\r
+		COMMENT @see net.minecraft.server.commands.TagCommand   
+	METHOD getTeamColor ()I
+		COMMENT Returns the color associated with the [net.minecraft.world.scores.Team] this Entity is part of as an RGB `int`.\r
+		COMMENT @return the color associated with the [net.minecraft.world.scores.Team] this Entity is part of as an RGB `int` or `0xFFFFFF` if the Entity is not part of a Team or the Team has no color
+	METHOD isSpectator ()Z
+		COMMENT Returns whether the Entity is an instance of [net.minecraft.world.entity.player.Player] whose [net.minecraft.world.level.GameType] is set to [net.minecraft.world.level.GameType#SPECTATOR].\r
+		COMMENT @see net.minecraft.world.entity.player.Player#gameMode()
+	METHOD removeTag (Ljava/lang/String;)Z
+		COMMENT Removes a tag from this Entity.\r
+		COMMENT @see net.minecraft.server.commands.TagCommand   
