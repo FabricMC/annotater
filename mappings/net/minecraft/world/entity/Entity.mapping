@@ -1,31 +1,31 @@
 CLASS net/minecraft/world/entity/Entity
 	FIELD TAG_ID Ljava/lang/String;
-		COMMENT Auxiliary constants used to determine Stringification of components.\r
+		COMMENT Auxiliary constants used to determine Stringification of components.
 		COMMENT @see ValueOutput
 	FIELD uuid Ljava/util/UUID;
 		COMMENT A [`UUID`][java.util.UUID] used to distinguish between different instances of Entity.
 	METHOD addTag (Ljava/lang/String;)Z
-		COMMENT Adds a tag to this Entity.\r
+		COMMENT Adds a tag to this Entity.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	METHOD discard ()V
 		COMMENT Removes this Entity from the [Level] it is in. The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 	METHOD entityTags ()Ljava/util/Set;
-		COMMENT Returns this Entity's tags.\r
+		COMMENT Returns this Entity's tags.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	METHOD getTeamColor ()I
-		COMMENT Returns the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int`.\r
+		COMMENT Returns the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int`.
 		COMMENT @return the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int` or `0xFFFFFF` if the Entity is not part of a Team or the Team has no color
 	METHOD isSpectator ()Z
-		COMMENT Returns whether the Entity is an instance of [`Player`][net.minecraft.world.entity.player.Player] whose [`GameType`][net.minecraft.world.level.GameType] is set to [`GameType#SPECTATOR`][net.minecraft.world.level.GameType#SPECTATOR].\r
+		COMMENT Returns whether the Entity is an instance of [`Player`][net.minecraft.world.entity.player.Player] whose [`GameType`][net.minecraft.world.level.GameType] is set to [`GameType#SPECTATOR`][net.minecraft.world.level.GameType#SPECTATOR].
 		COMMENT @see [`Player#gameMode()`][net.minecraft.world.entity.player.Player#gameMode()]
 	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
-		COMMENT Kills this Entity.\r
-		COMMENT This removes this Entity from the [Level] it is in.\r
-		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.\r
-		COMMENT \r
+		COMMENT Kills this Entity.
+		COMMENT This removes this Entity from the [Level] it is in.
+		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
+		COMMENT
 		COMMENT Additionally, the [`GameEvent`][net.minecraft.world.level.gameevent.GameEvent] [`GameEvent#ENTITY_DIE`][net.minecraft.world.level.gameevent.GameEvent#ENTITY_DIE] is broadcast.
 	METHOD removeTag (Ljava/lang/String;)Z
-		COMMENT Removes a tag from this Entity.\r
+		COMMENT Removes a tag from this Entity.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	CLASS RemovalReason
 		COMMENT Reasons an [`Entity`][net.minecraft.world.entity.Entity] is removed from a [`Level`][net.minecraft.world.level.Level]
