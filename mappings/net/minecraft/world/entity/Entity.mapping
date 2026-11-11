@@ -7,6 +7,8 @@ CLASS net/minecraft/world/entity/Entity
 	METHOD addTag (Ljava/lang/String;)Z
 		COMMENT Adds a tag to this Entity.\r
 		COMMENT @see net.minecraft.server.commands.TagCommand   
+	METHOD discard ()V
+		COMMENT Removes this Entity from the [Level] it is in. The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 	METHOD entityTags ()Ljava/util/Set;
 		COMMENT Returns this Entity's tags.\r
 		COMMENT @see net.minecraft.server.commands.TagCommand   
@@ -16,6 +18,14 @@ CLASS net/minecraft/world/entity/Entity
 	METHOD isSpectator ()Z
 		COMMENT Returns whether the Entity is an instance of [net.minecraft.world.entity.player.Player] whose [net.minecraft.world.level.GameType] is set to [net.minecraft.world.level.GameType#SPECTATOR].\r
 		COMMENT @see net.minecraft.world.entity.player.Player#gameMode()
+	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
+		COMMENT Kills this Entity.\r
+		COMMENT This removes this Entity from the [Level] it is in.\r
+		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.\r
+		COMMENT \r
+		COMMENT Additionally, the [net.minecraft.world.level.gameevent.GameEvent] [net.minecraft.world.level.gameevent.GameEvent#ENTITY_DIE] is broadcast.
 	METHOD removeTag (Ljava/lang/String;)Z
 		COMMENT Removes a tag from this Entity.\r
 		COMMENT @see net.minecraft.server.commands.TagCommand   
+	CLASS RemovalReason
+		COMMENT Reasons an [net.minecraft.world.entity.Entity] is removed from a level
