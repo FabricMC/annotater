@@ -16,11 +16,11 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT Returns the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int`.
 		COMMENT @return the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int` or `0xFFFFFF` if the Entity is not part of a Team or the Team has no color
 	METHOD isSpectator ()Z
-		COMMENT Returns whether the Entity is an instance of [`Player`][net.minecraft.world.entity.player.Player] whose [`GameType`][net.minecraft.world.level.GameType] is set to [`GameType#SPECTATOR`][net.minecraft.world.level.GameType#SPECTATOR].
+		COMMENT Returns whether this Entity is an instance of [`Player`][net.minecraft.world.entity.player.Player] whose [`GameType`][net.minecraft.world.level.GameType] is set to [`GameType#SPECTATOR`][net.minecraft.world.level.GameType#SPECTATOR].
 		COMMENT @see net.minecraft.world.entity.player.Player#gameMode() `Player#gameMode()`
 	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
 		COMMENT Kills this Entity.
-		COMMENT This removes this Entity from the [`Level`][net.minecraft.world.level.Level] it is in.
+		COMMENT This removes the Entity from the [`Level`][net.minecraft.world.level.Level] it is in.
 		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 		COMMENT
 		COMMENT Additionally, [`GameEvent.ENTITY_DIE`][net.minecraft.world.level.gameevent.GameEvent#ENTITY_DIE] is broadcast.
@@ -28,4 +28,4 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT Removes a tag from this Entity.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	CLASS RemovalReason
-		COMMENT Reasons an [`Entity`][net.minecraft.world.entity.Entity] is removed from a [`Level`][net.minecraft.world.level.Level]
+		COMMENT Reasons an [`Entity`][net.minecraft.world.entity.Entity] is removed from a [`Level`][net.minecraft.world.level.Level].
