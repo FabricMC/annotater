@@ -1,7 +1,7 @@
 CLASS net/minecraft/world/entity/Entity
 	FIELD TAG_ID Ljava/lang/String;
 		COMMENT Auxiliary constants used to determine Stringification of components.
-		COMMENT @see ValueOutput
+		COMMENT @see net.minecraft.world.level.storage.ValueOutput `ValueOutput`
 	FIELD uuid Ljava/util/UUID;
 		COMMENT A [`UUID`][java.util.UUID] used to distinguish between different instances of Entity.
 	METHOD addTag (Ljava/lang/String;)Z
