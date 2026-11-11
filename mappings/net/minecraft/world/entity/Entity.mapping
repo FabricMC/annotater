@@ -8,7 +8,7 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT Adds a tag to this Entity.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	METHOD discard ()V
-		COMMENT Removes this Entity from the [Level] it is in. The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
+		COMMENT Removes this Entity from the [Level][net.minecraft.world.level.Level] it is in. The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 	METHOD entityTags ()Ljava/util/Set;
 		COMMENT Returns this Entity's tags.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
@@ -20,7 +20,7 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT @see [`Player#gameMode()`][net.minecraft.world.entity.player.Player#gameMode()]
 	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
 		COMMENT Kills this Entity.
-		COMMENT This removes this Entity from the [Level] it is in.
+		COMMENT This removes this Entity from the [Level][net.minecraft.world.level.Level] it is in.
 		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 		COMMENT
 		COMMENT Additionally, [`GameEvent.ENTITY_DIE`][net.minecraft.world.level.gameevent.GameEvent#ENTITY_DIE] is broadcast.
