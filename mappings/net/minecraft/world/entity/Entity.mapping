@@ -1,7 +1,4 @@
 CLASS net/minecraft/world/entity/Entity
-	FIELD TAG_ID Ljava/lang/String;
-		COMMENT Auxiliary constants used to determine Stringification of components.
-		COMMENT @see net.minecraft.world.level.storage.ValueOutput `ValueOutput`
 	FIELD uuid Ljava/util/UUID;
 		COMMENT A [`UUID`][java.util.UUID] used to distinguish between different instances of Entity.
 	METHOD discard ()V
@@ -10,11 +7,8 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT Returns this Entity's tags.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	METHOD getTeamColor ()I
-		COMMENT Returns the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int`.
-		COMMENT @return the team color as an RGB `int`, or `0xFFFFFF` if the Entity is not part of a Team or the Team has no color
-	METHOD isSpectator ()Z
-		COMMENT Returns whether this Entity is an instance of [`Player`][net.minecraft.world.entity.player.Player] whose [`GameType`][net.minecraft.world.level.GameType] is set to [`GameType#SPECTATOR`][net.minecraft.world.level.GameType#SPECTATOR].
-		COMMENT @see net.minecraft.world.entity.player.Player#gameMode() `Player#gameMode()`
+		COMMENT Returns the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of in the `0xRRGGBB` format.
+		COMMENT @return the team color in the `0xRRGGBB` format, or [`CommonColors.WHITE`][net.minecraft.util.CommonColors#WHITE] if the Entity is not part of a Team or the Team has no color
 	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
 		COMMENT Kills this Entity.
 		COMMENT This removes the Entity from the [`Level`][net.minecraft.world.level.Level] it is in.
