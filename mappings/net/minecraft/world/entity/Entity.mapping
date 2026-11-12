@@ -21,8 +21,5 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 		COMMENT
 		COMMENT Additionally, [`GameEvent.ENTITY_DIE`][net.minecraft.world.level.gameevent.GameEvent#ENTITY_DIE] is broadcast.
-	METHOD removeTag (Ljava/lang/String;)Z
-		COMMENT Removes a tag from this Entity.
-		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	CLASS RemovalReason
 		COMMENT Reasons an [`Entity`][net.minecraft.world.entity.Entity] is removed from a [`Level`][net.minecraft.world.level.Level].
