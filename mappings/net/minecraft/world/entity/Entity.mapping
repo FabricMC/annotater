@@ -2,7 +2,9 @@ CLASS net/minecraft/world/entity/Entity
 	FIELD uuid Ljava/util/UUID;
 		COMMENT A [`UUID`][java.util.UUID] used to distinguish between different instances of Entity.
 	METHOD discard ()V
-		COMMENT Removes this Entity from the [`Level`][net.minecraft.world.level.Level] it is in. The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
+		COMMENT Removes this Entity from the [`Level`][net.minecraft.world.level.Level] it is in.
+		COMMENT
+		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 	METHOD entityTags ()Ljava/util/Set;
 		COMMENT Returns this Entity's tags.
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
@@ -11,6 +13,7 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT @return the team color in the `0xRRGGBB` format, or [`CommonColors.WHITE`][net.minecraft.util.CommonColors#WHITE] if the Entity is not part of a Team or the Team has no color
 	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
 		COMMENT Kills this Entity.
+		COMMENT
 		COMMENT This removes the Entity from the [`Level`][net.minecraft.world.level.Level] it is in.
 		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 		COMMENT
