@@ -14,7 +14,7 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT @see net.minecraft.server.commands.TagCommand `TagCommand`
 	METHOD getTeamColor ()I
 		COMMENT Returns the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int`.
-		COMMENT @return the color associated with the [`Team`][net.minecraft.world.scores.Team] this Entity is part of as an RGB `int` or `0xFFFFFF` if the Entity is not part of a Team or the Team has no color
+		COMMENT @return the team color as an RGB `int`, or `0xFFFFFF` if the Entity is not part of a Team or the Team has no color
 	METHOD isSpectator ()Z
 		COMMENT Returns whether this Entity is an instance of [`Player`][net.minecraft.world.entity.player.Player] whose [`GameType`][net.minecraft.world.level.GameType] is set to [`GameType#SPECTATOR`][net.minecraft.world.level.GameType#SPECTATOR].
 		COMMENT @see net.minecraft.world.entity.player.Player#gameMode() `Player#gameMode()`
