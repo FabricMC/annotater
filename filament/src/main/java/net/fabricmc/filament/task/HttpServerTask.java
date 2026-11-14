@@ -1,6 +1,6 @@
 package net.fabricmc.filament.task;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -107,17 +107,17 @@ public abstract class HttpServerTask extends DefaultTask {
 		tree.visitClass(className);
 
 		switch (body.kind()) {
-			case CLASS -> {
-				tree.visitComment(MappedElementKind.CLASS, body.comments());
-			}
-			case METHOD -> {
-				tree.visitMethod(body.name(), body.desc());
-				tree.visitComment(MappedElementKind.METHOD, body.comments());
-			}
-			case FIELD -> {
-				tree.visitField(body.name(), body.desc());
-				tree.visitComment(MappedElementKind.FIELD, body.comments());
-			}
+		case CLASS -> {
+			tree.visitComment(MappedElementKind.CLASS, body.comments());
+		}
+		case METHOD -> {
+			tree.visitMethod(body.name(), body.desc());
+			tree.visitComment(MappedElementKind.METHOD, body.comments());
+		}
+		case FIELD -> {
+			tree.visitField(body.name(), body.desc());
+			tree.visitComment(MappedElementKind.FIELD, body.comments());
+		}
 		}
 
 		Files.createDirectories(file.getParent());
@@ -190,6 +190,7 @@ public abstract class HttpServerTask extends DefaultTask {
 					Desktop.getDesktop().browse(URI.create(clientUrl));
 				}
 			} catch (IOException ignored) {
+				// no-op
 			}
 		}
 
@@ -207,9 +208,11 @@ public abstract class HttpServerTask extends DefaultTask {
 			Thread.currentThread().interrupt();
 		} finally {
 			server.stop(0);
+
 			try {
 				Runtime.getRuntime().removeShutdownHook(hook);
 			} catch (IllegalStateException ignored) {
+				// no-op
 			}
 		}
 	}
@@ -275,7 +278,7 @@ public abstract class HttpServerTask extends DefaultTask {
 	private static class HttpError extends Error {
 		private final int status;
 
-		public HttpError(int status, String message) {
+		HttpError(int status, String message) {
 			super(message);
 			this.status = status;
 		}
