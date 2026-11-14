@@ -1,21 +1,30 @@
 package net.fabricmc.filament;
 
-import net.fabricmc.filament.task.*;
-
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.provider.Provider;
 import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Sync;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.external.javadoc.StandardJavadocDocletOptions;
 import org.gradle.jvm.toolchain.JavaToolchainService;
 
+import net.fabricmc.filament.task.CheckDecompileTask;
+import net.fabricmc.filament.task.CheckMappingsTask;
+import net.fabricmc.filament.task.ConvertMappingsTask;
+import net.fabricmc.filament.task.DecompileTask;
+import net.fabricmc.filament.task.DropCheckMappingsErrorsTask;
+import net.fabricmc.filament.task.DropDecompileErrorsTask;
+import net.fabricmc.filament.task.DropJavadocErrorsTask;
+import net.fabricmc.filament.task.FixMappingsTask;
+import net.fabricmc.filament.task.FormatMappingsTask;
+import net.fabricmc.filament.task.HttpServerTask;
+import net.fabricmc.filament.task.JavaRuntimeJarTask;
 import net.fabricmc.filament.task.unpick.CheckUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.CombineUnpickDefinitionsTask;
 import net.fabricmc.filament.util.FilamentConstants;
