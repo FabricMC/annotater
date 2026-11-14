@@ -1,9 +1,11 @@
 package net.fabricmc.filament.task;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,10 +59,15 @@ public abstract class HttpServerTask extends DefaultTask {
 	@Option(option = "client", description = "The url of the mcsrc instance (default: https://mcsrc.dev)")
 	public abstract Property<String> getClient();
 
+	@Input
+	@Option(option = "open", description = "Open the mcsrc instance on the browser")
+	public abstract Property<Boolean> getOpen();
+
 	public HttpServerTask() {
 		getHost().convention("127.0.0.1");
 		getPort().convention("8000");
 		getClient().convention("https://mcsrc.dev");
+		getOpen().convention(false);
 		getOutputs().upToDateWhen(_ -> false);
 	}
 
@@ -171,10 +178,20 @@ public abstract class HttpServerTask extends DefaultTask {
 
 		server.setExecutor(null);
 		server.start();
+		String clientUrl = "%s/?annotater-server=http://%s:%s".formatted(getClient().get(), server.getAddress().getHostName(), server.getAddress().getPort());
 		getLogger().lifecycle("""
-				Server started at http://%1$s:%2$s
-				Connect on %3$s/?annotater-server=http://%1$s:%2$s
-				""".formatted(server.getAddress().getHostName(), server.getAddress().getPort(), getClient().get()));
+				Server started at http://{}:{}
+				Connect on {}
+				""", server.getAddress().getHostName(), server.getAddress().getPort(), clientUrl);
+
+		if (getOpen().get()) {
+			try {
+				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+					Desktop.getDesktop().browse(URI.create(clientUrl));
+				}
+			} catch (IOException ignored) {
+			}
+		}
 
 		CountDownLatch latch = new CountDownLatch(1);
 		Thread hook = new Thread(() -> {
