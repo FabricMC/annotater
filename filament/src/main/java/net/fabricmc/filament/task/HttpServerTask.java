@@ -141,6 +141,8 @@ public abstract class HttpServerTask extends DefaultTask {
 		}
 
 		HttpServer server = HttpServer.create(new InetSocketAddress(host, port), 0);
+		String client = getClient().map(it -> it.endsWith("/") ? it.substring(0, it.length() - 1) : it).get();
+
 		Map<String, Route> routes = new HashMap<>();
 		routes.put("/config", this::getConfig);
 		routes.put("/get-mapping", this::getMapping);
@@ -148,8 +150,8 @@ public abstract class HttpServerTask extends DefaultTask {
 
 		server.createContext("/", exchange -> {
 			Headers headers = exchange.getResponseHeaders();
-			headers.set("Access-Control-Allow-Origin", "*");
-			headers.set("Access-Control-Allow-Methods", "*");
+			headers.set("Access-Control-Allow-Origin", client);
+			headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 			headers.set("Access-Control-Allow-Headers", "Content-Type");
 
 			String path = exchange.getRequestURI().getPath().toLowerCase(Locale.ROOT);
@@ -178,7 +180,7 @@ public abstract class HttpServerTask extends DefaultTask {
 
 		server.setExecutor(null);
 		server.start();
-		String clientUrl = "%s/?annotater-server=http://%s:%s".formatted(getClient().get(), server.getAddress().getHostName(), server.getAddress().getPort());
+		String clientUrl = "%s/?annotater-server=http://%s:%s".formatted(client, server.getAddress().getHostName(), server.getAddress().getPort());
 		getLogger().lifecycle("""
 				Server started at http://{}:{}
 				Connect on {}
@@ -187,6 +189,7 @@ public abstract class HttpServerTask extends DefaultTask {
 		if (getOpen().get()) {
 			try {
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+					getLogger().lifecycle("Opening browser...");
 					Desktop.getDesktop().browse(URI.create(clientUrl));
 				}
 			} catch (IOException ignored) {
