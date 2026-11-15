@@ -23,8 +23,8 @@ import net.fabricmc.filament.task.DropDecompileErrorsTask;
 import net.fabricmc.filament.task.DropJavadocErrorsTask;
 import net.fabricmc.filament.task.FixMappingsTask;
 import net.fabricmc.filament.task.FormatMappingsTask;
-import net.fabricmc.filament.task.HttpServerTask;
 import net.fabricmc.filament.task.JavaRuntimeJarTask;
+import net.fabricmc.filament.task.http.AnnotaterServerTask;
 import net.fabricmc.filament.task.unpick.CheckUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.CombineUnpickDefinitionsTask;
 import net.fabricmc.filament.util.FilamentConstants;
@@ -151,7 +151,7 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.dependsOn(dropInvalidMappings);
 		});
 
-		tasks.register("serve", HttpServerTask.class, task -> {
+		tasks.register("serve", AnnotaterServerTask.class, task -> {
 			task.getMappings().set(mappings);
 		});
 	}

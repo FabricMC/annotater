@@ -1,4 +1,4 @@
-package net.fabricmc.filament.task;
+package net.fabricmc.filament.task.http;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -12,22 +12,12 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import org.gradle.api.DefaultTask;
-import org.gradle.api.GradleException;
-import org.gradle.api.file.DirectoryProperty;
-import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputDirectory;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.options.Option;
 
 import net.fabricmc.mappingio.MappedElementKind;
 import net.fabricmc.mappingio.MappingReader;
@@ -37,44 +27,26 @@ import net.fabricmc.mappingio.format.MappingFormat;
 import net.fabricmc.mappingio.tree.MemoryMappingTree;
 import net.fabricmc.mappingio.tree.VisitOrder;
 
-/// Serve HTTP API to be used by mcsrc.
-public abstract class HttpServerTask extends DefaultTask {
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+public record AnnotaterServer(
+		String mappingsDir,
+		String minecraftVersion,
+		String host,
+		int port,
+		String clientUrl,
+		boolean openBrowser
+) {
+	static final String PROP_KEY = "annotater.props";
+	static final Gson GSON = new Gson();
 
-	@InputDirectory
-	public abstract DirectoryProperty getMappings();
-
-	@Input
-	public abstract Property<String> getMinecraftVersion();
-
-	@Input
-	@Option(option = "host", description = "The host address to bind to (default: 127.0.0.1)")
-	public abstract Property<String> getHost();
-
-	@Input
-	@Option(option = "port", description = "The port to listen on (default: 8000, use 0 for random)")
-	public abstract Property<String> getPort();
-
-	@Input
-	@Option(option = "client", description = "The url of the mcsrc instance (default: https://mcsrc.dev)")
-	public abstract Property<String> getClient();
-
-	@Input
-	@Option(option = "open", description = "Open the mcsrc instance on the browser")
-	public abstract Property<Boolean> getOpen();
-
-	public HttpServerTask() {
-		getHost().convention("127.0.0.1");
-		getPort().convention("8000");
-		getClient().convention("https://mcsrc.dev");
-		getOpen().convention(false);
-		getOutputs().upToDateWhen(_ -> false);
+	static void main() throws IOException {
+		AnnotaterServer server = GSON.fromJson(System.getProperty(PROP_KEY), AnnotaterServer.class);
+		server.runServer();
 	}
 
 	/// Get the config
 	private void getConfig(HttpExchange exchange) throws IOException {
 		requireMethod(exchange, "GET");
-		sendResponse(exchange, 200, new Config(getMinecraftVersion().get()));
+		sendResponse(exchange, 200, new Config(minecraftVersion));
 	}
 
 	/// Get Enigma formatted mapping of the target class.
@@ -129,19 +101,9 @@ public abstract class HttpServerTask extends DefaultTask {
 		sendResponse(exchange, 200, new Details("Mapping updated"));
 	}
 
-	@TaskAction
-	public void runServer() throws IOException {
-		String host = getHost().get();
-		int port;
-
-		try {
-			port = Integer.parseInt(getPort().get());
-		} catch (NumberFormatException e) {
-			throw new GradleException("Invalid port number: " + getPort().get(), e);
-		}
-
+	private void runServer() throws IOException {
 		HttpServer server = HttpServer.create(new InetSocketAddress(host, port), 0);
-		String client = getClient().map(it -> it.endsWith("/") ? it.substring(0, it.length() - 1) : it).get();
+		String client = clientUrl.endsWith("/") ? clientUrl.substring(0, clientUrl.length() - 1) : clientUrl;
 
 		Map<String, Route> routes = new HashMap<>();
 		routes.put("/config", this::getConfig);
@@ -180,41 +142,24 @@ public abstract class HttpServerTask extends DefaultTask {
 
 		server.setExecutor(null);
 		server.start();
-		String clientUrl = "%s/?annotater-server=http://%s:%s".formatted(client, server.getAddress().getHostName(), server.getAddress().getPort());
-		getLogger().lifecycle("""
-				Server started at http://{}:{}
-				Connect on {}
-				""", server.getAddress().getHostName(), server.getAddress().getPort(), clientUrl);
+		String clientUrl = "%s/?annotater-server=http://%s:%s"
+				.formatted(client, server.getAddress().getHostName(), server.getAddress().getPort());
+		IO.println("""
+				Run `gradlew help --task serve` to see available options
+				Server started at http://%s:%s
+				Connect on %s
+				Ctrl+C to stop"""
+				.formatted(server.getAddress().getHostName(), server.getAddress().getPort(), clientUrl));
 
-		if (getOpen().get()) {
+		if (openBrowser) {
 			try {
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-					getLogger().lifecycle("Opening browser...");
 					Desktop.getDesktop().browse(URI.create(clientUrl));
+					IO.println("Browser opened");
+				} else {
+					IO.println("Unable to open browser, is system headless?");
 				}
 			} catch (IOException ignored) {
-				// no-op
-			}
-		}
-
-		CountDownLatch latch = new CountDownLatch(1);
-		Thread hook = new Thread(() -> {
-			getLogger().lifecycle("Shutting down HTTP server...");
-			server.stop(0);
-			latch.countDown();
-		});
-		Runtime.getRuntime().addShutdownHook(hook);
-
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		} finally {
-			server.stop(0);
-
-			try {
-				Runtime.getRuntime().removeShutdownHook(hook);
-			} catch (IllegalStateException ignored) {
 				// no-op
 			}
 		}
@@ -241,7 +186,7 @@ public abstract class HttpServerTask extends DefaultTask {
 	}
 
 	private Path getMappingFile(String className) {
-		Path baseDir = getMappings().get().getAsFile().toPath().toAbsolutePath();
+		Path baseDir = Path.of(mappingsDir).toAbsolutePath();
 		Path file = baseDir.resolve(className.replace('.', '/') + ".mapping").normalize();
 
 		if (!file.startsWith(baseDir)) {
