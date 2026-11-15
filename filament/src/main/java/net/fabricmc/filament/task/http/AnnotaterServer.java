@@ -43,6 +43,11 @@ public record AnnotaterServer(
 		server.runServer();
 	}
 
+	private void ping(HttpExchange exchange) throws IOException {
+		exchange.sendResponseHeaders(204, -1);
+		exchange.close();
+	}
+
 	/// Get the config
 	private void getConfig(HttpExchange exchange) throws IOException {
 		requireMethod(exchange, "GET");
@@ -106,6 +111,7 @@ public record AnnotaterServer(
 		String client = clientUrl.endsWith("/") ? clientUrl.substring(0, clientUrl.length() - 1) : clientUrl;
 
 		Map<String, Route> routes = new HashMap<>();
+		routes.put("/ping", this::ping);
 		routes.put("/config", this::getConfig);
 		routes.put("/get-mapping", this::getMapping);
 		routes.put("/update-mapping", this::updateMapping);
