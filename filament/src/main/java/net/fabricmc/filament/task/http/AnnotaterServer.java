@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import org.jspecify.annotations.Nullable;
 
 import net.fabricmc.mappingio.MappedElementKind;
 import net.fabricmc.mappingio.MappingReader;
+import net.fabricmc.mappingio.MappingUtil;
 import net.fabricmc.mappingio.MappingWriter;
 import net.fabricmc.mappingio.adapter.EmptyElementFilter;
 import net.fabricmc.mappingio.format.MappingFormat;
@@ -81,6 +83,8 @@ public record AnnotaterServer(
 
 		if (Files.exists(file)) {
 			MappingReader.read(file, MappingFormat.ENIGMA_FILE, tree);
+		} else {
+			tree.visitNamespaces(MappingUtil.NS_SOURCE_FALLBACK, List.of(MappingUtil.NS_TARGET_FALLBACK));
 		}
 
 		tree.visitClass(className);
@@ -108,9 +112,9 @@ public record AnnotaterServer(
 		sendResponse(exchange, 200, new Details("Mapping updated"));
 	}
 
-	private void runServer() throws IOException {
+	HttpServer createServer() throws IOException {
 		HttpServer server = HttpServer.create(new InetSocketAddress(host, port), 0);
-		String client = clientUrl.endsWith("/") ? clientUrl.substring(0, clientUrl.length() - 1) : clientUrl;
+		String client = baseClientUrl();
 		String clientOrigin = getOrigin(client);
 
 		Map<String, Route> routes = new HashMap<>();
@@ -152,7 +156,13 @@ public record AnnotaterServer(
 		});
 
 		server.setExecutor(null);
+		return server;
+	}
+
+	private void runServer() throws IOException {
+		HttpServer server = createServer();
 		server.start();
+		String client = baseClientUrl();
 		String clientUrl = "%s/?annotater-server=http://%s:%s"
 				.formatted(client, server.getAddress().getHostName(), server.getAddress().getPort());
 		IO.println("""
@@ -176,12 +186,30 @@ public record AnnotaterServer(
 		}
 	}
 
+	private String baseClientUrl() {
+		return clientUrl.endsWith("/") ? clientUrl.substring(0, clientUrl.length() - 1) : clientUrl;
+	}
+
 	@Contract("!null -> !null")
-	private @Nullable String getOrigin(@Nullable String url) {
+	@Nullable String getOrigin(@Nullable String url) {
 		if (url == null) return null;
 
-		URI uri = URI.create(url);
-		String scheme = uri.getScheme().toLowerCase(Locale.ROOT);
+		URI uri;
+
+		try {
+			uri = URI.create(url);
+		} catch (IllegalArgumentException e) {
+			throw new HttpError(403, "Invalid request origin");
+		}
+
+		String scheme = uri.getScheme();
+		String host = uri.getHost();
+
+		if (scheme == null || host == null) {
+			throw new HttpError(403, "Invalid request origin");
+		}
+
+		scheme = scheme.toLowerCase(Locale.ROOT);
 		int port = uri.getPort();
 
 		if (port == -1) {
@@ -192,7 +220,7 @@ public record AnnotaterServer(
 			}
 		}
 
-		return scheme + "://" + uri.getHost() + ":" + port;
+		return scheme + "://" + host.toLowerCase(Locale.ROOT) + ":" + port;
 	}
 
 	private void require(boolean predicate, int errorCode, String details) {
@@ -213,7 +241,7 @@ public record AnnotaterServer(
 		}
 	}
 
-	private Path getMappingFile(String className) {
+	Path getMappingFile(String className) {
 		String path = className.replace('.', '/');
 		int dollar = path.indexOf('$');
 
@@ -248,11 +276,11 @@ public record AnnotaterServer(
 		void handle(HttpExchange consumer) throws Exception;
 	}
 
-	private interface Body {
+	interface Body {
 	}
 
-	private static class HttpError extends Error {
-		private final int status;
+	static class HttpError extends Error {
+		final int status;
 
 		HttpError(int status, String message) {
 			super(message);
@@ -260,21 +288,21 @@ public record AnnotaterServer(
 		}
 	}
 
-	private record Config(String version) implements Body {
+	record Config(String version) implements Body {
 	}
 
-	private record Details(String details) implements Body {
+	record Details(String details) implements Body {
 	}
 
-	private record GetMapping(String className) implements Body {
+	record GetMapping(String className) implements Body {
 	}
 
-	private record UpdateMapping(
+	record UpdateMapping(
 			String className, Kind kind, String name, String desc, String comments
 	) implements Body {
 	}
 
-	private enum Kind {
+	enum Kind {
 		CLASS, METHOD, FIELD
 	}
 }
