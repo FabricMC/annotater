@@ -24,7 +24,7 @@ CLASS net/minecraft/resources/Identifier
 		COMMENT @param path the path, restricted to `[a-z0-9/._-]`
 		COMMENT @return an `Identifier` created from the namespace and path, or `null` if either string contains an invalid character.
 	METHOD withDefaultNamespace (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-		COMMENT Creates an `Identifier` with the namespace set to [DEFAULT_NAMESPACE].
+		COMMENT Creates an [Identifier] with the [default namespace][#DEFAULT_NAMESPACE].
 		COMMENT @param path the path, restricted to `[a-z0-9/._-]`
 	METHOD withPath (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
 		COMMENT @param newPath the path, restricted to `[a-z0-9/._-]`
