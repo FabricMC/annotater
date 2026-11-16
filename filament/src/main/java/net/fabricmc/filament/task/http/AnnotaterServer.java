@@ -18,6 +18,8 @@ import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 import net.fabricmc.mappingio.MappedElementKind;
 import net.fabricmc.mappingio.MappingReader;
@@ -109,6 +111,7 @@ public record AnnotaterServer(
 	private void runServer() throws IOException {
 		HttpServer server = HttpServer.create(new InetSocketAddress(host, port), 0);
 		String client = clientUrl.endsWith("/") ? clientUrl.substring(0, clientUrl.length() - 1) : clientUrl;
+		String clientOrigin = getOrigin(client);
 
 		Map<String, Route> routes = new HashMap<>();
 		routes.put("/ping", this::ping);
@@ -117,27 +120,29 @@ public record AnnotaterServer(
 		routes.put("/update-mapping", this::updateMapping);
 
 		server.createContext("/", exchange -> {
-			Headers headers = exchange.getResponseHeaders();
-			headers.set("Access-Control-Allow-Origin", client);
-			headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-			headers.set("Access-Control-Allow-Headers", "Content-Type");
-
-			String path = exchange.getRequestURI().getPath().toLowerCase(Locale.ROOT);
-
-			if (!routes.containsKey(path)) {
-				sendResponse(exchange, 404, new Details("Unknown route"));
-				return;
-			}
-
-			String method = exchange.getRequestMethod();
-
-			if ("OPTIONS".equalsIgnoreCase(method)) {
-				exchange.sendResponseHeaders(204, -1);
-				exchange.close();
-				return;
-			}
-
 			try {
+				Headers headers = exchange.getResponseHeaders();
+				headers.set("Vary", "Origin");
+
+				String requestOrigin = getOrigin(exchange.getRequestHeaders().getFirst("Origin"));
+				require(clientOrigin.equalsIgnoreCase(requestOrigin), 403, "Invalid request origin");
+
+				headers.set("Access-Control-Allow-Origin", client);
+				headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+				headers.set("Access-Control-Allow-Headers", "Content-Type");
+				headers.set("Access-Control-Allow-Private-Network", "true");
+
+				String path = exchange.getRequestURI().getPath().toLowerCase(Locale.ROOT);
+				require(routes.containsKey(path), 404, "Unknown route");
+
+				String method = exchange.getRequestMethod();
+
+				if ("OPTIONS".equalsIgnoreCase(method)) {
+					exchange.sendResponseHeaders(204, -1);
+					exchange.close();
+					return;
+				}
+
 				routes.get(path).handle(exchange);
 			} catch (HttpError e) {
 				sendResponse(exchange, e.status, new Details(e.getMessage()));
@@ -171,20 +176,37 @@ public record AnnotaterServer(
 		}
 	}
 
-	private void requireMethod(HttpExchange exchange, String method) {
-		if (!method.equalsIgnoreCase(exchange.getRequestMethod())) {
-			throw new HttpError(404, "Unknown route");
+	@Contract("!null -> !null")
+	private @Nullable String getOrigin(@Nullable String url) {
+		if (url == null) return null;
+
+		URI uri = URI.create(url);
+		String scheme = uri.getScheme().toLowerCase(Locale.ROOT);
+		int port = uri.getPort();
+
+		if (port == -1) {
+			switch (scheme) {
+			case "http" -> port = 80;
+			case "https" -> port = 443;
+			default -> throw new HttpError(403, "Invalid request origin");
+			}
 		}
+
+		return scheme + "://" + uri.getHost() + ":" + port;
+	}
+
+	private void require(boolean predicate, int errorCode, String details) {
+		if (!predicate) throw new HttpError(errorCode, details);
+	}
+
+	private void requireMethod(HttpExchange exchange, String method) {
+		require(method.equalsIgnoreCase(exchange.getRequestMethod()), 404, "Unknown route");
 	}
 
 	private <T extends Body> T parseBodyOrError(HttpExchange exchange, Class<T> clazz) throws IOException {
 		try (InputStreamReader in = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
 			T parsed = GSON.fromJson(in, clazz);
-
-			if (parsed == null) {
-				throw new HttpError(400, "Empty body");
-			}
-
+			require(parsed != null, 400, "Empty body");
 			return parsed;
 		} catch (JsonSyntaxException e) {
 			throw new HttpError(400, "Invalid body format:" + e.getMessage());
@@ -194,21 +216,13 @@ public record AnnotaterServer(
 	private Path getMappingFile(String className) {
 		Path baseDir = Path.of(mappingsDir).toAbsolutePath();
 		Path file = baseDir.resolve(className.replace('.', '/') + ".mapping").normalize();
-
-		if (!file.startsWith(baseDir)) {
-			throw new HttpError(400, "Invalid class name");
-		}
-
+		require(file.startsWith(baseDir), 400, "Invalid class name");
 		return file;
 	}
 
 	private Path getMappingFileOrError(String className) {
 		Path file = getMappingFile(className);
-
-		if (!Files.isRegularFile(file)) {
-			throw new HttpError(404, "Mapping file not found");
-		}
-
+		require(Files.isRegularFile(file), 404, "Mapping file not found");
 		return file;
 	}
 
