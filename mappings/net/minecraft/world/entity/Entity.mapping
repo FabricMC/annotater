@@ -1,0 +1,22 @@
+CLASS net/minecraft/world/entity/Entity
+	FIELD uuid Ljava/util/UUID;
+		COMMENT A [java.util.UUID] used to distinguish between different instances of Entity.
+	METHOD discard ()V
+		COMMENT Removes this Entity from the [net.minecraft.world.level.Level] it is in.
+		COMMENT
+		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
+	METHOD entityTags ()Ljava/util/Set;
+		COMMENT Returns this Entity's tags.
+		COMMENT @see net.minecraft.server.commands.TagCommand
+	METHOD getTeamColor ()I
+		COMMENT Returns the color associated with the [net.minecraft.world.scores.Team] this Entity is part of in the `0xRRGGBB` format.
+		COMMENT @return the team color in the `0xRRGGBB` format, or [net.minecraft.util.CommonColors#WHITE] if the Entity is not part of a Team or the Team has no color
+	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
+		COMMENT Kills this Entity.
+		COMMENT
+		COMMENT This removes the Entity from the [net.minecraft.world.level.Level] it is in.
+		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
+		COMMENT
+		COMMENT Additionally, [net.minecraft.world.level.gameevent.GameEvent#ENTITY_DIE] is broadcast.
+	CLASS RemovalReason
+		COMMENT Reasons an [net.minecraft.world.entity.Entity] is removed from a [net.minecraft.world.level.Level].
