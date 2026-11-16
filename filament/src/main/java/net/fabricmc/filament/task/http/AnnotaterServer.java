@@ -214,8 +214,16 @@ public record AnnotaterServer(
 	}
 
 	private Path getMappingFile(String className) {
+		String path = className.replace('.', '/');
+		int dollar = path.indexOf('$');
+
+		if (dollar != -1) {
+			path = path.substring(0, dollar);
+		}
+
+		require(!path.isEmpty(), 404, "Invalid class name");
 		Path baseDir = Path.of(mappingsDir).toAbsolutePath();
-		Path file = baseDir.resolve(className.replace('.', '/') + ".mapping").normalize();
+		Path file = baseDir.resolve(path + ".mapping").normalize();
 		require(file.startsWith(baseDir), 400, "Invalid class name");
 		return file;
 	}
