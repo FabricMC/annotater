@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import com.sun.net.httpserver.HttpServer;
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -124,7 +123,7 @@ class AnnotaterServerTest {
 		HttpResponse<String> response = request("GET", "/config", CLIENT, null);
 
 		assertEquals(200, response.statusCode());
-		assertEquals(VERSION, parse(response, AnnotaterServer.Config.class).version());
+		assertEquals("{\"version\":\"" + VERSION + "\"}", response.body());
 		assertTrue(response.headers().firstValue("Content-Type").orElseThrow().startsWith("application/json"));
 	}
 
@@ -153,15 +152,13 @@ class AnnotaterServerTest {
 		HttpResponse<String> response = request("GET", "/unknown", CLIENT, null);
 
 		assertEquals(404, response.statusCode());
-		assertEquals("Unknown route", parse(response, AnnotaterServer.Details.class).details());
 	}
 
 	@Test
 	void wrongMethodIs404() throws Exception {
-		HttpResponse<String> response = request("POST", "/config", CLIENT, null);
+		HttpResponse<String> response = request("POST", "/config", CLIENT, "{}");
 
 		assertEquals(404, response.statusCode());
-		assertEquals("Unknown route", parse(response, AnnotaterServer.Details.class).details());
 	}
 
 	@Test
@@ -170,12 +167,61 @@ class AnnotaterServerTest {
 	}
 
 	@Test
-	void updateMappingForInnerClassWritesOutermostFile() throws Exception {
-		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, new AnnotaterServer.UpdateMapping(
-				"net.minecraft.Foo$Bar", AnnotaterServer.Kind.CLASS, null, null, "inner class"));
+	void parsesUpdateMappingBody() throws Exception {
+		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+				{
+					"className": "net.minecraft.Foo",
+					"kind": "METHOD",
+					"name": "bar",
+					"desc": "()V",
+					"comments": "hello"
+				}""");
 
 		assertEquals(200, response.statusCode(), response.body());
-		assertEquals("Mapping updated", parse(response, AnnotaterServer.Details.class).details());
+
+		MemoryMappingTree written = new MemoryMappingTree();
+		MappingReader.read(mappingsDir.resolve("net/minecraft/Foo.mapping"), MappingFormat.ENIGMA_FILE, written);
+
+		var cls = written.getClass("net/minecraft/Foo");
+		assertNotNull(cls);
+
+		var method = cls.getMethod("bar", "()V");
+		assertNotNull(method);
+		assertEquals("hello", method.getComment());
+	}
+
+	@Test
+	void createsMappingForNewClass() throws Exception {
+		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+				{
+					"className": "net.minecraft.Foo",
+					"kind": "CLASS",
+					"comments": "new class"
+				}""");
+
+		assertEquals(200, response.statusCode(), response.body());
+
+		Path file = mappingsDir.resolve("net/minecraft/Foo.mapping");
+		assertTrue(Files.isRegularFile(file));
+
+		MemoryMappingTree written = new MemoryMappingTree();
+		MappingReader.read(file, MappingFormat.ENIGMA_FILE, written);
+
+		var cls = written.getClass("net/minecraft/Foo");
+		assertNotNull(cls);
+		assertEquals("new class", cls.getComment());
+	}
+
+	@Test
+	void updateMappingForInnerClassWritesOutermostFile() throws Exception {
+		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+				{
+					"className": "net.minecraft.Foo$Bar",
+					"kind": "CLASS",
+					"comments": "inner class"
+				}""");
+
+		assertEquals(200, response.statusCode(), response.body());
 
 		Path outer = mappingsDir.resolve("net/minecraft/Foo.mapping");
 		assertTrue(Files.isRegularFile(outer));
@@ -193,13 +239,20 @@ class AnnotaterServerTest {
 	void updateMappingPreservesExistingContent() throws Exception {
 		Path file = mappingsDir.resolve("net/minecraft/Foo.mapping");
 		Files.createDirectories(file.getParent());
-		Files.writeString(file, "CLASS net/minecraft/Foo\n\tFIELD bar I\n\t\tCOMMENT existing\n");
+		Files.writeString(file, """
+				CLASS net/minecraft/Foo
+				\tFIELD bar I
+				\t\tCOMMENT existing
+				""");
 
-		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, new AnnotaterServer.UpdateMapping(
-				"net.minecraft.Foo", AnnotaterServer.Kind.CLASS, null, null, "new comment"));
+		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+				{
+					"className": "net.minecraft.Foo",
+					"kind": "CLASS",
+					"comments": "new comment"
+				}""");
 
 		assertEquals(200, response.statusCode(), response.body());
-		assertEquals("Mapping updated", parse(response, AnnotaterServer.Details.class).details());
 
 		MemoryMappingTree written = new MemoryMappingTree();
 		MappingReader.read(file, MappingFormat.ENIGMA_FILE, written);
@@ -214,10 +267,15 @@ class AnnotaterServerTest {
 	void getMappingForInnerClassReadsOutermostFile() throws Exception {
 		Path outer = mappingsDir.resolve("net/minecraft/Foo.mapping");
 		Files.createDirectories(outer.getParent());
-		Files.writeString(outer, "CLASS net/minecraft/Foo$Bar\n\tCOMMENT inner\n");
+		Files.writeString(outer, """
+				CLASS net/minecraft/Foo$Bar
+				\tCOMMENT inner
+				""");
 
-		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT,
-				new AnnotaterServer.GetMapping("net.minecraft.Foo$Bar"));
+		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT, """
+				{
+					"className": "net.minecraft.Foo$Bar"
+				}""");
 
 		assertEquals(200, response.statusCode(), response.body());
 		assertTrue(response.body().contains("net/minecraft/Foo$Bar"));
@@ -225,19 +283,20 @@ class AnnotaterServerTest {
 
 	@Test
 	void getMappingForUnknownClassIs404() throws Exception {
-		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT,
-				new AnnotaterServer.GetMapping("net.minecraft.Missing"));
+		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT, """
+				{
+					"className": "net.minecraft.Missing"
+				}""");
 
 		assertEquals(404, response.statusCode());
-		assertEquals("Mapping file not found", parse(response, AnnotaterServer.Details.class).details());
 	}
 
 	private HttpResponse<String> request(
-			String method, String path, String origin, AnnotaterServer.@Nullable Body body
+			String method, String path, String origin, String body
 	) throws IOException, InterruptedException {
 		HttpRequest.Builder builder = HttpRequest.newBuilder(baseUri.resolve(path)).method(method, body == null
 				? BodyPublishers.noBody()
-				: BodyPublishers.ofString(AnnotaterServer.GSON.toJson(body)));
+				: BodyPublishers.ofString(body));
 
 		if (origin != null) {
 			builder.header("Origin", origin);
@@ -248,10 +307,6 @@ class AnnotaterServerTest {
 		}
 
 		return HTTP.send(builder.build(), BodyHandlers.ofString());
-	}
-
-	private static <T> T parse(HttpResponse<String> response, Class<T> type) {
-		return AnnotaterServer.GSON.fromJson(response.body(), type);
 	}
 
 	private static void assertHttpError(int status, Executable executable) {

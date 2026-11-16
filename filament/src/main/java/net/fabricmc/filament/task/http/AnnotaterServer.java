@@ -288,21 +288,21 @@ public record AnnotaterServer(
 		}
 	}
 
-	record Config(String version) implements Body {
+	private record Config(String version) implements Body {
 	}
 
-	record Details(String details) implements Body {
+	private record Details(String details) implements Body {
 	}
 
-	record GetMapping(String className) implements Body {
+	private record GetMapping(String className) implements Body {
 	}
 
-	record UpdateMapping(
+	private record UpdateMapping(
 			String className, Kind kind, String name, String desc, String comments
 	) implements Body {
 	}
 
-	enum Kind {
+	private enum Kind {
 		CLASS, METHOD, FIELD
 	}
 }
