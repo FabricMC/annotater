@@ -54,7 +54,7 @@ public static Iterable<BlockPos> neighborColumn(int startX, int startY, int star
 
 Use backticks (\`) for identifiers, literals, and short expressions. Separate paragraphs with blank lines. Prefer Markdown lists and fenced code blocks over HTML. Use markdown links instead of `{@link}` or `{@linkplain}`.
 
-When linking to a member of the same class, use `#` (such as `[#clear()]`).
+When linking to a member of the same class, use `#` (such as `[#clear()]`). Otherwise, use the fully-qualified class name rather than the shortened name.
 
 For syntax reference, see [Oracle's JavaDoc Guide](https://docs.oracle.com/en/java/javase/25/javadoc/using-markdown-documentation-comments.html).
 
@@ -72,6 +72,18 @@ public static int veryGoodNumber() { /*...*/ }
 +/// 
 +/// @see #veryBadNumber()
 public static int veryGoodNumber() { /*...*/ }
+
+// Uses short name names
+-/// Moves the entity to a new dimension, changing its [Level].
+-///
+-/// @see Player#changeDimension
+public Entity changeDimension(Level newLevel) { /*...*/ }
+
+// Uses fully qualified names
++/// Moves the entity to a new dimension, changing its [net.minecraft.world.level.Level].
++///
++/// @see net.minecraft.world.entity.player.Player#changeDimension
+public Entity changeDimension(Level newLevel) { /*...*/ }
 ```
 
 ## Explain parameters and return values only when needed
@@ -95,4 +107,3 @@ public static Identifier fromNamespaceAndPath(String namespace, String path) {/*
 +/// @param timeout the maximum wait in milliseconds, or `-1` to wait indefinitely
 public void waitForEndUpdate(long timeout) {/*...*/}
 ```
-
