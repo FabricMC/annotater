@@ -6,8 +6,8 @@ import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.provider.Provider;
 import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Sync;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.javadoc.Javadoc;
@@ -24,6 +24,7 @@ import net.fabricmc.filament.task.DropJavadocErrorsTask;
 import net.fabricmc.filament.task.FixMappingsTask;
 import net.fabricmc.filament.task.FormatMappingsTask;
 import net.fabricmc.filament.task.JavaRuntimeJarTask;
+import net.fabricmc.filament.task.http.AnnotaterServerTask;
 import net.fabricmc.filament.task.unpick.CheckUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.CombineUnpickDefinitionsTask;
 import net.fabricmc.filament.util.FilamentConstants;
@@ -148,6 +149,10 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 		tasks.register("dropInvalid", task -> {
 			task.setDescription("Drops everything failing the checks.");
 			task.dependsOn(dropInvalidMappings);
+		});
+
+		tasks.register("serve", AnnotaterServerTask.class, task -> {
+			task.getMappings().set(mappings);
 		});
 	}
 }
