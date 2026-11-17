@@ -167,6 +167,13 @@ class AnnotaterServerTest {
 	}
 
 	@Test
+	void errorIfNonNullableIsNull() throws Exception {
+		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT, "{}");
+
+		assertEquals(400, response.statusCode(), response.body());
+	}
+
+	@Test
 	void parsesUpdateMappingBody() throws Exception {
 		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
 				{
@@ -188,6 +195,18 @@ class AnnotaterServerTest {
 		var method = cls.getMethod("bar", "()V");
 		assertNotNull(method);
 		assertEquals("hello", method.getComment());
+	}
+
+	@Test
+	void updateMethodMappingErrorOnMissingName() throws Exception {
+		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+				{
+					"className": "net/minecraft/Foo",
+					"kind": "METHOD",
+					"comments": "hello"
+				}""");
+
+		assertEquals(400, response.statusCode(), response.body());
 	}
 
 	@Test
