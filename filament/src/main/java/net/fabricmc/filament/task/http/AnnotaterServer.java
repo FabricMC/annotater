@@ -15,13 +15,15 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
+import net.fabricmc.filament.util.JSpecifyRecordTypeAdapterFactory;
 import net.fabricmc.mappingio.MappedElementKind;
 import net.fabricmc.mappingio.MappingReader;
 import net.fabricmc.mappingio.MappingUtil;
@@ -40,7 +42,9 @@ public record AnnotaterServer(
 		boolean openBrowser
 ) {
 	static final String PROP_KEY = "annotater.props";
-	static final Gson GSON = new Gson();
+	static final Gson GSON = new GsonBuilder()
+			.registerTypeAdapterFactory(new JSpecifyRecordTypeAdapterFactory())
+			.create();
 
 	static void main() throws IOException {
 		AnnotaterServer server = GSON.fromJson(System.getProperty(PROP_KEY), AnnotaterServer.class);
@@ -89,18 +93,22 @@ public record AnnotaterServer(
 
 		tree.visitClass(className);
 
-		switch (body.kind()) {
-		case CLASS -> {
+		if (body.kind() == Kind.CLASS) {
 			tree.visitComment(MappedElementKind.CLASS, body.comments());
-		}
-		case METHOD -> {
-			tree.visitMethod(body.name(), body.desc());
-			tree.visitComment(MappedElementKind.METHOD, body.comments());
-		}
-		case FIELD -> {
-			tree.visitField(body.name(), body.desc());
-			tree.visitComment(MappedElementKind.FIELD, body.comments());
-		}
+		} else {
+			require(body.name() != null, 400, "Missing mapping target name");
+			require(body.desc() != null, 400, "Missing mapping target desc");
+
+			switch (body.kind()) {
+			case METHOD -> {
+				tree.visitMethod(body.name(), body.desc());
+				tree.visitComment(MappedElementKind.METHOD, body.comments());
+			}
+			case FIELD -> {
+				tree.visitField(body.name(), body.desc());
+				tree.visitComment(MappedElementKind.FIELD, body.comments());
+			}
+			}
 		}
 
 		Files.createDirectories(file.getParent());
@@ -236,8 +244,8 @@ public record AnnotaterServer(
 			T parsed = GSON.fromJson(in, clazz);
 			require(parsed != null, 400, "Empty body");
 			return parsed;
-		} catch (JsonSyntaxException e) {
-			throw new HttpError(400, "Invalid body format:" + e.getMessage());
+		} catch (JsonParseException e) {
+			throw new HttpError(400, "Invalid body format: " + e.getMessage());
 		}
 	}
 
@@ -298,7 +306,11 @@ public record AnnotaterServer(
 	}
 
 	private record UpdateMapping(
-			String className, Kind kind, String name, String desc, String comments
+			String className,
+			Kind kind,
+			@Nullable String name,
+			@Nullable String desc,
+			String comments
 	) implements Body {
 	}
 
