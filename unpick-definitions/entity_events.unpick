@@ -1,0 +1,110 @@
+unpick v4
+
+#: Numbers prescribing what entity event has occurred
+group int events
+    @scope method net.minecraft.client.player.LocalPlayer handleEntityEvent (B)V
+    @scope method net.minecraft.network.protocol.game.ClientboundEntityEventPacket <init> (Lnet/minecraft/world/entity/Entity;B)V
+    @scope method net.minecraft.network.protocol.game.ClientboundEntityEventPacket getEventId ()B
+    @scope method net.minecraft.server.level.ServerLevel broadcastEntityEvent (Lnet/minecraft/world/entity/Entity;B)V
+    @scope method net.minecraft.world.entity.Entity handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.LivingEntity handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.LivingEntity entityEventForEquipmentBreak (Lnet/minecraft/world/entity/EquipmentSlot;)B
+    @scope method net.minecraft.world.entity.Mob handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.TamableAnimal handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.Animal handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.allay.Allay handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.armadillo.Armadillo handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.dolphin.Dolphin handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.equine.AbstractHorse handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.feline.Ocelot handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.fox.Fox handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.goat.Goat handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.golem.IronGolem handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.rabbit.Rabbit handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.sheep.Sheep handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.squid.Squid handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.animal.wolf.Wolf handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.decoration.ArmorStand handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.monster.Ravager handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.monster.Witch handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.monster.Zoglin handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.monster.creaking.Creaking handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.monster.hoglin.Hoglin handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.monster.warden.Warden handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.monster.zombie.ZombieVillager handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.npc.villager.Villager handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.player.Player handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.projectile.EvokerFangs handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.projectile.FireworkRocketEntity handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.projectile.FishingHook handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.projectile.arrow.Arrow handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEgg handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.vehicle.boat.AbstractBoat handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.vehicle.minecart.MinecartSpawner handleEntityEvent (B)V
+    @scope method net.minecraft.world.entity.vehicle.minecart.MinecartTNT handleEntityEvent (B)V
+    @scope method net.minecraft.world.level.Level broadcastEntityEvent (Lnet/minecraft/world/entity/Entity;B)V
+    net.minecraft.world.entity.EntityEvent.JUMP
+    net.minecraft.world.entity.EntityEvent.KINETIC_HIT
+    net.minecraft.world.entity.EntityEvent.DEATH
+    net.minecraft.world.entity.EntityEvent.START_ATTACKING
+    net.minecraft.world.entity.EntityEvent.STOP_ATTACKING
+    net.minecraft.world.entity.EntityEvent.TAMING_FAILED
+    net.minecraft.world.entity.EntityEvent.TAMING_SUCCEEDED
+    net.minecraft.world.entity.EntityEvent.SHAKE_WETNESS
+    net.minecraft.world.entity.EntityEvent.USE_ITEM_COMPLETE
+    net.minecraft.world.entity.EntityEvent.EAT_GRASS
+    net.minecraft.world.entity.EntityEvent.OFFER_FLOWER
+    net.minecraft.world.entity.EntityEvent.LOVE_HEARTS
+    net.minecraft.world.entity.EntityEvent.VILLAGER_ANGRY
+    net.minecraft.world.entity.EntityEvent.VILLAGER_HAPPY
+    net.minecraft.world.entity.EntityEvent.WITCH_HAT_MAGIC
+    net.minecraft.world.entity.EntityEvent.ZOMBIE_CONVERTING
+    net.minecraft.world.entity.EntityEvent.FIREWORKS_EXPLODE
+    net.minecraft.world.entity.EntityEvent.IN_LOVE_HEARTS
+    net.minecraft.world.entity.EntityEvent.SQUID_ANIM_SYNCH
+    net.minecraft.world.entity.EntityEvent.SILVERFISH_MERGE_ANIM
+    net.minecraft.world.entity.EntityEvent.GUARDIAN_ATTACK_SOUND
+    net.minecraft.world.entity.EntityEvent.REDUCED_DEBUG_INFO
+    net.minecraft.world.entity.EntityEvent.FULL_DEBUG_INFO
+    net.minecraft.world.entity.EntityEvent.PERMISSION_LEVEL_ALL
+    net.minecraft.world.entity.EntityEvent.PERMISSION_LEVEL_MODERATORS
+    net.minecraft.world.entity.EntityEvent.PERMISSION_LEVEL_GAMEMASTERS
+    net.minecraft.world.entity.EntityEvent.PERMISSION_LEVEL_ADMINS
+    net.minecraft.world.entity.EntityEvent.PERMISSION_LEVEL_OWNERS
+    net.minecraft.world.entity.EntityEvent.FISHING_ROD_REEL_IN
+    net.minecraft.world.entity.EntityEvent.ARMORSTAND_WOBBLE
+    net.minecraft.world.entity.EntityEvent.STOP_OFFER_FLOWER
+    net.minecraft.world.entity.EntityEvent.PROTECTED_FROM_DEATH
+    net.minecraft.world.entity.EntityEvent.DOLPHIN_LOOKING_FOR_TREASURE
+    net.minecraft.world.entity.EntityEvent.RAVAGER_STUNNED
+    net.minecraft.world.entity.EntityEvent.TRUSTING_FAILED
+    net.minecraft.world.entity.EntityEvent.TRUSTING_SUCCEEDED
+    net.minecraft.world.entity.EntityEvent.VILLAGER_SWEAT
+    net.minecraft.world.entity.EntityEvent.FOX_EAT
+    net.minecraft.world.entity.EntityEvent.TELEPORT
+    net.minecraft.world.entity.EntityEvent.MAINHAND_BREAK
+    net.minecraft.world.entity.EntityEvent.OFFHAND_BREAK
+    net.minecraft.world.entity.EntityEvent.HEAD_BREAK
+    net.minecraft.world.entity.EntityEvent.CHEST_BREAK
+    net.minecraft.world.entity.EntityEvent.LEGS_BREAK
+    net.minecraft.world.entity.EntityEvent.FEET_BREAK
+    net.minecraft.world.entity.EntityEvent.HONEY_SLIDE
+    net.minecraft.world.entity.EntityEvent.HONEY_JUMP
+    net.minecraft.world.entity.EntityEvent.SWAP_HANDS
+    net.minecraft.world.entity.EntityEvent.CANCEL_SHAKE_WETNESS
+    net.minecraft.world.entity.EntityEvent.START_RAM
+    net.minecraft.world.entity.EntityEvent.END_RAM
+    net.minecraft.world.entity.EntityEvent.POOF
+    net.minecraft.world.entity.EntityEvent.TENDRILS_SHIVER
+    net.minecraft.world.entity.EntityEvent.SONIC_CHARGE
+    net.minecraft.world.entity.EntityEvent.SNIFFER_DIGGING_SOUND
+    net.minecraft.world.entity.EntityEvent.ARMADILLO_PEEK
+    net.minecraft.world.entity.EntityEvent.BODY_BREAK
+    net.minecraft.world.entity.EntityEvent.SHAKE
+    net.minecraft.world.entity.EntityEvent.DROWN_PARTICLES
+    net.minecraft.world.entity.EntityEvent.SADDLE_BREAK
+    net.minecraft.world.entity.EntityEvent.RAVAGER_ROARED
+    net.minecraft.world.entity.EntityEvent.TNT_PRIME
+    net.minecraft.world.entity.EntityEvent.BOAT_SINK
+    net.minecraft.world.entity.EntityEvent.BOAT_LAUNCH
