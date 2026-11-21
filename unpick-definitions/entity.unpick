@@ -26,8 +26,36 @@ group String entity_tag_names
     net.minecraft.world.entity.Entity.TAG_CUSTOM_NAME
 
 group int entity_tag_details
-    @scope net.minecraft.world.entity.Entity addTag (Ljava/lang/String;)Z
+    @scope method net.minecraft.world.entity.Entity addTag (Ljava/lang/String;)Z
     net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
+
+group int boarding_cooldown
+    @scope method net.minecraft.world.entity.Entity addTag (Lnet/minecraft/world/entity/Entity;)V
+    net.minecraft.world.entity.Entity.BOARDING_COOLDOWN
+
+#: Numbers that represent at which digit of a binary number the data is stored
+# Annotated with net.minecraft.world.entity.Entity.Flags
+group int entity_property_flags
+    @scope method net.minecraft.world.entity.Entity isOnFire ()Z
+    @scope method net.minecraft.world.entity.Entity isShiftKeyDown ()Z
+    @scope method net.minecraft.world.entity.Entity isSprinting ()Z
+    @scope method net.minecraft.world.entity.Entity isSwimming ()Z
+    @scope method net.minecraft.world.entity.Entity isInvisible ()Z
+    @scope method net.minecraft.world.entity.Entity isCurrentlyGlowing ()Z
+    net.minecraft.world.entity.Entity.FLAG_ONFIRE
+    net.minecraft.world.entity.Entity.FLAG_SHIFT_KEY_DOWN
+    net.minecraft.world.entity.Entity.FLAG_SPRINTING
+    net.minecraft.world.entity.Entity.FLAG_SWIMMING
+    net.minecraft.world.entity.Entity.FLAG_INVISIBLE
+    net.minecraft.world.entity.Entity.FLAG_GLOWING
+
+group invalid_entity_id
+    @scope method Lnet/minecraft/world/entity/Entity;getId()I
+    net.minecraft.world.entity.Entity.INVALID_ENTITY_ID
+
+group int iterations
+    @scope net.minecraft.world.entity.Entity checkInsideBlocks (Ljava/util/List;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;)V
+    net.minecraft.world.entity.Entity.MAX_BLOCK_ITERATIONS_ALONG_TRAVEL_PER_TICK
 
 target_method com.mojang.serialization.Codec sizeLimitedListOf (I)Lcom/mojang/serialization/Codec;
     param 0 entity_tag_details
