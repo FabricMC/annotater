@@ -1,9 +1,98 @@
 CLASS net/minecraft/util/Mth
-	COMMENT Math utilities.
-	METHOD clamp (III)I
-		COMMENT Clamps `value` between `min` and `max` (inclusive).
+	COMMENT Math functions and constants used throughout Minecraft.
+	METHOD absMax (DD)D
+		COMMENT Returns the larger of `|a|` and `|b|`.
+	METHOD absMax (FF)F
+		COMMENT Returns the larger of `|a|` and `|b|`.
+	METHOD absMax (II)I
+		COMMENT Returns the larger of `|a|` and `|b|`.
+	METHOD approach (FFF)F
+		COMMENT Moves `current` toward `target` by at most `|increment|` without overshooting.
+	METHOD approachDegrees (FFF)F
+		COMMENT Moves `current` toward `target` along the shortest angular path in degrees by at most `|increment|` without overshooting.
+	METHOD chessboardDistance (IIII)I
+		COMMENT Returns the Chebyshev (chessboard) distance between `(x0, z0)` and `(x1, z1)`, defined as `max(|x1 - x0|, |z1 - z0|)`.
+	METHOD clampedLerp (DDD)D
+		COMMENT Linearly interpolates between `min` and `max`, clamping `factor` to `[0.0, 1.0]`.
 		COMMENT
-		COMMENT @param value the value to clamp
-		COMMENT @param min the minimum value
-		COMMENT @param max the maximum value
-		COMMENT @return the clamped value
+		COMMENT @param factor the interpolation weight; values below `0.0` return `min` and values above `1.0` return `max`
+	METHOD clampedLerp (FFF)F
+		COMMENT Linearly interpolates between `min` and `max`, clamping `factor` to `[0.0F, 1.0F]`.
+		COMMENT
+		COMMENT @param factor the interpolation weight; values below `0.0F` return `min` and values above `1.0F` return `max`
+	METHOD createInsecureUUID (Lnet/minecraft/util/RandomSource;)Ljava/util/UUID;
+		COMMENT Generates a version 4, variant 2 [java.util.UUID] from the given [net.minecraft.util.RandomSource].
+		COMMENT
+		COMMENT Not cryptographically secure, intended for deterministic or non-security sensitive entity and feature identifiers.
+	METHOD degreesDifference (FF)F
+		COMMENT Returns the shortest signed angular difference in degrees from `fromAngle` to `toAngle` in `[-180.0F, 180.0F)`.
+	METHOD degreesDifferenceAbs (FF)F
+		COMMENT Returns the shortest unsigned angular distance in degrees between `angleA` and `angleB` in `[0.0F, 180.0F]`.
+	METHOD equal (DD)Z
+		COMMENT Returns whether `a` and `b` are within [#EPSILON] of each other.
+	METHOD equal (FF)Z
+		COMMENT Returns whether `a` and `b` are within [#EPSILON] of each other.
+	METHOD fastInvSqrt (D)D
+		COMMENT @deprecated Use [#invSqrt(double)] instead.
+	METHOD hsvToArgb (FFFI)I
+		COMMENT Converts HSV color components in `[0.0F, 1.0F]` and an alpha channel into a packed `0xAARRGGBB` color integer.
+		COMMENT
+		COMMENT @param hue the hue in `[0.0F, 1.0F)`
+		COMMENT @param saturation the saturation in `[0.0F, 1.0F]`
+		COMMENT @param value the brightness value in `[0.0F, 1.0F]`
+		COMMENT @param alpha the alpha channel in `[0, 255]`
+		COMMENT @return the packed ARGB color compatible with [net.minecraft.util.ARGB]
+	METHOD hsvToRgb (FFF)I
+		COMMENT Converts HSV color components in `[0.0F, 1.0F]` to a packed `0x00RRGGBB` color integer with `0` alpha.
+		COMMENT
+		COMMENT @see #hsvToArgb(float, float, float, int)
+	METHOD isPowerOfTwo (I)Z
+		COMMENT Returns whether `input` is a positive power of two.
+	METHOD isPowerOfTwo (J)Z
+		COMMENT Returns whether `input` is a positive power of two.
+	METHOD nextDouble (Lnet/minecraft/util/RandomSource;DD)D
+		COMMENT Returns a uniformly distributed random double in `[min, max)`.
+		COMMENT
+		COMMENT Returns `min` directly if `min >= max`.
+	METHOD nextFloat (Lnet/minecraft/util/RandomSource;FF)F
+		COMMENT Returns a uniformly distributed random float in `[min, max)`.
+		COMMENT
+		COMMENT Returns `min` directly if `min >= max`.
+	METHOD nextInt (Lnet/minecraft/util/RandomSource;II)I
+		COMMENT Returns a uniformly distributed random integer in `[minInclusive, maxInclusive]`.
+		COMMENT
+		COMMENT Returns `minInclusive` directly if `minInclusive >= maxInclusive`.
+	METHOD packDegrees (F)B
+		COMMENT Quantizes an angle in degrees into a signed byte representing `1/256`th of a full rotation (`360° / 256`).
+		COMMENT
+		COMMENT @see #unpackDegrees(byte)
+	METHOD rayIntersectsAABB (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;)Z
+		COMMENT Returns whether a ray starting at `rayStart` and extending infinitely along `rayDir` intersects `aabb`.
+		COMMENT
+		COMMENT @param rayDir the ray direction vector (need not be normalized)
+	METHOD rotateIfNecessary (FFF)F
+		COMMENT Clamps `baseAngle` so that it is within `maxAngleDiff` degrees of `targetAngle`.
+		COMMENT
+		COMMENT @param maxAngleDiff the maximum allowed angular deviation in degrees (must be non-negative)
+	METHOD smallestEncompassingPowerOfTwo (I)I
+		COMMENT Returns the smallest power of two greater than or equal to `input`.
+		COMMENT
+		COMMENT Returns `0` for `input <= 0`, and overflows to `Integer.MIN_VALUE` for inputs greater than `2^30`.
+	METHOD smallestSquareSide (I)I
+		COMMENT Returns the minimum side length `n` such that an `n × n` grid can hold `itemCount` items.
+		COMMENT
+		COMMENT @throws IllegalArgumentException if `itemCount` is negative
+	METHOD unpackDegrees (B)F
+		COMMENT Converts a byte-quantized rotation back into degrees in `[-180.0F, 178.59375F]`.
+		COMMENT
+		COMMENT @see #packDegrees(float)
+	METHOD wrapDegrees (D)D
+		COMMENT Wraps an angle in degrees into `[-180.0, 180.0)`.
+	METHOD wrapDegrees (F)F
+		COMMENT Wraps an angle in degrees into `[-180.0F, 180.0F)`.
+	METHOD wrapDegrees (I)I
+		COMMENT Wraps an angle in degrees into `[-180, 180)`.
+	METHOD wrapDegrees (J)F
+		COMMENT Wraps an angle in degrees into `[-180.0F, 180.0F)`.
+	METHOD wrapDegrees90 (F)F
+		COMMENT Wraps an angle in degrees into `[-45.0F, 45.0F)`.
