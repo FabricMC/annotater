@@ -1,0 +1,9 @@
+unpick v4
+
+group float
+	@scope class net.minecraft.util.Mth
+	net.minecraft.util.Mth.EPSILON
+
+group double
+	@scope method net.minecraft.util.Mth equal (DD)Z
+	(double) net.minecraft.util.Mth.EPSILON
