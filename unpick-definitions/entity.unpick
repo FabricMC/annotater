@@ -30,7 +30,7 @@ group int entity_tag_details
     net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
 
 group int boarding_cooldown
-    @scope method net.minecraft.world.entity.Entity addTag (Lnet/minecraft/world/entity/Entity;)V
+    @scope method net.minecraft.world.entity.Entity removePassenger (Lnet/minecraft/world/entity/Entity;)V
     net.minecraft.world.entity.Entity.BOARDING_COOLDOWN
 
 #: Numbers that represent at which digit of a binary number the data is stored
@@ -49,12 +49,12 @@ group int entity_property_flags
     net.minecraft.world.entity.Entity.FLAG_INVISIBLE
     net.minecraft.world.entity.Entity.FLAG_GLOWING
 
-group invalid_entity_id
-    @scope method Lnet/minecraft/world/entity/Entity;getId()I
+group int invalid_entity_id
+    @scope method net.minecraft.world.entity.Entity checkInsideBlocks getId ()I
     net.minecraft.world.entity.Entity.INVALID_ENTITY_ID
 
 group int iterations
-    @scope net.minecraft.world.entity.Entity checkInsideBlocks (Ljava/util/List;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;)V
+    @scope method net.minecraft.world.entity.Entity checkInsideBlocks (Ljava/util/List;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;)V
     net.minecraft.world.entity.Entity.MAX_BLOCK_ITERATIONS_ALONG_TRAVEL_PER_TICK
 
 target_method com.mojang.serialization.Codec sizeLimitedListOf (I)Lcom/mojang/serialization/Codec;
