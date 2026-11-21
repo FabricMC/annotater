@@ -50,7 +50,7 @@ group int entity_property_flags
     net.minecraft.world.entity.Entity.FLAG_GLOWING
 
 group int invalid_entity_id
-    @scope method net.minecraft.world.entity.Entity checkInsideBlocks getId ()I
+    @scope method net.minecraft.world.entity.Entity getId ()I
     net.minecraft.world.entity.Entity.INVALID_ENTITY_ID
 
 group int iterations
