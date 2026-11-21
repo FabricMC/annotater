@@ -1,0 +1,33 @@
+unpick v4
+
+#: Names the data of Entity is stored under
+# These are only used in a handful of places and really shouldn't appear elsewhere in the future
+group String entity_tag_names
+    @scope method net.minecraft.world.entity.Entity saveAsPassenger (Lnet/minecraft/world/level/storage/ValueOutput;)Z
+    @scope method net.minecraft.world.entity.Entity saveWithoutId (Lnet/minecraft/world/level/storage/ValueOutput;)V
+    @scope method net.minecraft.world.entity.Entity load (Lnet/minecraft/world/level/storage/ValueInput;)V
+    net.minecraft.world.entity.Entity.TAG_ID
+    net.minecraft.world.entity.Entity.TAG_UUID
+    net.minecraft.world.entity.Entity.TAG_PASSENGERS
+    net.minecraft.world.entity.Entity.TAG_DATA
+    net.minecraft.world.entity.Entity.TAG_POS
+    net.minecraft.world.entity.Entity.TAG_MOTION
+    net.minecraft.world.entity.Entity.TAG_ROTATION
+    net.minecraft.world.entity.Entity.TAG_PORTAL_COOLDOWN
+    net.minecraft.world.entity.Entity.TAG_NO_GRAVITY
+    net.minecraft.world.entity.Entity.TAG_AIR
+    net.minecraft.world.entity.Entity.TAG_ON_GROUND
+    net.minecraft.world.entity.Entity.TAG_FALL_DISTANCE
+    net.minecraft.world.entity.Entity.TAG_FIRE
+    net.minecraft.world.entity.Entity.TAG_SILENT
+    net.minecraft.world.entity.Entity.TAG_GLOWING
+    net.minecraft.world.entity.Entity.TAG_INVULNERABLE
+    net.minecraft.world.entity.Entity.TAG_INVULNERABLE_TIME
+    net.minecraft.world.entity.Entity.TAG_CUSTOM_NAME
+
+group int entity_tag_details
+    @scope net.minecraft.world.entity.Entity addTag (Ljava/lang/String;)Z
+    net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
+
+target_method com.mojang.serialization.Codec sizeLimitedListOf (I)Lcom/mojang/serialization/Codec;
+    param 0 entity_tag_details
