@@ -57,5 +57,22 @@ group int iterations
     @scope method net.minecraft.world.entity.Entity checkInsideBlocks (Ljava/util/List;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;)V
     net.minecraft.world.entity.Entity.MAX_BLOCK_ITERATIONS_ALONG_TRAVEL_PER_TICK
 
+group int max_movement_handled_per_tick
+    @scope method net.minecraft.world.entity.Entity addMovementThisTick (Lnet/minecraft/world/entity/Entity$Movement;)V
+    net.minecraft.world.entity.Entity.MAX_MOVEMENTS_HANDELED_PER_TICK
+
+group double epsilon
+    @scope method net.minecraft.world.entity.Entity hasMovedHorizontallyRecently ()Z
+    @scope method net.minecraft.world.entity.Entity getOnPos ()Lnet/minecraft/core/BlockPos
+    @scope method net.minecraft.world.entity.Entity getOnPos (F)Lnet/minecraft/core/BlockPos
+    @scope method net.minecraft.world.entity.Entity limitPistonMovement (Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3
+    @scope method net.minecraft.world.entity.Entity collide (Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+    @scope method net.minecraft.world.entity.Entity checkInsideBlocks (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;Lit/unimi/dsi/fastutil/longs/LongSet;I)I
+    @scope method net.minecraft.world.entity.Entity getCollisionHorizontalEscapeVector (DDF)Lnet/minecraft/world/phys/Vec3;
+    net.minecraft.util.Mth.EPSILON
+
+target_method java.util.ArrayDeque <init> (Ljava/util/Collection;)V
+    param 0 max_movement_handled_per_tick
+
 target_method com.mojang.serialization.Codec sizeLimitedListOf (I)Lcom/mojang/serialization/Codec;
     param 0 entity_tag_details
