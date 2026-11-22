@@ -1,10 +1,6 @@
 unpick v4
 
-group float regular_floats
-	@scope class net.minecraft.util.Mth
-	net.minecraft.util.Mth.EPSILON
-
-group epsilon
+group float epsilon
     @scope method net.minecraft.client.gui.components.ChatComponent forEachLine (Lnet/minecraft/client/gui/components/ChatComponent$AlphaCalculator;Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;)I
     @scope method net.minecraft.client.gui.screens.reporting.ChatSelectionScreen$ChatSelectionList setScrollAmount (D)V
     @scope method net.minecraft.client.gui.screens.reporting.ChatSelectionScreen$ChatSelectionList setScrollAmount (D)V
@@ -113,7 +109,7 @@ group epsilon
     @scope method net.minecraft.world.phys.Vec3 normalize ()Lnet/minecraft/world/phys/Vec3;
     @scope method net.minecraft.world.phys.shapes.EntityCollisionContext isAbove (Lnet/minecraft/world/phys/shapes/VoxelShape;Lnet/minecraft/core/BlockPos;Z)Z
     @scope method net.minecraft.world.phys.shapes.PositionCollisionContext isAbove (Lnet/minecraft/world/phys/shapes/VoxelShape;Lnet/minecraft/core/BlockPos;Z)Z
-	(double) net.minecraft.util.Mth.EPSILON
+	net.minecraft.util.Mth.EPSILON
 
 group float deg_to_rad
     @scope method net.minecraft.client.Camera createProjectionMatrixForCulling ()Lorg/joml/Matrix4f;
@@ -469,7 +465,7 @@ group float deg_to_rad
     @scope method net.minecraft.world.phys.Vec3 directionFromRotation (FF)Lnet/minecraft/world/phys/Vec3;
     net.minecraft.util.Mth.DEG_TO_RAD
 
-group rad_to_deg
+group float rad_to_deg
     @scope method net.minecraft.client.model.effects.SpearAnimations thirdPersonHandUse (Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/world/entity/HumanoidArm;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V
     @scope method net.minecraft.client.model.effects.SpearAnimations thirdPersonHandUse (Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/world/entity/HumanoidArm;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V
     @scope method net.minecraft.client.renderer.blockentity.ConduitRenderer submit (Lnet/minecraft/client/renderer/blockentity/state/ConduitRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V
