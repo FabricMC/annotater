@@ -71,7 +71,7 @@ group double epsilon
     @scope method net.minecraft.world.entity.Entity getCollisionHorizontalEscapeVector (DDF)Lnet/minecraft/world/phys/Vec3;
     net.minecraft.util.Mth.EPSILON
 
-target_method java.util.ArrayDeque <init> (Ljava/util/Collection;)V
+target_method java.util.ArrayDeque <init> (I)V
     param 0 max_movement_handled_per_tick
 
 target_method com.mojang.serialization.Codec sizeLimitedListOf (I)Lcom/mojang/serialization/Codec;
