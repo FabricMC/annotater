@@ -1,6 +1,6 @@
 unpick v4
 
-group float epsilon
+group float
     @scope method net.minecraft.client.gui.components.ChatComponent forEachLine (Lnet/minecraft/client/gui/components/ChatComponent$AlphaCalculator;Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;)I
     @scope method net.minecraft.client.gui.screens.reporting.ChatSelectionScreen$ChatSelectionList setScrollAmount (D)V
     @scope method net.minecraft.client.model.animal.axolotl.AdultAxolotlModel setupLayStillOnGroundAnimation (FF)V
@@ -74,9 +74,6 @@ group float epsilon
     @scope method net.minecraft.world.phys.Vec3 normalize ()Lnet/minecraft/world/phys/Vec3;
     @scope method net.minecraft.world.phys.shapes.EntityCollisionContext isAbove (Lnet/minecraft/world/phys/shapes/VoxelShape;Lnet/minecraft/core/BlockPos;Z)Z
     @scope method net.minecraft.world.phys.shapes.PositionCollisionContext isAbove (Lnet/minecraft/world/phys/shapes/VoxelShape;Lnet/minecraft/core/BlockPos;Z)Z
-    net.minecraft.util.Mth.EPSILON
-
-group float deg_to_rad
     @scope method net.minecraft.client.Camera createProjectionMatrixForCulling ()Lorg/joml/Matrix4f;
     @scope method net.minecraft.client.Camera setRotation (FF)V
     @scope method net.minecraft.client.Camera getNearPlane (F)Lnet/minecraft/client/Camera$NearPlane;
@@ -228,9 +225,6 @@ group float deg_to_rad
     @scope method net.minecraft.world.item.component.BlocksAttacks$DamageReduction resolve (Lnet/minecraft/world/damagesource/DamageSource;FD)F
     @scope method net.minecraft.world.level.block.DaylightDetectorBlock updateSignalStrength (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;)V
     @scope method net.minecraft.world.phys.Vec3 directionFromRotation (FF)Lnet/minecraft/world/phys/Vec3;
-    net.minecraft.util.Mth.DEG_TO_RAD
-
-group float rad_to_deg
     @scope method net.minecraft.client.model.effects.SpearAnimations thirdPersonHandUse (Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/world/entity/HumanoidArm;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V
     @scope method net.minecraft.client.renderer.blockentity.ConduitRenderer submit (Lnet/minecraft/client/renderer/blockentity/state/ConduitRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V
     @scope method net.minecraft.client.renderer.entity.GuardianRenderer renderBeam (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/world/phys/Vec3;FFF)V
@@ -277,3 +271,5 @@ group float rad_to_deg
     @scope method net.minecraft.world.waypoints.TrackedWaypoint$ChunkWaypoint yawAngleToCamera (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/waypoints/TrackedWaypoint$Camera;Lnet/minecraft/world/waypoints/PartialTickSupplier;)D
     @scope method net.minecraft.world.waypoints.TrackedWaypoint$Vec3iWaypoint yawAngleToCamera (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/waypoints/TrackedWaypoint$Camera;Lnet/minecraft/world/waypoints/PartialTickSupplier;)D
     net.minecraft.util.Mth.RAD_TO_DEG
+    net.minecraft.util.Mth.DEG_TO_RAD
+    net.minecraft.util.Mth.EPSILON
