@@ -1,0 +1,7 @@
+unpick v4
+group int
+	@scope class net.minecraft.world.level.Level
+	net.minecraft.world.level.Level.MAX_LEVEL_SIZE
+	-net.minecraft.world.level.Level.MAX_LEVEL_SIZE
+	net.minecraft.world.level.Level.MAX_ENTITY_SPAWN_Y
+	net.minecraft.world.level.Level.MIN_ENTITY_SPAWN_Y

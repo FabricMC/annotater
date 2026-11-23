@@ -2,7 +2,10 @@ CLASS net/minecraft/world/level/Level
 	METHOD addParticle (Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)V
 		COMMENT Adds a particle to the client's level renderer.\r
 		COMMENT \r
-		COMMENT Does nothing on the server.
+		COMMENT Does nothing on the server.\r
+		COMMENT \r
+		COMMENT @param overrideLimiter if `true`, displays this particle even if the particle limit has been reached\r
+		COMMENT @param alwaysShow whether to display this particle when the [particles][net.minecraft.client.Options#particles()] graphics option is set to Minimal
 	METHOD explode (Lnet/minecraft/world/entity/Entity;DDDFLnet/minecraft/world/level/Level$ExplosionInteraction;)V
 		COMMENT Creates an explosion.\r
 		COMMENT \r
@@ -33,6 +36,10 @@ CLASS net/minecraft/world/level/Level
 		COMMENT This method will load the chunk containing `pos` if it's not already loaded.\r
 		COMMENT \r
 		COMMENT On the server, this method will always return `null` when called off the main server thread.
+	METHOD getChunkAt (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/chunk/LevelChunk;
+		COMMENT {@return the [net.minecraft.world.level.chunk.LevelChunk] at the given `pos`}\r
+		COMMENT \r
+		COMMENT The chunk will be loaded if it isn't already.
 	METHOD getEntity (I)Lnet/minecraft/world/entity/Entity;
 		COMMENT {@return the entity using the entity ID, or `null` if none was found}\r
 		COMMENT \r
