@@ -1,4 +1,4 @@
 CLASS net/minecraft/sounds/SoundSource
-	COMMENT A source of sound.\r
-	COMMENT \r
+	COMMENT A source of sound.
+	COMMENT 
 	COMMENT These correspomd to the different sliders in the [net.minecraft.client.gui.screens.options.SoundOptionsScreen]
