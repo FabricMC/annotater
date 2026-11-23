@@ -1,30 +1,8 @@
 unpick v4
 
-#:The default namespace vanilla Identifiers are registered under
-group String default_namespace
-    @scope method net.minecraft.client.resources.ClientPackSource createVanillaPackSource (Ljava/nio/file/Path;)Lnet/minecraft/server/packs/VanillaPackResources;
-    @scope method net.minecraft.client.telemetry.WorldSessionTelemetryManager onAdvancementDone (Lnet/minecraft/world/level/Level;Lnet/minecraft/advancements/AdvancementHolder;)V
-    @scope method net.minecraft.data.DataGenerator getBuiltinDatapack (ZLjava/lang/String;)Lnet/minecraft/data/DataGenerator$PackGenerator;
-    @scope method net.minecraft.gametest.framework.TestCommand displayTestId (Lnet/minecraft/resources/Identifier;)Ljava/lang/String;
-    @scope method net.minecraft.network.chat.contents.objects.AtlasSprite toShortName (Lnet/minecraft/resources/Identifier;)Ljava/lang/String;
-    @scope method net.minecraft.resources.Identifier withDefaultNamespace (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-    @scope method net.minecraft.resources.Identifier tryBySeparator (Ljava/lang/String;C)Lnet/minecraft/resources/Identifier;
-    @scope method net.minecraft.resources.Identifier toShortLanguageKey ()Ljava/lang/String;
-    @scope method net.minecraft.resources.Identifier toShortString ()Ljava/lang/String;
-    @scope method net.minecraft.server.packs.VanillaPackResources asResourceManager ()Lnet/minecraft/server/packs/resources/ResourceManager;
-    @scope method net.minecraft.server.packs.repository.ServerPacksSource createVanillaPackSource ()Lnet/minecraft/server/packs/VanillaPackResources;
-    @scope method net.minecraft.util.datafix.fixes.LevelFlatGeneratorInfoFix lambda$fixString$0 (Lcom/google/common/base/Splitter;ILjava/lang/String;)Ljava/lang/String;
-    @scope method net.minecraft.world.level.block.entity.BlockEntityTypes register (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;
+group String
     net.minecraft.resources.Identifier.DEFAULT_NAMESPACE
-
-group String realms_namespace
-    @scope method com.mojang.realmsclient.util.RealmsTextureManager getTexture (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-    @scope method net.minecraft.client.resources.ClientPackSource createVanillaPackSource (Ljava/nio/file/Path;)Lnet/minecraft/server/packs/VanillaPackResources;
     net.minecraft.resources.Identifier.REALMS_NAMESPACE
-
-group String allowed_namespace_characters_regex
-    @scope method net.minecraft.server.packs.FilePackResources getNamespaces (Lnet/minecraft/server/packs/PackType;)Ljava/util/Set;
-    @scope method net.minecraft.server.packs.PathPackResources getNamespaces (Ljava/nio/file/Path;)Ljava/util/Set;
     net.minecraft.resources.Identifier.ALLOWED_NAMESPACE_CHARACTERS
 
 # most fields named similar to 'colonPosition' have deliberately been excluded as they don't always refer to identifiers
