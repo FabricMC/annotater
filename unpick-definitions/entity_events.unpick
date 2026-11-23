@@ -1,7 +1,7 @@
 unpick v4
 
-#: Numbers prescribing what entity event has occurred
-group int events
+#: Numbers describing what Entity event has occurred
+group int
     @scope method net.minecraft.client.player.LocalPlayer handleEntityEvent (B)V
     @scope method net.minecraft.network.protocol.game.ClientboundEntityEventPacket <init> (Lnet/minecraft/world/entity/Entity;B)V
     @scope method net.minecraft.network.protocol.game.ClientboundEntityEventPacket getEventId ()B
