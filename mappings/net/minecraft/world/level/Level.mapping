@@ -1,0 +1,166 @@
+CLASS net/minecraft/world/level/Level
+	METHOD addParticle (Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)V
+		COMMENT Adds a particle to the client's level renderer.\r
+		COMMENT \r
+		COMMENT Does nothing on the server.
+	METHOD explode (Lnet/minecraft/world/entity/Entity;DDDFLnet/minecraft/world/level/Level$ExplosionInteraction;)V
+		COMMENT Creates an explosion.\r
+		COMMENT \r
+		COMMENT @see #explode(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, net.minecraft.world.level.ExplosionDamageCalculator, double, double, double, float, boolean, net.minecraft.world.level.Level.ExplosionInteraction, net.minecraft.core.particles.ParticleOptions, net.minecraft.core.particles.ParticleOptions, net.minecraft.util.random.WeightedList, net.minecraft.core.Holder)
+	METHOD explode (Lnet/minecraft/world/entity/Entity;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;)V
+		COMMENT Creates an explosion.\r
+		COMMENT \r
+		COMMENT @see #explode(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, net.minecraft.world.level.ExplosionDamageCalculator, double, double, double, float, boolean, net.minecraft.world.level.Level.ExplosionInteraction, net.minecraft.core.particles.ParticleOptions, net.minecraft.core.particles.ParticleOptions, net.minecraft.util.random.WeightedList, net.minecraft.core.Holder)
+	METHOD explode (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;)V
+		COMMENT Creates an explosion.\r
+		COMMENT \r
+		COMMENT @see #explode(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, net.minecraft.world.level.ExplosionDamageCalculator, double, double, double, float, boolean, net.minecraft.world.level.Level.ExplosionInteraction, net.minecraft.core.particles.ParticleOptions, net.minecraft.core.particles.ParticleOptions, net.minecraft.util.random.WeightedList, net.minecraft.core.Holder)
+	METHOD explode (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;Lnet/minecraft/core/particles/ParticleOptions;Lnet/minecraft/core/particles/ParticleOptions;Lnet/minecraft/util/random/WeightedList;Lnet/minecraft/core/Holder;)V
+		COMMENT  Creates an explosion.\r
+		COMMENT \r
+		COMMENT  @param source the entity that exploded (like TNT) or `null` to indicate no entity exploded\r
+		COMMENT  @param damageSource the custom damage source or `null` to use the default [net.minecraft.world.damagesource.DamageSources#explosion(net.minecraft.world.level.Explosion)]\r
+		COMMENT  @param r the radius, or power, of the explosion\r
+		COMMENT  @param fire whether the explosion should create fire\r
+		COMMENT  @param interactionType the [net.minecraft.world.level.Level.ExplosionInteraction], which indicates how it should interact with the level\r
+	METHOD explode (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;Lnet/minecraft/world/phys/Vec3;FZLnet/minecraft/world/level/Level$ExplosionInteraction;)V
+		COMMENT Creates an explosion.\r
+		COMMENT \r
+		COMMENT @see #explode(net.minecraft.world.entity.Entity, net.minecraft.world.damagesource.DamageSource, net.minecraft.world.level.ExplosionDamageCalculator, double, double, double, float, boolean, net.minecraft.world.level.Level.ExplosionInteraction, net.minecraft.core.particles.ParticleOptions, net.minecraft.core.particles.ParticleOptions, net.minecraft.util.random.WeightedList, net.minecraft.core.Holder)
+	METHOD getBlockEntity (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+		COMMENT {@return the block entity at the given position, or null if there is none}\r
+		COMMENT \r
+		COMMENT This method will load the chunk containing `pos` if it's not already loaded.\r
+		COMMENT \r
+		COMMENT On the server, this method will always return `null` when called off the main server thread.
+	METHOD getEntity (I)Lnet/minecraft/world/entity/Entity;
+		COMMENT {@return the entity using the entity ID, or `null` if none was found}\r
+		COMMENT \r
+		COMMENT @apiNote \r
+		COMMENT Entity ID is ephemeral and changes after server restart. Use the UUID for persistent storage instead.\r
+		COMMENT \r
+		COMMENT @see #getEntity(java.util.UUID)
+	METHOD getRainLevel (F)F
+		COMMENT {@return the rain level.}\r
+		COMMENT \r
+		COMMENT @param a a delta value representing tick progress
+	METHOD getThunderLevel (F)F
+		COMMENT {@return the thunder level.}\r
+		COMMENT \r
+		COMMENT @param a a delta value representing tick progress
+	METHOD hasEntities (Lnet/minecraft/world/level/entity/EntityTypeTest;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Z
+		COMMENT Checks if entities of the given `type` exist in `bb`.\r
+		COMMENT \r
+		COMMENT This has the same performance cost as [`getEntities`][#getEntities(net.minecraft.world.level.entity.EntityTypeTest, net.minecraft.world.phys.AABB, java.util.function.Predicate, java.util.List, int)] with `maxResults` set to 1.
+	METHOD isDebug ()Z
+		COMMENT Checks if this level is a debug level.\r
+		COMMENT \r
+		COMMENT Debug levels are not modifiable. They have a barrier layer at y=60,\r
+		COMMENT and lists all possible block states in game at y=70, helpful for finding\r
+		COMMENT block rendering and model errors.\r
+		COMMENT \r
+		COMMENT @see net.minecraft.world.level.levelgen.DebugLevelSource
+	METHOD isInSpawnableBounds (Lnet/minecraft/core/BlockPos;)Z
+		COMMENT {@return whether the `pos` is in spawnable bounds}\r
+		COMMENT \r
+		COMMENT @implNote \r
+		COMMENT A position is considered to be inside spawnable bounds if its X and Z\r
+		COMMENT coordinates are greater than or equal to -[#MAX_LEVEL_SIZE] and less\r
+		COMMENT than [#MAX_LEVEL_SIZE], and its Y coordinate is greater than or equal\r
+		COMMENT to [#MIN_ENTITY_SPAWN_Y] and less than [#MAX_ENTITY_SPAWN_Y].\r
+		COMMENT \r
+		COMMENT @apiNote\r
+		COMMENT This method should be used for spawning and teleportation. To test for\r
+		COMMENT block positions, use [#isInWorldBounds] (which checks the height limit),\r
+		COMMENT and if the action involves an entity interaction, additionally check for\r
+		COMMENT [#mayInteract] (which checks the spawn protection and world border).\r
+		COMMENT \r
+		COMMENT @see #isInWorldBounds\r
+		COMMENT @see #mayInteract
+	METHOD isInWorldBounds (Lnet/minecraft/core/BlockPos;)Z
+		COMMENT {@return whether the `pos` is in world bounds}\r
+		COMMENT \r
+		COMMENT @implNote \r
+		COMMENT In addition to the height limit, the position's X and Z \r
+		COMMENT must be greater than or equal to -[#MAX_LEVEL_SIZE] and \r
+		COMMENT less than [#MAX_LEVEL_SIZE].\r
+		COMMENT \r
+		COMMENT @apiNote\r
+		COMMENT This method should be used for block placement. If the \r
+		COMMENT action involves an entity interaction, additionally check \r
+		COMMENT for [#mayInteract] (which checks the spawn protection and world border).\r
+		COMMENT \r
+		COMMENT @param pos the pos to check\r
+		COMMENT \r
+		COMMENT @see #isInSpawnableBounds\r
+		COMMENT @see #mayInteract
+	METHOD mayInteract (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;)Z
+		COMMENT {@return whether `entity` can modify blocks at `pos`}\r
+		COMMENT \r
+		COMMENT @implNote\r
+		COMMENT For players, this checks the spawn protection and world border. This\r
+		COMMENT is always `true` on the client and for non-player entites.\r
+		COMMENT \r
+		COMMENT @see #isInWorldBounds\r
+		COMMENT @see #isInSpawnableBounds
+	METHOD playSeededSound (Lnet/minecraft/world/entity/Entity;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V
+		COMMENT Plays a sound.\r
+		COMMENT \r
+		COMMENT On the client, the sound will only play if `except` matches the client's player. On the server, sound packets will be sent to players around `except`, but not to `except` itself.\r
+		COMMENT \r
+		COMMENT @param except the player that will play this sound (client) or be skipped (server), or `null`\r
+		COMMENT @param source the source of the sound, which dictates which sound slider it corresponds to
+	METHOD playSeededSound (Lnet/minecraft/world/entity/Entity;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFJ)V
+		COMMENT Plays a sound.\r
+		COMMENT \r
+		COMMENT @see #playSeededSound(net.minecraft.world.entity.Entity, double, double, double, net.minecraft.core.Holder, net.minecraft.sounds.SoundSource, float, float, long)
+	METHOD playSeededSound (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V
+		COMMENT Plays a sound from `sourceEntity`'s position.\r
+		COMMENT \r
+		COMMENT On the client, the sound will only play if `except` matches the client's player. On the server, sound packets will be sent to players around `except`, but not to `except` itself.\r
+		COMMENT \r
+		COMMENT @param except the player that will play this sound (client) or be skipped (server), or `null`\r
+		COMMENT @param source the source of the sound, which dictates which sound slider it corresponds to
+	METHOD playSound (Lnet/minecraft/world/entity/Entity;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FF)V
+		COMMENT Plays a sound.\r
+		COMMENT \r
+		COMMENT @see #playSeededSound(net.minecraft.world.entity.Entity, double, double, double, net.minecraft.core.Holder, net.minecraft.sounds.SoundSource, float, float, long)
+	METHOD playSound (Lnet/minecraft/world/entity/Entity;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;)V
+		COMMENT Plays a sound.\r
+		COMMENT \r
+		COMMENT @see #playSeededSound(net.minecraft.world.entity.Entity, double, double, double, net.minecraft.core.Holder, net.minecraft.sounds.SoundSource, float, float, long)
+	METHOD playSound (Lnet/minecraft/world/entity/Entity;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V
+		COMMENT Plays a sound.\r
+		COMMENT \r
+		COMMENT @see #playSeededSound(net.minecraft.world.entity.Entity, double, double, double, net.minecraft.core.Holder, net.minecraft.sounds.SoundSource, float, float, long)
+	METHOD playSound (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V
+		COMMENT Plays a sound.\r
+		COMMENT \r
+		COMMENT On the client, the sound will only play if `except` matches the client's player. On the server, sound packets will be sent to players around `except`, but not to `except` itself.\r
+		COMMENT \r
+		COMMENT @param except the player that will play this sound (client) or be skipped (server), or `null`\r
+		COMMENT @param source the source of the sound, which dictates which sound slider it corresponds to
+	METHOD playSound (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FF)V
+		COMMENT Plays a sound from `sourceEntity`'s position.\r
+		COMMENT \r
+		COMMENT @see #playSeededSound(net.minecraft.world.entity.Entity, net.minecraft.world.entity.Entity, net.minecraft.core.Holder, net.minecraft.sounds.SoundSource, float, float, long)
+	METHOD playSound (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V
+		COMMENT Plays a sound from `sourceEntity`'s position.\r
+		COMMENT \r
+		COMMENT @see #playSeededSound(net.minecraft.world.entity.Entity, net.minecraft.world.entity.Entity, net.minecraft.core.Holder, net.minecraft.sounds.SoundSource, float, float, long)
+	METHOD sendPacketToServer (Lnet/minecraft/network/protocol/Packet;)V
+		COMMENT Sends a packet to the server.\r
+		COMMENT \r
+		COMMENT @throws UnsupportedOperationException if called on the server
+	CLASS ExplosionInteraction
+		COMMENT Controls how an explosion interacts with the level.
+		FIELD BLOCK Lnet/minecraft/world/level/Level$ExplosionInteraction;
+			COMMENT Blocks are destroyed and decay according to [net.minecraft.world.level.gamerules.GameRules#BLOCK_EXPLOSION_DROP_DECAY]. Used by blocks like end crystals and respawn anchors.
+		FIELD MOB Lnet/minecraft/world/level/Level$ExplosionInteraction;
+			COMMENT Blocks will only be destroyes if [net.minecraft.world.level.gamerules.GameRules#MOB_GRIEFING] is `true` and will decay according to [net.minecraft.world.level.gamerules.GameRules#MOB_EXPLOSION_DROP_DECAY]. Used by mobs like creepers and the wither.
+		FIELD NONE Lnet/minecraft/world/level/Level$ExplosionInteraction;
+			COMMENT Blocks aren't destroyed.
+		FIELD TNT Lnet/minecraft/world/level/Level$ExplosionInteraction;
+			COMMENT Blocks will be destroyed and will decay according to [net.minecraft.world.level.gamerules.GameRules#TNT_EXPLOSION_DROP_DECAY]. Used by TNT.
+		FIELD TRIGGER Lnet/minecraft/world/level/Level$ExplosionInteraction;
+			COMMENT Blocks are triggered instead of being destroyed. Triggering will pull levers, push buttons, ring bells, extinguish candles, and open or close doors, trapdoors, and fence gates. Used by wind charges.
