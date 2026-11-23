@@ -43,7 +43,7 @@ group int separator
     @scope method net.minecraft.resources.Identifier tryParse (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
     @scope method net.minecraft.resources.Identifier toDebugFileName ()Ljava/lang/String;
     @scope method net.minecraft.resources.Identifier isAllowedInIdentifier (C)Z
-    @scope method net.minecraft.server.Bootstrap lambda$getMissingTranslations$0 (Lnet/minecraft/resources/Identifier;)Ljava/lang/String;
+    @scope method net.minecraft.server.Bootstrap getMissingTranslations (Lnet/minecraft/locale/Language;)Ljava/util/Set;
     @scope method net.minecraft.stats.Stat locationToKey (Lnet/minecraft/resources/Identifier;)Ljava/lang/String;
     @scope method net.minecraft.util.datafix.fixes.LevelFlatGeneratorInfoFix <clinit> ()V
     @scope method net.minecraft.util.datafix.fixes.StatsCounterFix unpackLegacyKey (Ljava/lang/String;)Lnet/minecraft/util/datafix/fixes/StatsCounterFix$StatType;
