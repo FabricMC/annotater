@@ -2,7 +2,7 @@ unpick v4
 
 #: Names the data of Entity is stored under
 # These are only used in a handful of places and really shouldn't appear elsewhere in the future
-group String entity_tag_names
+group String
     @scope method net.minecraft.world.entity.Entity saveAsPassenger (Lnet/minecraft/world/level/storage/ValueOutput;)Z
     @scope method net.minecraft.world.entity.Entity saveWithoutId (Lnet/minecraft/world/level/storage/ValueOutput;)V
     @scope method net.minecraft.world.entity.Entity load (Lnet/minecraft/world/level/storage/ValueInput;)V
@@ -35,7 +35,7 @@ group int boarding_cooldown
 
 #: Numbers that represent at which digit of a binary number the data is stored
 # Annotated with net.minecraft.world.entity.Entity.Flags
-group int entity_property_flags
+group int
     @scope method net.minecraft.world.entity.Entity isOnFire ()Z
     @scope method net.minecraft.world.entity.Entity isShiftKeyDown ()Z
     @scope method net.minecraft.world.entity.Entity isSprinting ()Z
