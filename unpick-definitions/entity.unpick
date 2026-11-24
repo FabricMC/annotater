@@ -25,7 +25,7 @@ group String
     net.minecraft.world.entity.Entity.TAG_INVULNERABLE_TIME
     net.minecraft.world.entity.Entity.TAG_CUSTOM_NAME
 
-group int entity_tag_details
+group int
     @scope class net.minecraft.world.entity.Entity
     net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
 
@@ -73,11 +73,5 @@ group double epsilon
 
 target_method java.util.ArrayDeque <init> (I)V
     param 0 max_movement_handled_per_tick
-
-target_method com.mojang.serialization.Codec sizeLimitedListOf (I)Lcom/mojang/serialization/Codec;
-    param 0 entity_tag_details
-
-target_method java.util.Collection size ()I
-    return entity_tag_details
 
 target_field net.minecraft.world.entity.Entity boardingCooldown I boarding_cooldown
