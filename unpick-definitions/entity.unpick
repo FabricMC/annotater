@@ -26,7 +26,7 @@ group String
     net.minecraft.world.entity.Entity.TAG_CUSTOM_NAME
 
 group int entity_tag_details
-    @scope method net.minecraft.world.entity.Entity addTag (Ljava/lang/String;)Z
+    @scope class net.minecraft.world.entity.Entity
     net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
 
 group int boarding_cooldown
@@ -76,3 +76,8 @@ target_method java.util.ArrayDeque <init> (I)V
 
 target_method com.mojang.serialization.Codec sizeLimitedListOf (I)Lcom/mojang/serialization/Codec;
     param 0 entity_tag_details
+
+target_method java.util.Collection size ()I
+    return entity_tag_details
+
+target_field net.minecraft.world.entity.Entity boardingCooldown I boarding_cooldown
