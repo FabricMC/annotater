@@ -24,14 +24,6 @@ group String
     net.minecraft.world.entity.Entity.TAG_INVULNERABLE_TIME
     net.minecraft.world.entity.Entity.TAG_CUSTOM_NAME
 
-group int
-    @scope class net.minecraft.world.entity.Entity
-    net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
-
-group int
-    @scope method net.minecraft.world.entity.Entity removePassenger (Lnet/minecraft/world/entity/Entity;)V
-    net.minecraft.world.entity.Entity.BOARDING_COOLDOWN
-
 #: Numbers that represent at which digit of a binary number the data is stored
 # Annotated with net.minecraft.world.entity.Entity.Flags
 group int
@@ -48,6 +40,22 @@ group int
     net.minecraft.world.entity.Entity.FLAG_INVISIBLE
     net.minecraft.world.entity.Entity.FLAG_GLOWING
 
+group int
+    @scope class net.minecraft.world.entity.Entity
+    net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
+
+group int
+    @scope method net.minecraft.world.entity.Entity removePassenger (Lnet/minecraft/world/entity/Entity;)V
+    net.minecraft.world.entity.Entity.BOARDING_COOLDOWN
+
+group int
+    @scope method net.minecraft.world.entity.Entity checkInsideBlocks (Ljava/util/List;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;)V
+    net.minecraft.world.entity.Entity.MAX_BLOCK_ITERATIONS_ALONG_TRAVEL_PER_TICK
+
+group int
+    @scope method net.minecraft.world.entity.Entity addMovementThisTick (Lnet/minecraft/world/entity/Entity$Movement;)V
+    net.minecraft.world.entity.Entity.MAX_MOVEMENTS_HANDELED_PER_TICK
+
 group int entity_id
   net.minecraft.world.entity.Entity.INVALID_ENTITY_ID
 
@@ -55,14 +63,3 @@ target_method net.minecraft.world.entity.Entity getId ()I
   return entity_id
 
 target_field net.minecraft.world.entity.Entity id I entity_id
-
-group int iterations
-    @scope method net.minecraft.world.entity.Entity checkInsideBlocks (Ljava/util/List;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;)V
-    net.minecraft.world.entity.Entity.MAX_BLOCK_ITERATIONS_ALONG_TRAVEL_PER_TICK
-
-group int max_movement_handled_per_tick
-    @scope method net.minecraft.world.entity.Entity addMovementThisTick (Lnet/minecraft/world/entity/Entity$Movement;)V
-    net.minecraft.world.entity.Entity.MAX_MOVEMENTS_HANDELED_PER_TICK
-
-target_method java.util.ArrayDeque <init> (I)V
-    param 0 max_movement_handled_per_tick
