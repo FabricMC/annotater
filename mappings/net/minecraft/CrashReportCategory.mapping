@@ -7,23 +7,23 @@ CLASS net/minecraft/CrashReportCategory
 		COMMENT @param nestedOffset the number of additional stack frames to skip
 		COMMENT @return the size of the filled in stacktrace
 	METHOD formatLocation (Lnet/minecraft/world/level/LevelHeightAccessor;DDD)Ljava/lang/String;
-		COMMENT Formats a set of `x`, `y`, and `z` coordinates into a human readable string for use in a crash report.
+		COMMENT Formats a set of coordinates into a human readable string for use in a crash report.
 		COMMENT
 		COMMENT @see #formatLocation(net.minecraft.world.level.LevelHeightAccessor, int, int, int)
 	METHOD formatLocation (Lnet/minecraft/world/level/LevelHeightAccessor;III)Ljava/lang/String;
-		COMMENT Formats a set of `x`, `y`, and `z` coordinates into a human readable string for use in a crash report.
+		COMMENT Formats a set of coordinates into a human readable string for use in a crash report.
 		COMMENT
-		COMMENT The formatted string also contains information regarding its containing section and containing region.
+		COMMENT The formatted string also contains information about the chunk, section, and region position.
 	METHOD formatLocation (Lnet/minecraft/world/level/LevelHeightAccessor;Lnet/minecraft/core/BlockPos;)Ljava/lang/String;
-		COMMENT Formats a set of `x`, `y`, and `z` coordinates into a human readable string for use in a crash report.
+		COMMENT Formats a set of coordinates into a human readable string for use in a crash report.
 		COMMENT
 		COMMENT @see #formatLocation(net.minecraft.world.level.LevelHeightAccessor, int, int, int)
 	METHOD getDetails (Ljava/lang/StringBuilder;)V
 		COMMENT Appends this category's details to the specified `StringBuilder`.
 	METHOD getStacktrace ()[Ljava/lang/StackTraceElement;
-		COMMENT {@return this category's stacktrace}
+		COMMENT Returns this category's stacktrace.
 		COMMENT
-		COMMENT Returns an empty array if called before [#fillInStackTrace].
+		COMMENT @return this category's stacktrace, or an empty array if called before [#fillInStackTrace]
 	METHOD setDetail (Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/CrashReportCategory;
 		COMMENT Sets a detail on this `CrashReportCategory`.
 		COMMENT
@@ -45,4 +45,4 @@ CLASS net/minecraft/CrashReportCategory
 		COMMENT
 		COMMENT A value of `null` for either `source` or `next` means no such element should exist and this method will only return `true` if this category's stacktrace is too short to contain said element.
 		COMMENT
-		COMMENT @return `true` is the validation succeeds, `false` if it fails
+		COMMENT @return whether the validation succeeds

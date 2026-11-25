@@ -1,6 +1,6 @@
 CLASS net/minecraft/CrashReport
 	METHOD addCategory (Ljava/lang/String;)Lnet/minecraft/CrashReportCategory;
-		COMMENT Add a category to this `CrashReport`.
+		COMMENT Adds a category to this `CrashReport`.
 		COMMENT
 		COMMENT Categories provide a way to add additional information to a crash report to aid in debugging.
 		COMMENT
@@ -13,8 +13,8 @@ CLASS net/minecraft/CrashReport
 		COMMENT @param nestedOffset the number of additional frames to skip when computing the category's stacktrace
 		COMMENT @see net.minecraft.CrashReportCategory#setDetail(java.lang.String, java.lang.Object)
 	METHOD preload ()V
-		COMMENT Preloads the crash report machinery and reserves memory to help prevent errors when creating crash reports in a possible resource-constrained post-crash environment.
+		COMMENT Preloads the crash report machinery and reserves memory to help prevent errors when creating crash reports in a possibly resource-constrained post-crash environment.
 	METHOD saveToFile (Ljava/nio/file/Path;Lnet/minecraft/ReportType;Ljava/util/List;)Z
 		COMMENT Writes this `CrashReport` to a file.
 		COMMENT
-		COMMENT @return `true` if the write succeeded, `false` otherwise
+		COMMENT @return whether the write succeeded
