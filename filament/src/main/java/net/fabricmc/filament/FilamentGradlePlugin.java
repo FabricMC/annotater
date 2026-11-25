@@ -1,5 +1,7 @@
 package net.fabricmc.filament;
 
+import java.util.List;
+
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
@@ -26,10 +28,13 @@ import net.fabricmc.filament.task.FormatMappingsTask;
 import net.fabricmc.filament.task.JavaRuntimeJarTask;
 import net.fabricmc.filament.task.unpick.CheckUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.CombineUnpickDefinitionsTask;
+import net.fabricmc.filament.task.unpick.UnpickJarTask;
 import net.fabricmc.filament.util.FilamentConstants;
 import net.fabricmc.loom.api.LoomGradleExtensionAPI;
 
 public final class FilamentGradlePlugin implements Plugin<Project> {
+	private static final String ANNOTATER_TASK_GROUP = "annotater";
+
 	@Override
 	public void apply(Project project) {
 		project.getPluginManager().apply("net.fabricmc.fabric-loom");
@@ -49,11 +54,12 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 		var toolchain = project.getExtensions().getByType(JavaPluginExtension.class).getToolchain();
 		var javaLauncher = project.getExtensions().getByType(JavaToolchainService.class).launcherFor(toolchain);
 		var javaRuntimeJar = tasks.register("javaRuntimeJar", JavaRuntimeJarTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getModules().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath().dir("jmods")));
 			task.getOutput().set(buildDir.file("javaRuntime/java-runtime.jar"));
 		});
 		var syncRuntimeLibs = tasks.register("syncRuntimeLibs", Sync.class, task -> {
-			task.setGroup("build");
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Syncs Minecraft dependencies and Java runtime classes, excluding the Minecraft jars.");
 			task.from(decompileClasspath);
 			task.from(javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
@@ -61,33 +67,67 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.into(buildDir.dir("runtime_libs"));
 		});
 		tasks.register("prepareMcSrc", task -> {
-			task.setGroup("build");
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Prepares the project for mcsrc.");
 			task.dependsOn(syncRuntimeLibs);
 		});
 
 		final Directory unpickDefinitions = project.getLayout().getProjectDirectory().dir("unpick-definitions");
 		var checkUnpickDefinitions = tasks.register("checkUnpickDefinitions", CheckUnpickDefinitionsTask.class, task -> {
-			task.setGroup("unpick");
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getInput().set(unpickDefinitions);
 			task.getClasspath().from(minecraftJars, decompileClasspath, javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
 		});
-		tasks.register("combineUnpickDefinitions", CombineUnpickDefinitionsTask.class, task -> {
-			task.setGroup("unpick");
+		var combineUnpickDefinitions = tasks.register("combineUnpickDefinitions", CombineUnpickDefinitionsTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.dependsOn(checkUnpickDefinitions);
 			task.getInput().set(unpickDefinitions);
 			task.getOutput().set(buildDir.file("unpick/definitions.unpick"));
 		});
+		var unpickJar = tasks.register("unpickJar", UnpickJarTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
+			task.setDescription("Applies unpick definitions to the Minecraft jar.");
+			task.getInput().set(project.getLayout().file(minecraftJars.getElements().map(files -> {
+				if (files.size() != 1) {
+					throw new IllegalStateException("Unpick requires a single merged Minecraft jar");
+				}
+
+				return files.iterator().next().getAsFile();
+			})));
+			task.getUnpickDefinitions().set(combineUnpickDefinitions.flatMap(CombineUnpickDefinitionsTask::getOutput));
+			task.getClasspath().from(decompileClasspath, javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
+			task.getOutput().set(buildDir.file("unpick/minecraft-unpicked.jar"));
+		});
+		tasks.register("decompileVineflower", DecompileTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
+			task.setDescription("Decompiles the whole game with unpick and javadocs applied.");
+			task.getDecompileAll().set(true);
+			task.getMappings().set(mappings);
+			task.getMinecraftJars().from(unpickJar.flatMap(UnpickJarTask::getOutput));
+			task.getLibraries().from(decompileClasspath);
+			task.getOutput().set(buildDir.dir("vineflower"));
+			task.getReport().set(buildDir.file("decompileVineflower/report.tsv"));
+			task.getJavadocLines().set(buildDir.file("decompileVineflower/javadoc-lines.tsv"));
+		});
+		// Loom registers genSources after evaluation as a lifecycle task for its default decompiler.
+		project.afterEvaluate(ignored -> tasks.named("genSources", task -> {
+			task.setEnabled(false);
+			// Gradle still runs the dependencies of a disabled task.
+			task.setDependsOn(List.of());
+		}));
 
 		var checkMappings = tasks.register("checkMappings", CheckMappingsTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getMappings().set(mappings);
 			task.getMinecraftJars().from(minecraftJars);
 		});
 		tasks.register("convertMappings", ConvertMappingsTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getMappings().set(mappings);
 			task.getOutput().set(buildDir.file("mappings.tiny"));
 		});
 		var decompile = tasks.register("decompile", DecompileTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getMappings().set(mappings);
 			task.getMinecraftJars().from(minecraftJars);
 			task.getLibraries().from(decompileClasspath);
@@ -96,6 +136,7 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.getJavadocLines().set(buildDir.file("decompile/javadoc-lines.tsv"));
 		});
 		var checkDecompile = tasks.register("checkDecompile", CheckDecompileTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getReport().set(decompile.flatMap(DecompileTask::getReport));
 		});
 
@@ -110,7 +151,7 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			FilamentConstants.JAVADOC_OPTIONS.forEach(flag -> options.addBooleanOption(flag.substring(1), true));
 		});
 
-		tasks.named("check", task -> task.dependsOn(checkMappings, checkDecompile, checkUnpickDefinitions, "javadoc"));
+		tasks.named("check", task -> task.dependsOn(checkMappings, checkDecompile, unpickJar, "javadoc"));
 
 		// The check tasks have no outputs, so they are not automatically ordered after clean
 		checkMappings.configure(task -> task.mustRunAfter("clean"));
@@ -119,16 +160,19 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 
 		// A pipeline fixing the mappings, each step dropping the mappings failing one of the checks
 		var dropCheckMappingsErrors = tasks.register("dropCheckMappingsErrors", DropCheckMappingsErrorsTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getMappings().set(mappings);
 			task.getMinecraftJars().from(minecraftJars);
 			task.getOutput().set(buildDir.dir("fixedMappings/dropCheckMappingsErrors"));
 		});
 		var dropDecompileErrors = tasks.register("dropDecompileErrors", DropDecompileErrorsTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getMappings().set(dropCheckMappingsErrors.flatMap(FixMappingsTask::getOutput));
 			task.getReport().set(decompile.flatMap(DecompileTask::getReport));
 			task.getOutput().set(buildDir.dir("fixedMappings/dropDecompileErrors"));
 		});
 		var dropJavadocErrors = tasks.register("dropJavadocErrors", DropJavadocErrorsTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getMappings().set(dropDecompileErrors.flatMap(FixMappingsTask::getOutput));
 			task.getSources().set(decompile.flatMap(DecompileTask::getOutput));
 			task.getJavadocLines().set(decompile.flatMap(DecompileTask::getJavadocLines));
@@ -136,16 +180,19 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.getOutput().set(buildDir.dir("fixedMappings/dropJavadocErrors"));
 		});
 		var formatMappings = tasks.register("formatMappings", FormatMappingsTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.getMappings().set(dropJavadocErrors.flatMap(FixMappingsTask::getOutput));
 			task.getOutput().set(buildDir.dir("fixedMappings/formatMappings"));
 		});
 		Provider<Directory> fixedMappings = formatMappings.flatMap(FixMappingsTask::getOutput);
 		var dropInvalidMappings = tasks.register("dropInvalidMappings", Sync.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Drops the mappings failing the checks, replacing the mappings with the fixed mappings.");
 			task.from(fixedMappings);
 			task.into(mappings);
 		});
 		tasks.register("dropInvalid", task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Drops everything failing the checks.");
 			task.dependsOn(dropInvalidMappings);
 		});

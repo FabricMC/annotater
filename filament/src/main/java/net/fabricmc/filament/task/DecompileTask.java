@@ -26,7 +26,9 @@ import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.logging.LogLevel;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
+import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.CompileClasspath;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.OutputDirectory;
@@ -50,10 +52,17 @@ import net.fabricmc.fernflower.api.IFabricJavadocProvider;
 import net.fabricmc.mappingio.tree.MappingTree;
 import net.fabricmc.mappingio.tree.MemoryMappingTree;
 
-/// Decompiles the Minecraft jars with the javadocs inserted, and saves the sources of the documented classes so the
+/// Decompiles the Minecraft jars with the javadocs inserted, and by default saves only the documented classes so the
 /// javadocs can be checked by the javadoc tool. The invalid javadocs are reported instead of failing, so they can be
 /// checked by [CheckDecompileTask] or dropped by [DropDecompileErrorsTask] without decompiling again.
 public abstract class DecompileTask extends DefaultTask {
+	public DecompileTask() {
+		getDecompileAll().convention(false);
+	}
+
+	@Input
+	public abstract Property<Boolean> getDecompileAll();
+
 	@InputDirectory
 	public abstract DirectoryProperty getMappings();
 
@@ -86,6 +95,7 @@ public abstract class DecompileTask extends DefaultTask {
 		// Run in a separate process to decompile with more memory
 		getWorkerExecutor().processIsolation(spec -> spec.getForkOptions().setMaxHeapSize("4G")).submit(Decompile.class, parameters -> {
 			parameters.getMappings().set(getMappings());
+			parameters.getDecompileAll().set(getDecompileAll());
 			parameters.getMinecraftJars().from(getMinecraftJars());
 			parameters.getLibraries().from(getLibraries());
 			parameters.getOutput().set(getOutput());
@@ -107,6 +117,8 @@ public abstract class DecompileTask extends DefaultTask {
 	}
 
 	public interface Parameters extends WorkParameters {
+		Property<Boolean> getDecompileAll();
+
 		DirectoryProperty getMappings();
 
 		ConfigurableFileCollection getMinecraftJars();
@@ -176,7 +188,7 @@ public abstract class DecompileTask extends DefaultTask {
 			options.put(IFabricJavadocProvider.PROPERTY_NAME, new JavadocProvider(tree, ids));
 			options.put(IFernflowerPreferences.THREADS, String.valueOf(Runtime.getRuntime().availableProcessors()));
 
-			Saver saver = new Saver(getParameters().getOutput().get().getAsFile().toPath(), documented, new ConcurrentHashMap<>());
+			Saver saver = new Saver(getParameters().getOutput().get().getAsFile().toPath(), documented, getParameters().getDecompileAll().get(), new ConcurrentHashMap<>());
 			GradleLogger logger = new GradleLogger(Logging.getLogger(DecompileTask.class));
 			Fernflower fernflower = new Fernflower(saver, options, logger);
 			getParameters().getMinecraftJars().forEach(fernflower::addSource);
@@ -294,10 +306,12 @@ public abstract class DecompileTask extends DefaultTask {
 	}
 
 	/// Saves the sources of the documented classes with the markers removed, recording where each javadoc was written by its id.
-	private record Saver(Path output, Set<String> documented, Map<Integer, Location> written) implements IResultSaver {
+	private record Saver(Path output, Set<String> documented, boolean decompileAll, Map<Integer, Location> written) implements IResultSaver {
 		@Override
 		public void saveClassEntry(String path, String archiveName, String qualifiedName, String entryName, @Nullable String content) {
-			if (content == null || !documented.contains(qualifiedName)) return;
+			if (content == null || (!decompileAll && !documented.contains(qualifiedName))) {
+				return;
+			}
 
 			// Strip the markers, recording the line each javadoc starts on in the stripped source
 			Matcher matcher = MARKER_LINE.matcher(content);
