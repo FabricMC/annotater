@@ -4,17 +4,4 @@ unpick v4
 group int entity_events
     net.minecraft.world.entity.EntityEvent.*
 
-target_method net.minecraft.world.entity.Entity handleEntityEvent (B)V
-    param 0 entity_events
-
-target_method net.minecraft.world.level.Level broadcastEntityEvent (Lnet/minecraft/world/entity/Entity;B)V
-    param 1 entity_events
-
-target_method net.minecraft.network.protocol.game.ClientboundEntityEventPacket <init> (Lnet/minecraft/world/entity/Entity;B)V
-    param 1 entity_events
-
-target_method net.minecraft.network.protocol.game.ClientboundEntityEventPacket getEventId ()B
-    return entity_events
-
-target_method net.minecraft.world.entity.LivingEntity entityEventForEquipmentBreak (Lnet/minecraft/world/entity/EquipmentSlot;)B
-    return entity_events
+target_annotation net.minecraft.world.entity.EntityEvent$Value entity_events

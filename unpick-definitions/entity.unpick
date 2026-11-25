@@ -25,14 +25,7 @@ group String
     net.minecraft.world.entity.Entity.TAG_CUSTOM_NAME
 
 #: Numbers that represent at which digit of a binary number the data is stored
-# Annotated with net.minecraft.world.entity.Entity.Flags
-group int
-    @scope method net.minecraft.world.entity.Entity isOnFire ()Z
-    @scope method net.minecraft.world.entity.Entity isShiftKeyDown ()Z
-    @scope method net.minecraft.world.entity.Entity isSprinting ()Z
-    @scope method net.minecraft.world.entity.Entity isSwimming ()Z
-    @scope method net.minecraft.world.entity.Entity isInvisible ()Z
-    @scope method net.minecraft.world.entity.Entity isCurrentlyGlowing ()Z
+group int shared_entity_flags
     net.minecraft.world.entity.Entity.FLAG_ONFIRE
     net.minecraft.world.entity.Entity.FLAG_SHIFT_KEY_DOWN
     net.minecraft.world.entity.Entity.FLAG_SPRINTING
@@ -41,11 +34,11 @@ group int
     net.minecraft.world.entity.Entity.FLAG_GLOWING
 
 group int
-    @scope class net.minecraft.world.entity.Entity
+    @scope method net.minecraft.world.entity.Entity addTag (Ljava/lang/String;)Z
+    @scope method net.minecraft.world.entity.Entity <clinit> ()V
     net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
 
-group int
-    @scope method net.minecraft.world.entity.Entity removePassenger (Lnet/minecraft/world/entity/Entity;)V
+group int entity_boarding_cooldown
     net.minecraft.world.entity.Entity.BOARDING_COOLDOWN
 
 group int
@@ -63,3 +56,7 @@ target_method net.minecraft.world.entity.Entity getId ()I
   return entity_id
 
 target_field net.minecraft.world.entity.Entity id I entity_id
+
+target_field net.minecraft.world.entity.Entity boardingCooldown I entity_boarding_cooldown
+
+target_annotation net.minecraft.world.entity.Entity$Flags shared_entity_flags
