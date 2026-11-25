@@ -55,7 +55,7 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 		var javaLauncher = project.getExtensions().getByType(JavaToolchainService.class).launcherFor(toolchain);
 		var javaRuntimeJar = tasks.register("javaRuntimeJar", JavaRuntimeJarTask.class, task -> {
 			task.setGroup(ANNOTATER_TASK_GROUP);
-			task.getModules().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath().dir("jmods")));
+			task.getJavaHome().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath()));
 			task.getOutput().set(buildDir.file("javaRuntime/java-runtime.jar"));
 		});
 		var syncRuntimeLibs = tasks.register("syncRuntimeLibs", Sync.class, task -> {
