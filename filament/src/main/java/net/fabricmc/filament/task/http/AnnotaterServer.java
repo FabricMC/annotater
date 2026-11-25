@@ -9,10 +9,15 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +26,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import net.fabricmc.filament.util.JSpecifyRecordTypeAdapterFactory;
@@ -35,6 +41,8 @@ import net.fabricmc.mappingio.tree.VisitOrder;
 
 public record AnnotaterServer(
 		String mappingsDir,
+		String unpickDir,
+		String runtimeLibrariesDir,
 		String minecraftVersion,
 		String host,
 		int port,
@@ -51,6 +59,23 @@ public record AnnotaterServer(
 		server.runServer();
 	}
 
+	// region Routes
+
+	private @NonNull Map<Route, RouteHandler> getRoutes() {
+		Map<Route, RouteHandler> routes = new HashMap<>();
+		routes.put(new Route("GET", "/ping"), this::ping);
+		routes.put(new Route("GET", "/config"), this::getConfig);
+		routes.put(new Route("GET", "/mapping"), this::getMapping);
+		routes.put(new Route("POST", "/mapping"), this::updateMapping);
+		routes.put(new Route("GET", "/unpick/list"), this::listUnpick);
+		routes.put(new Route("GET", "/unpick"), this::getUnpick);
+		routes.put(new Route("POST", "/unpick"), this::updateUnpick);
+		routes.put(new Route("DELETE", "/unpick"), this::deleteUnpick);
+		routes.put(new Route("GET", "/library"), this::getRuntimeLibrary);
+		return routes;
+	}
+
+	/// Indicate that the server still alive
 	private void ping(HttpExchange exchange) throws IOException {
 		exchange.sendResponseHeaders(204, -1);
 		exchange.close();
@@ -58,27 +83,32 @@ public record AnnotaterServer(
 
 	/// Get the config
 	private void getConfig(HttpExchange exchange) throws IOException {
-		requireMethod(exchange, "GET");
-		sendResponse(exchange, 200, new Config(minecraftVersion));
+		Path baseDir = Path.of(runtimeLibrariesDir).toAbsolutePath().normalize();
+		List<String> runtimeLibraries;
+
+		try (Stream<Path> stream = Files.walk(baseDir)) {
+			runtimeLibraries = stream
+					.filter(Files::isRegularFile)
+					.filter(p -> p.getFileName().toString().endsWith(".jar"))
+					.map(p -> relativePath(baseDir, p))
+					.toList();
+		}
+
+		sendResponse(exchange, 200, new Config(minecraftVersion, runtimeLibraries));
 	}
 
 	/// Get Enigma formatted mapping of the target class.
 	private void getMapping(HttpExchange exchange) throws IOException {
-		requireMethod(exchange, "POST");
-		GetMapping body = parseBodyOrError(exchange, GetMapping.class);
-		Path file = getMappingFileOrError(body.className());
+		String className = exchange.getRequestURI().getQuery();
+		require(className != null && !className.isEmpty(), 400, "Missing class name query");
+		Path file = getMappingFile(className);
+		require(Files.isRegularFile(file), 404, "Mapping file not found");
 
-		exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=utf-8");
-		exchange.sendResponseHeaders(200, Files.size(file));
-
-		try (OutputStream out = exchange.getResponseBody()) {
-			Files.copy(file, out);
-		}
+		sendFileResponse(exchange, file, "text/plain; charset=utf-8");
 	}
 
 	/// Update mapping for a select member of the target class.
 	private void updateMapping(HttpExchange exchange) throws IOException {
-		requireMethod(exchange, "POST");
 		UpdateMapping body = parseBodyOrError(exchange, UpdateMapping.class);
 		Path file = getMappingFile(body.className());
 
@@ -86,6 +116,7 @@ public record AnnotaterServer(
 		String className = body.className().replace('.', '/');
 
 		if (Files.exists(file)) {
+			require(Files.isRegularFile(file), 400, "Tried to edit directory");
 			MappingReader.read(file, MappingFormat.ENIGMA_FILE, tree);
 		} else {
 			tree.visitNamespaces(MappingUtil.NS_SOURCE_FALLBACK, List.of(MappingUtil.NS_TARGET_FALLBACK));
@@ -120,16 +151,90 @@ public record AnnotaterServer(
 		sendResponse(exchange, 200, new Details("Mapping updated"));
 	}
 
+	/// Get list of unpick file path and its modified time
+	private void listUnpick(HttpExchange exchange) throws IOException {
+		Path baseDir = Path.of(unpickDir).toAbsolutePath().normalize();
+		List<Path> files;
+
+		try (Stream<Path> stream = Files.walk(baseDir)) {
+			files = stream
+					.filter(Files::isRegularFile)
+					.filter(p -> p.getFileName().toString().endsWith(".unpick"))
+					.toList();
+		}
+
+		List<UnpickMetadata> metadata = new ArrayList<>(files.size());
+
+		for (Path file : files) {
+			metadata.add(new UnpickMetadata(
+					relativePath(baseDir, file),
+					Files.getLastModifiedTime(file).toMillis()
+			));
+		}
+
+		this.sendResponse(exchange, 200, new ListBody<>(metadata));
+	}
+
+	/// Get the content of an unpick file from a file path
+	private void getUnpick(HttpExchange exchange) throws IOException {
+		String path = exchange.getRequestURI().getQuery();
+		require(path != null && !path.isEmpty(), 400, "Missing path query");
+		require(path.endsWith(".unpick"), 400, "Invalid path");
+
+		Path file = getFilePath(unpickDir, path);
+		require(Files.isRegularFile(file), 404, "File not found");
+
+		sendFileResponse(exchange, file, "text/plain; charset=utf-8");
+	}
+
+	/// Update or create an unpick file
+	private void updateUnpick(HttpExchange exchange) throws IOException {
+		UpdateUnpick body = parseBodyOrError(exchange, UpdateUnpick.class);
+		require(body.path().endsWith(".unpick"), 400, "Invalid path");
+		Path file = getFilePath(unpickDir, body.path());
+
+		if (Files.exists(file)) {
+			require(Files.isRegularFile(file), 400, "Tried to edit directory");
+		}
+
+		Files.writeString(file, body.content());
+		sendResponse(exchange, 200, new Details("Unpick updated"));
+	}
+
+	/// Delete an unpick file
+	private void deleteUnpick(HttpExchange exchange) throws IOException {
+		String path = exchange.getRequestURI().getQuery();
+		require(path != null && !path.isEmpty(), 400, "Missing path query");
+		require(path.endsWith(".unpick"), 400, "Invalid path");
+
+		Path file = getFilePath(unpickDir, path);
+		require(Files.isRegularFile(file), 404, "File not found");
+
+		Files.delete(file);
+		sendResponse(exchange, 200, new Details("Unpick deleted"));
+	}
+
+	/// Get runtime library jar
+	private void getRuntimeLibrary(HttpExchange exchange) throws IOException {
+		String path = exchange.getRequestURI().getQuery();
+		require(path != null && !path.isEmpty(), 400, "Missing path query");
+		require(path.endsWith(".jar"), 400, "Invalid path");
+
+		Path file = getFilePath(runtimeLibrariesDir, path);
+		require(Files.isRegularFile(file), 404, "File not found");
+
+		sendFileResponse(exchange, file, "application/java-archive");
+	}
+
+	// endregion
+	// region Server Initialization
+
 	HttpServer createServer() throws IOException {
 		HttpServer server = HttpServer.create(new InetSocketAddress(host, port), 0);
 		String client = baseClientUrl();
 		String clientOrigin = getOrigin(client);
-
-		Map<String, Route> routes = new HashMap<>();
-		routes.put("/ping", this::ping);
-		routes.put("/config", this::getConfig);
-		routes.put("/get-mapping", this::getMapping);
-		routes.put("/update-mapping", this::updateMapping);
+		Map<Route, RouteHandler> routes = getRoutes();
+		Set<String> paths = routes.keySet().stream().map(Route::path).collect(Collectors.toSet());
 
 		server.createContext("/", exchange -> {
 			try {
@@ -140,22 +245,23 @@ public record AnnotaterServer(
 				require(clientOrigin.equalsIgnoreCase(requestOrigin), 403, "Invalid request origin");
 
 				headers.set("Access-Control-Allow-Origin", client);
-				headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+				headers.set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
 				headers.set("Access-Control-Allow-Headers", "Content-Type");
 				headers.set("Access-Control-Allow-Private-Network", "true");
 
 				String path = exchange.getRequestURI().getPath().toLowerCase(Locale.ROOT);
-				require(routes.containsKey(path), 404, "Unknown route");
+				require(paths.contains(path), 404, "Unknown route");
+				String method = exchange.getRequestMethod().toUpperCase(Locale.ROOT);
 
-				String method = exchange.getRequestMethod();
-
-				if ("OPTIONS".equalsIgnoreCase(method)) {
+				if ("OPTIONS".equals(method)) {
 					exchange.sendResponseHeaders(204, -1);
 					exchange.close();
 					return;
 				}
 
-				routes.get(path).handle(exchange);
+				RouteHandler handler = routes.get(new Route(method, path));
+				require(handler != null, 404, "Unknown route");
+				handler.handle(exchange);
 			} catch (HttpError e) {
 				sendResponse(exchange, e.status, new Details(e.getMessage()));
 			} catch (Exception e) {
@@ -194,12 +300,16 @@ public record AnnotaterServer(
 		}
 	}
 
+	// endregion
+	// region Utilities
+
 	private String baseClientUrl() {
 		return clientUrl.endsWith("/") ? clientUrl.substring(0, clientUrl.length() - 1) : clientUrl;
 	}
 
 	@Contract("!null -> !null")
-	@Nullable String getOrigin(@Nullable String url) {
+	@Nullable
+	private String getOrigin(@Nullable String url) {
 		if (url == null) return null;
 
 		URI uri;
@@ -235,10 +345,6 @@ public record AnnotaterServer(
 		if (!predicate) throw new HttpError(errorCode, details);
 	}
 
-	private void requireMethod(HttpExchange exchange, String method) {
-		require(method.equalsIgnoreCase(exchange.getRequestMethod()), 404, "Unknown route");
-	}
-
 	private <T extends Body> T parseBodyOrError(HttpExchange exchange, Class<T> clazz) throws IOException {
 		try (InputStreamReader in = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)) {
 			T parsed = GSON.fromJson(in, clazz);
@@ -249,7 +355,14 @@ public record AnnotaterServer(
 		}
 	}
 
-	Path getMappingFile(String className) {
+	private Path getFilePath(String parent, String path) {
+		Path baseDir = Path.of(parent).toAbsolutePath().normalize();
+		Path file = baseDir.resolve(path).normalize();
+		require(file.startsWith(baseDir), 400, "Invalid path");
+		return file;
+	}
+
+	private Path getMappingFile(String className) {
 		String path = className.replace('.', '/');
 		int dollar = path.indexOf('$');
 
@@ -257,17 +370,12 @@ public record AnnotaterServer(
 			path = path.substring(0, dollar);
 		}
 
-		require(!path.isEmpty(), 404, "Invalid class name");
-		Path baseDir = Path.of(mappingsDir).toAbsolutePath();
-		Path file = baseDir.resolve(path + ".mapping").normalize();
-		require(file.startsWith(baseDir), 400, "Invalid class name");
-		return file;
+		require(!path.isEmpty(), 400, "Invalid class name");
+		return getFilePath(mappingsDir, path + ".mapping");
 	}
 
-	private Path getMappingFileOrError(String className) {
-		Path file = getMappingFile(className);
-		require(Files.isRegularFile(file), 404, "Mapping file not found");
-		return file;
+	private String relativePath(Path baseDir, Path file) {
+		return baseDir.relativize(file).toString().replace('\\', '/');
 	}
 
 	private void sendResponse(HttpExchange exchange, int statusCode, Body body) throws IOException {
@@ -280,11 +388,30 @@ public record AnnotaterServer(
 		}
 	}
 
-	private interface Route {
+	private void sendFileResponse(HttpExchange exchange, Path file, String contentType) throws IOException {
+		exchange.getResponseHeaders().set("Content-Type", contentType);
+		exchange.sendResponseHeaders(200, Files.size(file));
+
+		try (OutputStream out = exchange.getResponseBody()) {
+			Files.copy(file, out);
+		}
+	}
+
+	private record Route(String method, String path) {
+		Route {
+			method = method.toUpperCase(Locale.ROOT);
+			path = path.toLowerCase(Locale.ROOT);
+		}
+	}
+
+	private interface RouteHandler {
 		void handle(HttpExchange consumer) throws Exception;
 	}
 
-	interface Body {
+	// endregion
+	// region Body
+
+	private interface Body {
 	}
 
 	static class HttpError extends Error {
@@ -296,13 +423,13 @@ public record AnnotaterServer(
 		}
 	}
 
-	private record Config(String version) implements Body {
+	private record ListBody<T extends Body>(List<T> entries) implements Body {
+	}
+
+	private record Config(String version, List<String> runtimeLibraries) implements Body {
 	}
 
 	private record Details(String details) implements Body {
-	}
-
-	private record GetMapping(String className) implements Body {
 	}
 
 	private record UpdateMapping(
@@ -312,6 +439,12 @@ public record AnnotaterServer(
 			@Nullable String desc,
 			String comments
 	) implements Body {
+	}
+
+	private record UnpickMetadata(String path, long modifiedTime) implements Body {
+	}
+
+	private record UpdateUnpick(String path, String content) implements Body {
 	}
 
 	private enum Kind {

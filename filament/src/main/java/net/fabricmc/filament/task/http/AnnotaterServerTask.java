@@ -23,7 +23,13 @@ public abstract class AnnotaterServerTask extends DefaultTask {
 	protected abstract ObjectFactory getObjects();
 
 	@InputDirectory
-	public abstract DirectoryProperty getMappings();
+	public abstract DirectoryProperty getMappingsDir();
+
+	@InputDirectory
+	public abstract DirectoryProperty getUnpickDir();
+
+	@InputDirectory
+	public abstract DirectoryProperty getRuntimeLibrariesDir();
 
 	@Input
 	public abstract Property<String> getMinecraftVersion();
@@ -63,7 +69,9 @@ public abstract class AnnotaterServerTask extends DefaultTask {
 			));
 			spec.getMainClass().set(AnnotaterServer.class.getName());
 			spec.systemProperty(AnnotaterServer.PROP_KEY, AnnotaterServer.GSON.toJson(new AnnotaterServer(
-					getMappings().get().getAsFile().getAbsolutePath(),
+					getMappingsDir().get().getAsFile().getAbsolutePath(),
+					getUnpickDir().get().getAsFile().getAbsolutePath(),
+					getRuntimeLibrariesDir().get().getAsFile().getAbsolutePath(),
 					getMinecraftVersion().get(),
 					getHost().get(),
 					getPort().map(Integer::parseInt).get(),

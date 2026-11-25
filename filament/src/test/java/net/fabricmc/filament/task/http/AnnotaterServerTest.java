@@ -3,8 +3,6 @@ package net.fabricmc.filament.task.http;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -21,7 +19,6 @@ import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.io.TempDir;
 
 import net.fabricmc.mappingio.MappingReader;
@@ -35,6 +32,10 @@ class AnnotaterServerTest {
 
 	@TempDir
 	Path mappingsDir;
+	@TempDir
+	Path unpickDir;
+	@TempDir
+	Path runtimeLibrariesDir;
 
 	private AnnotaterServer server;
 	private HttpServer httpServer;
@@ -42,7 +43,16 @@ class AnnotaterServerTest {
 
 	@BeforeEach
 	void setUp() throws IOException {
-		server = new AnnotaterServer(mappingsDir.toString(), VERSION, "127.0.0.1", 0, CLIENT, false);
+		server = new AnnotaterServer(
+				mappingsDir.toString(),
+				unpickDir.toString(),
+				runtimeLibrariesDir.toString(),
+				VERSION,
+				"127.0.0.1",
+				0,
+				CLIENT,
+				false
+		);
 		httpServer = server.createServer();
 		httpServer.start();
 		baseUri = URI.create("http://127.0.0.1:" + httpServer.getAddress().getPort());
@@ -54,48 +64,52 @@ class AnnotaterServerTest {
 	}
 
 	@Test
-	void getOriginAddsDefaultPorts() {
-		assertEquals("https://mcsrc.dev:443", server.getOrigin("https://mcsrc.dev"));
-		assertEquals("https://mcsrc.dev:443", server.getOrigin("https://mcsrc.dev:443"));
-		assertEquals("http://localhost:80", server.getOrigin("http://localhost"));
-		assertEquals("http://localhost:8000", server.getOrigin("http://localhost:8000"));
+	void originIsNormalizedBeforeComparison() throws Exception {
+		assertEquals(200, request("GET", "/config", "https://mcsrc.dev", null).statusCode());
+		assertEquals(200, request("GET", "/config", "HTTPS://MCSRC.DEV/some/path?query#fragment", null).statusCode());
 	}
 
 	@Test
-	void getOriginDropsPathAndNormalizesCase() {
-		assertEquals("https://mcsrc.dev:443", server.getOrigin("HTTPS://MCSRC.DEV/some/path?query#fragment"));
+	void invalidOriginsAreRejected() throws Exception {
+		assertEquals(403, request("GET", "/config", "not a url", null).statusCode());
+		assertEquals(403, request("GET", "/config", "ftp://mcsrc.dev", null).statusCode());
+		assertEquals(403, request("GET", "/config", "https:///foo", null).statusCode());
 	}
 
 	@Test
-	void getOriginReturnsNullForNull() {
-		assertNull(server.getOrigin(null));
+	void getMappingUsesOutermostClassFile() throws Exception {
+		Path file = mappingsDir.resolve("net/minecraft/Foo.mapping");
+		Files.createDirectories(file.getParent());
+		Files.writeString(file, "CLASS net/minecraft/Foo\n");
+
+		for (String className : new String[] {"net.minecraft.Foo", "net.minecraft.Foo$Bar", "net.minecraft.Foo$Bar$Baz"}) {
+			HttpResponse<String> response = request("GET", "/mapping?" + className, CLIENT, null);
+
+			assertEquals(200, response.statusCode(), className);
+			assertEquals("CLASS net/minecraft/Foo\n", response.body(), className);
+		}
 	}
 
 	@Test
-	void getOriginRejectsInvalidUrls() {
-		assertHttpError(403, () -> server.getOrigin("null"));
-		assertHttpError(403, () -> server.getOrigin("not a url"));
-		assertHttpError(403, () -> server.getOrigin("ftp://mcsrc.dev"));
-		assertHttpError(403, () -> server.getOrigin("https:///foo"));
+	void getMappingRejectsTraversal() throws Exception {
+		assertEquals(400, request("GET", "/mapping?../../etc/passwd", CLIENT, null).statusCode());
 	}
 
 	@Test
-	void getMappingFileUsesOutermostClass() {
-		Path expected = mappingsDir.resolve("net/minecraft/Foo.mapping");
-
-		assertEquals(expected, server.getMappingFile("net.minecraft.Foo"));
-		assertEquals(expected, server.getMappingFile("net.minecraft.Foo$Bar"));
-		assertEquals(expected, server.getMappingFile("net.minecraft.Foo$Bar$Baz"));
+	void getMappingRejectsEmptyClassName() throws Exception {
+		assertEquals(400, request("GET", "/mapping?$Foo", CLIENT, null).statusCode());
 	}
 
 	@Test
-	void getMappingFileRejectsTraversal() {
-		assertHttpError(400, () -> server.getMappingFile("../../etc/passwd"));
-	}
+	void updateMappingRejectsTraversal() throws Exception {
+		HttpResponse<String> response = request("POST", "/mapping", CLIENT, """
+				{
+					"className": "../../etc/passwd",
+					"kind": "CLASS",
+					"comments": "nope"
+				}""");
 
-	@Test
-	void getMappingFileRejectsEmptyClassName() {
-		assertHttpError(404, () -> server.getMappingFile("$Foo"));
+		assertEquals(400, response.statusCode(), response.body());
 	}
 
 	@Test
@@ -107,6 +121,7 @@ class AnnotaterServerTest {
 		assertEquals("true", response.headers().firstValue("Access-Control-Allow-Private-Network").orElseThrow());
 		assertEquals("Origin", response.headers().firstValue("Vary").orElseThrow());
 		assertTrue(response.headers().firstValue("Access-Control-Allow-Methods").orElseThrow().contains("GET"));
+		assertTrue(response.headers().firstValue("Access-Control-Allow-Methods").orElseThrow().contains("DELETE"));
 		assertTrue(response.headers().firstValue("Access-Control-Allow-Headers").orElseThrow().contains("Content-Type"));
 	}
 
@@ -120,10 +135,17 @@ class AnnotaterServerTest {
 
 	@Test
 	void configFromAllowedOrigin() throws Exception {
+		Files.createDirectories(runtimeLibrariesDir.resolve("nested"));
+		Files.writeString(runtimeLibrariesDir.resolve("nested/lib.jar"), "");
+		Files.writeString(runtimeLibrariesDir.resolve("ignored.txt"), "");
+
 		HttpResponse<String> response = request("GET", "/config", CLIENT, null);
 
 		assertEquals(200, response.statusCode());
-		assertEquals("{\"version\":\"" + VERSION + "\"}", response.body());
+		assertEquals(
+				"{\"version\":\"" + VERSION + "\",\"runtimeLibraries\":[\"nested/lib.jar\"]}",
+				response.body()
+		);
 		assertTrue(response.headers().firstValue("Content-Type").orElseThrow().startsWith("application/json"));
 	}
 
@@ -156,9 +178,11 @@ class AnnotaterServerTest {
 
 	@Test
 	void wrongMethodIs404() throws Exception {
-		HttpResponse<String> response = request("POST", "/config", CLIENT, "{}");
-
-		assertEquals(404, response.statusCode());
+		assertEquals(404, request("POST", "/config", CLIENT, "{}").statusCode());
+		assertEquals(404, request("POST", "/unpick/list", CLIENT, "{}").statusCode());
+		assertEquals(404, request("POST", "/library", CLIENT, "{}").statusCode());
+		assertEquals(404, request("DELETE", "/mapping", CLIENT, null).statusCode());
+		assertEquals(404, request("DELETE", "/library", CLIENT, null).statusCode());
 	}
 
 	@Test
@@ -168,14 +192,14 @@ class AnnotaterServerTest {
 
 	@Test
 	void errorIfNonNullableIsNull() throws Exception {
-		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT, "{}");
+		HttpResponse<String> response = request("POST", "/mapping", CLIENT, "{}");
 
 		assertEquals(400, response.statusCode(), response.body());
 	}
 
 	@Test
 	void parsesUpdateMappingBody() throws Exception {
-		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+		HttpResponse<String> response = request("POST", "/mapping", CLIENT, """
 				{
 					"className": "net.minecraft.Foo",
 					"kind": "METHOD",
@@ -199,7 +223,7 @@ class AnnotaterServerTest {
 
 	@Test
 	void updateMethodMappingErrorOnMissingName() throws Exception {
-		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+		HttpResponse<String> response = request("POST", "/mapping", CLIENT, """
 				{
 					"className": "net/minecraft/Foo",
 					"kind": "METHOD",
@@ -211,7 +235,7 @@ class AnnotaterServerTest {
 
 	@Test
 	void createsMappingForNewClass() throws Exception {
-		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+		HttpResponse<String> response = request("POST", "/mapping", CLIENT, """
 				{
 					"className": "net.minecraft.Foo",
 					"kind": "CLASS",
@@ -233,7 +257,7 @@ class AnnotaterServerTest {
 
 	@Test
 	void updateMappingForInnerClassWritesOutermostFile() throws Exception {
-		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+		HttpResponse<String> response = request("POST", "/mapping", CLIENT, """
 				{
 					"className": "net.minecraft.Foo$Bar",
 					"kind": "CLASS",
@@ -264,7 +288,7 @@ class AnnotaterServerTest {
 				\t\tCOMMENT existing
 				""");
 
-		HttpResponse<String> response = request("POST", "/update-mapping", CLIENT, """
+		HttpResponse<String> response = request("POST", "/mapping", CLIENT, """
 				{
 					"className": "net.minecraft.Foo",
 					"kind": "CLASS",
@@ -291,23 +315,171 @@ class AnnotaterServerTest {
 				\tCOMMENT inner
 				""");
 
-		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT, """
-				{
-					"className": "net.minecraft.Foo$Bar"
-				}""");
+		HttpResponse<String> response = request("GET", "/mapping?net.minecraft.Foo$Bar", CLIENT, null);
 
 		assertEquals(200, response.statusCode(), response.body());
 		assertTrue(response.body().contains("net/minecraft/Foo$Bar"));
+		assertEquals("text/plain; charset=utf-8", response.headers().firstValue("Content-Type").orElseThrow());
 	}
 
 	@Test
 	void getMappingForUnknownClassIs404() throws Exception {
-		HttpResponse<String> response = request("POST", "/get-mapping", CLIENT, """
+		assertEquals(404, request("GET", "/mapping?net.minecraft.Missing", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void getMappingWithoutQueryIs400() throws Exception {
+		assertEquals(400, request("GET", "/mapping", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void listUnpickFiles() throws Exception {
+		Path file = unpickDir.resolve("sub/Foo.unpick");
+		Files.createDirectories(file.getParent());
+		Files.writeString(file, "unpick content");
+		Files.writeString(unpickDir.resolve("ignored.txt"), "");
+
+		HttpResponse<String> response = request("GET", "/unpick/list", CLIENT, null);
+
+		assertEquals(200, response.statusCode(), response.body());
+		assertTrue(response.body().contains("\"path\":\"sub/Foo.unpick\""));
+		assertFalse(response.body().contains("ignored.txt"));
+	}
+
+	@Test
+	void getUnpick() throws Exception {
+		Path file = unpickDir.resolve("sub/Foo.unpick");
+		Files.createDirectories(file.getParent());
+		Files.writeString(file, "unpick content");
+
+		HttpResponse<String> response = request("GET", "/unpick?sub/Foo.unpick", CLIENT, null);
+
+		assertEquals(200, response.statusCode(), response.body());
+		assertEquals("unpick content", response.body());
+		assertEquals("text/plain; charset=utf-8", response.headers().firstValue("Content-Type").orElseThrow());
+	}
+
+	@Test
+	void getUnpickRejectsNonUnpickPath() throws Exception {
+		assertEquals(400, request("GET", "/unpick?notes.txt", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void getUnpickRejectsTraversal() throws Exception {
+		assertEquals(400, request("GET", "/unpick?../../evil.unpick", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void getUnpickUnknownIs404() throws Exception {
+		assertEquals(404, request("GET", "/unpick?sub/Missing.unpick", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void updateUnpickWritesFile() throws Exception {
+		HttpResponse<String> response = request("POST", "/unpick", CLIENT, """
 				{
-					"className": "net.minecraft.Missing"
+					"path": "Foo.unpick",
+					"content": "unpick content"
 				}""");
 
-		assertEquals(404, response.statusCode());
+		assertEquals(200, response.statusCode(), response.body());
+		assertEquals("unpick content", Files.readString(unpickDir.resolve("Foo.unpick")));
+	}
+
+	@Test
+	void updateUnpickRejectsNonUnpickPath() throws Exception {
+		HttpResponse<String> response = request("POST", "/unpick", CLIENT, """
+				{
+					"path": "notes.txt",
+					"content": "nope"
+				}""");
+
+		assertEquals(400, response.statusCode(), response.body());
+	}
+
+	@Test
+	void updateUnpickRejectsTraversal() throws Exception {
+		HttpResponse<String> response = request("POST", "/unpick", CLIENT, """
+				{
+					"path": "../../evil.unpick",
+					"content": "nope"
+				}""");
+
+		assertEquals(400, response.statusCode(), response.body());
+	}
+
+	@Test
+	void deleteUnpickRemovesFile() throws Exception {
+		Path file = unpickDir.resolve("Foo.unpick");
+		Files.writeString(file, "unpick content");
+
+		HttpResponse<String> response = request("DELETE", "/unpick?Foo.unpick", CLIENT, null);
+
+		assertEquals(200, response.statusCode(), response.body());
+		assertFalse(Files.exists(file));
+	}
+
+	@Test
+	void deleteUnpickRejectsNonUnpickPath() throws Exception {
+		assertEquals(400, request("DELETE", "/unpick?notes.txt", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void deleteUnpickRejectsTraversal() throws Exception {
+		assertEquals(400, request("DELETE", "/unpick?../../evil.unpick", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void deleteUnpickWithoutQueryIs400() throws Exception {
+		assertEquals(400, request("DELETE", "/unpick", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void deleteUnpickUnknownIs404() throws Exception {
+		assertEquals(404, request("DELETE", "/unpick?Missing.unpick", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void getRuntimeLibrary() throws Exception {
+		Files.writeString(runtimeLibrariesDir.resolve("lib.jar"), "jar content");
+
+		HttpResponse<String> response = request("GET", "/library?lib.jar", CLIENT, null);
+
+		assertEquals(200, response.statusCode(), response.body());
+		assertEquals("jar content", response.body());
+		assertEquals("application/java-archive", response.headers().firstValue("Content-Type").orElseThrow());
+	}
+
+	@Test
+	void getRuntimeLibraryResolvesNestedPath() throws Exception {
+		Path jar = runtimeLibrariesDir.resolve("nested/lib.jar");
+		Files.createDirectories(jar.getParent());
+		Files.writeString(jar, "jar content");
+
+		HttpResponse<String> response = request("GET", "/library?nested/lib.jar", CLIENT, null);
+
+		assertEquals(200, response.statusCode(), response.body());
+		assertEquals("jar content", response.body());
+	}
+
+	@Test
+	void getRuntimeLibraryRejectsNonJarPath() throws Exception {
+		assertEquals(400, request("GET", "/library?lib.txt", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void getRuntimeLibraryRejectsTraversal() throws Exception {
+		assertEquals(400, request("GET", "/library?../../evil.jar", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void getRuntimeLibraryUnknownIs404() throws Exception {
+		assertEquals(404, request("GET", "/library?Missing.jar", CLIENT, null).statusCode());
+	}
+
+	@Test
+	void getRuntimeLibraryWithoutQueryIs400() throws Exception {
+		assertEquals(400, request("GET", "/library", CLIENT, null).statusCode());
 	}
 
 	private HttpResponse<String> request(
@@ -326,10 +498,5 @@ class AnnotaterServerTest {
 		}
 
 		return HTTP.send(builder.build(), BodyHandlers.ofString());
-	}
-
-	private static void assertHttpError(int status, Executable executable) {
-		AnnotaterServer.HttpError error = assertThrows(AnnotaterServer.HttpError.class, executable);
-		assertEquals(status, error.status);
 	}
 }

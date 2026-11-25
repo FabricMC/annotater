@@ -68,15 +68,16 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.getJavaHome().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath()));
 			task.getOutput().set(buildDir.file("javaRuntime/java-runtime.jar"));
 		});
+		var runtimeLibsDir = buildDir.dir("runtime_libs");
 		var syncRuntimeLibs = tasks.register("syncRuntimeLibs", Sync.class, task -> {
 			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Syncs Minecraft dependencies and Java runtime classes, excluding the Minecraft jars.");
 			task.from(decompileClasspath);
 			task.from(javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
 			task.include("*.jar");
-			task.into(buildDir.dir("runtime_libs"));
+			task.into(runtimeLibsDir);
 		});
-		tasks.register("prepareMcSrc", task -> {
+		var prepareMcSrc = tasks.register("prepareMcSrc", task -> {
 			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Prepares the project for mcsrc.");
 			task.dependsOn(syncRuntimeLibs);
@@ -208,7 +209,11 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 		});
 
 		tasks.register("serve", AnnotaterServerTask.class, task -> {
-			task.getMappings().set(mappings);
+			task.setGroup(ANNOTATER_TASK_GROUP);
+			task.dependsOn(prepareMcSrc);
+			task.getMappingsDir().set(mappings);
+			task.getUnpickDir().set(unpickDefinitions);
+			task.getRuntimeLibrariesDir().set(runtimeLibsDir);
 		});
 	}
 }
