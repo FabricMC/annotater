@@ -1,0 +1,48 @@
+CLASS net/minecraft/CrashReportCategory
+	METHOD fillInStackTrace (I)I
+		COMMENT Fills in this category's stacktrace.
+		COMMENT
+		COMMENT Captures the current stack, skipping crash report machinery and `nestedOffset` additional frames. The remaining stacktrace is then stored on this category for later calls to [#getStacktrace()].
+		COMMENT
+		COMMENT @param nestedOffset the number of additional stack frames to skip
+		COMMENT @return the size of the filled in stacktrace
+	METHOD formatLocation (Lnet/minecraft/world/level/LevelHeightAccessor;DDD)Ljava/lang/String;
+		COMMENT Formats a set of `x`, `y`, and `z` coordinates into a human readable string for use in a crash report.
+		COMMENT
+		COMMENT @see #formatLocation(net.minecraft.world.level.LevelHeightAccessor, int, int, int)
+	METHOD formatLocation (Lnet/minecraft/world/level/LevelHeightAccessor;III)Ljava/lang/String;
+		COMMENT Formats a set of `x`, `y`, and `z` coordinates into a human readable string for use in a crash report.
+		COMMENT
+		COMMENT The formatted string also contains information regarding it's containing section and containing region.
+	METHOD formatLocation (Lnet/minecraft/world/level/LevelHeightAccessor;Lnet/minecraft/core/BlockPos;)Ljava/lang/String;
+		COMMENT Formats a set of `x`, `y`, and `z` coordinates into a human readable string for use in a crash report.
+		COMMENT
+		COMMENT @see #formatLocation(net.minecraft.world.level.LevelHeightAccessor, int, int, int)
+	METHOD getDetails (Ljava/lang/StringBuilder;)V
+		COMMENT Appends this category's details to the specified `StringBuilder`.
+	METHOD getStacktrace ()[Ljava/lang/StackTraceElement;
+		COMMENT {@return this category's stacktrace}
+		COMMENT
+		COMMENT Returns an empty array if called before [#fillInStackTrace].
+	METHOD setDetail (Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/CrashReportCategory;
+		COMMENT Sets a detail on this `CrashReportCategory`.
+		COMMENT
+		COMMENT Details are displayed alongside this category and contain additional information to aid in debugging.
+	METHOD setDetail (Ljava/lang/String;Lnet/minecraft/CrashReportDetail;)Lnet/minecraft/CrashReportCategory;
+		COMMENT Sets a detail on this `CrashReportCategory`.
+		COMMENT
+		COMMENT Details are displayed alongside this category and contain additional information to aid in debugging.
+		COMMENT
+		COMMENT The provided `callback` function will be run when the report is constructed to determine the value of the detail. If the `callback` function throws, an error placeholder will be used instead.
+		COMMENT
+		COMMENT @param callback a callback function to compute the value of this detail
+	METHOD setDetailError (Ljava/lang/String;Ljava/lang/Throwable;)V
+		COMMENT Sets a detail to an error.
+		COMMENT
+		COMMENT This method is used to indicate an error has occured while collecting the required information for this detail.
+	METHOD validateStackTrace (Ljava/lang/StackTraceElement;Ljava/lang/StackTraceElement;)Z
+		COMMENT Validates that this catagory's stacktrace starts with `source` and is followed `next`.
+		COMMENT
+		COMMENT A value of `null` for either `source` or `next` means no such element should exist and this method will only return `true` if this category's stacktrace is too short to contain said element.
+		COMMENT
+		COMMENT @return `true` is the validation succeeds, false if it fails
