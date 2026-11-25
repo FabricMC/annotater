@@ -9,12 +9,13 @@ import org.gradle.api.file.Directory;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.provider.Provider;
-import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.Sync;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.javadoc.Javadoc;
 import org.gradle.external.javadoc.StandardJavadocDocletOptions;
+import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.gradle.jvm.toolchain.JavaToolchainService;
+import org.gradle.jvm.toolchain.JvmVendorSpec;
 
 import net.fabricmc.filament.task.CheckDecompileTask;
 import net.fabricmc.filament.task.CheckMappingsTask;
@@ -30,6 +31,7 @@ import net.fabricmc.filament.task.unpick.CheckUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.CombineUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.UnpickJarTask;
 import net.fabricmc.filament.util.FilamentConstants;
+import net.fabricmc.loom.LoomGradleExtension;
 import net.fabricmc.loom.api.LoomGradleExtensionAPI;
 
 public final class FilamentGradlePlugin implements Plugin<Project> {
@@ -51,11 +53,18 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			configuration.extendsFrom(minecraftLibraries);
 		});
 
-		var toolchain = project.getExtensions().getByType(JavaPluginExtension.class).getToolchain();
-		var javaLauncher = project.getExtensions().getByType(JavaToolchainService.class).launcherFor(toolchain);
+		var minecraftJavaVersion = project.getProviders().provider(() -> {
+			var versionInfo = LoomGradleExtension.get(project).getMinecraftProvider().getVersionInfo();
+			return JavaLanguageVersion.of(versionInfo.javaVersion().majorVersion());
+		});
+		var javaToolchains = project.getExtensions().getByType(JavaToolchainService.class);
+		var javaLauncher = javaToolchains.launcherFor(spec -> {
+			spec.getLanguageVersion().set(minecraftJavaVersion);
+			spec.getVendor().set(JvmVendorSpec.MICROSOFT);
+		});
 		var javaRuntimeJar = tasks.register("javaRuntimeJar", JavaRuntimeJarTask.class, task -> {
 			task.setGroup(ANNOTATER_TASK_GROUP);
-			task.getModules().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath().dir("jmods")));
+			task.getJavaHome().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath()));
 			task.getOutput().set(buildDir.file("javaRuntime/java-runtime.jar"));
 		});
 		var syncRuntimeLibs = tasks.register("syncRuntimeLibs", Sync.class, task -> {
