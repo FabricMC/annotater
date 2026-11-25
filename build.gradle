@@ -29,6 +29,7 @@ jar {
 }
 
 tasks.register('mappingsJar', Jar) {
+	group = 'annotater'
 	from(convertMappings) {
 		into "mappings"
 	}
