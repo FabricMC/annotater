@@ -51,6 +51,7 @@ class AnnotaterServerTest {
 				"127.0.0.1",
 				0,
 				CLIENT,
+				false,
 				false
 		);
 		httpServer = server.createServer();

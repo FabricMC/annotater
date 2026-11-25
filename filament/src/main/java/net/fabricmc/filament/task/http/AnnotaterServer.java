@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,7 +46,8 @@ public record AnnotaterServer(
 		String host,
 		int port,
 		String clientUrl,
-		boolean openBrowser
+		boolean openBrowser,
+		boolean trace
 ) {
 	static final String PROP_KEY = "annotater.props";
 	static final Gson GSON = new GsonBuilder()
@@ -237,6 +237,9 @@ public record AnnotaterServer(
 		Set<String> paths = routes.keySet().stream().map(Route::path).collect(Collectors.toSet());
 
 		server.createContext("/", exchange -> {
+			String traceLine = "%s %s".formatted(exchange.getRequestMethod(), exchange.getRequestURI());
+			if (trace) IO.println("-->     " + traceLine);
+
 			try {
 				Headers headers = exchange.getResponseHeaders();
 				headers.set("Vary", "Origin");
@@ -266,6 +269,8 @@ public record AnnotaterServer(
 				sendResponse(exchange, e.status, new Details(e.getMessage()));
 			} catch (Exception e) {
 				sendResponse(exchange, 500, new Details("Server error: " + e.getMessage()));
+			} finally {
+				if (trace) IO.println("<-- %d %s".formatted(exchange.getResponseCode(), traceLine));
 			}
 		});
 

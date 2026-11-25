@@ -50,12 +50,17 @@ public abstract class AnnotaterServerTask extends DefaultTask {
 	@Option(option = "open", description = "Open the mcsrc instance on the browser (default: false)")
 	public abstract Property<Boolean> getOpen();
 
+	@Input
+	@Option(option = "trace", description = "Print every request and response (default: false)")
+	public abstract Property<Boolean> getTrace();
+
 	public AnnotaterServerTask() {
 		setDescription("Serve HTTP server to be used with mcsrc");
 		getHost().convention("127.0.0.1");
 		getPort().convention("8000");
 		getClient().convention("https://mcsrc.dev");
 		getOpen().convention(false);
+		getTrace().convention(false);
 		getOutputs().upToDateWhen(_ -> false);
 	}
 
@@ -76,7 +81,8 @@ public abstract class AnnotaterServerTask extends DefaultTask {
 					getHost().get(),
 					getPort().map(Integer::parseInt).get(),
 					getClient().get(),
-					getOpen().get()
+					getOpen().get(),
+					getTrace().get()
 			)));
 		});
 	}
