@@ -1,0 +1,7 @@
+unpick v4
+
+group int update_limit
+   net.minecraft.world.level.block.Block.UPDATE_LIMIT
+
+target_method net.minecraft.world.level.block.Block updateOrDestroy (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;II)V
+   param 5 update_limit
