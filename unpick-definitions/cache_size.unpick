@@ -2,7 +2,7 @@ unpick v4
 
 group int cache_size
    @scope method net.minecraft.world.level.block.Block shouldRenderFace (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;)Z
-   @scope method net.minecraft.world.level.block.Block lambda$static$0 ()Lit/unimi/dsi/fastutil/objects/Object2ByteLinkedOpenHashMap;
+   @scope method net.minecraft.world.level.block.Block <clinit> ()V
    net.minecraft.world.level.block.Block.CACHE_SIZE
 
 target_method it.unimi.dsi.fastutil.objects.Object2ByteLinkedOpenHashMap size ()I
