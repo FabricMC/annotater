@@ -5,3 +5,9 @@ group int update_limit
 
 target_method net.minecraft.world.level.block.Block updateOrDestroy (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;II)V
    param 5 update_limit
+
+target_method net.minecraft.world.level.LevelWriter setBlock (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z
+   param 3 update_limit
+
+target_method net.minecraft.world.level.LevelWriter destroyBlock (Lnet/minecraft/core/BlockPos;ZLnet/minecraft/world/entity/Entity;I)Z
+   param 3 update_limit
