@@ -1,0 +1,61 @@
+unpick v4
+
+group int
+   @scope class net.minecraft.world.inventory.AbstractContainerMenu
+   net.minecraft.world.inventory.AbstractContainerMenu.SLOTS_PER_ROW
+   net.minecraft.world.inventory.AbstractContainerMenu.SLOT_SIZE
+   net.minecraft.world.inventory.AbstractContainerMenu.SLOT_CLICKED_OUTSIDE
+
+group int
+   @scope method net.minecraft.world.inventory.AbstractContainerMenu addStandardInventorySlots (Lnet/minecraft/world/Container;II)V
+   3 * net.minecraft.world.inventory.AbstractContainerMenu.SLOT_SIZE + 4
+
+
+group int quick_craft_header
+   net.minecraft.world.inventory.AbstractContainerMenu.QUICKCRAFT_HEADER_START
+   net.minecraft.world.inventory.AbstractContainerMenu.QUICKCRAFT_HEADER_CONTINUE
+   net.minecraft.world.inventory.AbstractContainerMenu.QUICKCRAFT_HEADER_END
+
+group int quick_craft_type
+   net.minecraft.world.inventory.AbstractContainerMenu.QUICKCRAFT_TYPE_CHARITABLE
+   net.minecraft.world.inventory.AbstractContainerMenu.QUICKCRAFT_TYPE_GREEDY
+   net.minecraft.world.inventory.AbstractContainerMenu.QUICKCRAFT_TYPE_CLONE
+
+group int container_click
+   net.minecraft.world.inventory.AbstractContainerMenu.CONTAINER_CLICK_PRIMARY
+   net.minecraft.world.inventory.AbstractContainerMenu.CONTAINER_CLICK_SECONDARY
+
+target_field net.minecraft.world.inventory.AbstractContainerMenu quickcraftType I quick_craft_type
+target_field net.minecraft.world.inventory.AbstractContainerMenu quickcraftStatus I quick_craft_header
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu getQuickcraftHeader (I)I
+   return quick_craft_header
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu getQuickcraftType (I)I
+   return quick_craft_type
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu getQuickcraftMask (II)I
+   param 0 quick_craft_header
+   param 1 quick_craft_type
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu isValidQuickcraftType (ILnet/minecraft/world/entity/player/Player;)Z
+   param 0 quick_craft_type
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu getQuickCraftPlaceCount (IILnet/minecraft/world/item/ItemStack;)I
+   param 1 quick_craft_type
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu isContainerClickButton (I)Z
+   param 0 container_click
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu getRedstoneSignalFromContainer (Lnet/minecraft/world/Container;)I
+   return redstone_signal
+
+group int
+   @strict
+   @scope method net.minecraft.world.inventory.AbstractContainerMenu getRedstoneSignalFromContainer (Lnet/minecraft/world/Container;)I
+   net.minecraft.world.level.redstone.Redstone.SIGNAL_MAX
+   net.minecraft.world.level.redstone.Redstone.SIGNAL_MIN
+
+group int
+   @scope method net.minecraft.world.inventory.AbstractContainerMenu incrementStateId ()I
+   java.lang.Short.MAX_VALUE
