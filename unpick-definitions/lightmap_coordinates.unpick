@@ -1,0 +1,121 @@
+unpick v4
+
+group int lightmap_coordinates
+	@flags
+	net.minecraft.util.LightCoordsUtil.FULL_BRIGHT
+	net.minecraft.util.LightCoordsUtil.FULL_SKY
+	net.minecraft.util.LightCoordsUtil.MAX_SMOOTH_LIGHT_LEVEL
+
+target_field com.mojang.blaze3d.vertex.QuadInstance lightCoords0 I lightmap_coordinates
+target_field com.mojang.blaze3d.vertex.QuadInstance lightCoords1 I lightmap_coordinates
+target_field com.mojang.blaze3d.vertex.QuadInstance lightCoords2 I lightmap_coordinates
+target_field com.mojang.blaze3d.vertex.QuadInstance lightCoords3 I lightmap_coordinates
+target_method com.mojang.blaze3d.vertex.QuadInstance getLightCoords (I)I
+   return lightmap_coordinates
+target_method com.mojang.blaze3d.vertex.QuadInstance getLightCoordsWithEmission (II)I
+   return lightmap_coordinates
+target_method com.mojang.blaze3d.vertex.QuadInstance setLightCoords (I)V
+   param 0 lightmap_coordinates
+target_method com.mojang.blaze3d.vertex.QuadInstance setLightCoords (II)V
+   param 1 lightmap_coordinates
+
+target_method com.mojang.blaze3d.vertex.VertexConsumer setLight (I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+   param 0 lightmap_coordinates
+target_method com.mojang.blaze3d.vertex.VertexConsumer addVertex (FFFIFFIIFFF)V
+   param 7 lightmap_coordinates
+
+target_method net.minecraft.client.model.Model renderToBuffer (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.model.geom.ModelPart render (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V
+   param 2 lightmap_coordinates
+target_method net.minecraft.client.model.geom.ModelPart render (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V
+   param 2 lightmap_coordinates
+target_method net.minecraft.client.model.geom.ModelPart compile (Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.MapRenderer render (Lnet/minecraft/client/renderer/state/MapRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ZI)V
+   param 4 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.block.FluidRenderer vertex (Lcom/mojang/blaze3d/vertex/VertexConsumer;FFFIFFI)V
+   param 7 lightmap_coordinates
+
+target_method net.minecraft.util.LightCoordsUtil pack (II)I
+   return lightmap_coordinates
+target_method net.minecraft.util.LightCoordsUtil sky (I)I
+   param 0 lightmap_coordinates
+target_method net.minecraft.util.LightCoordsUtil block (I)I
+   param 0 lightmap_coordinates
+target_method net.minecraft.util.LightCoordsUtil getLightCoords (Lnet/minecraft/util/LightCoordsUtil$BrightnessGetter;Lnet/minecraft/world/level/BlockAndLightGetter;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)I
+   return lightmap_coordinates
+
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitBlockModel (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;Ljava/util/List;[IIII)V
+   param 4 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitCrumblingOverlay (Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V
+   param 4 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitCrumblingOverlay (Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V
+   param 3 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitItem (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemDisplayContext;III[ILnet/minecraft/client/resources/model/geometry/ItemQuads;Lnet/minecraft/client/renderer/item/ItemStackRenderState$FoilType;)V
+   param 2 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitModel (Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/texture/UvMapping;I)V
+   param 4 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitModel (Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;III)V
+   param 4 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitModel (Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/resources/Identifier;III)V
+   param 4 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitModel (Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;IIILnet/minecraft/client/resources/model/sprite/SpriteId;Lnet/minecraft/client/resources/model/sprite/SpriteGetter;I)V
+   param 3 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitModelPart (Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/UvMapping;)V
+   param 3 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitModelPart (Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/UvMapping;I)V
+   param 3 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitModelPart (Lnet/minecraft/client/model/geom/ModelPart;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IILnet/minecraft/client/renderer/texture/UvMapping;II)V
+   param 3 lightmap_coordinates
+target_method net.minecraft.client.renderer.OrderedSubmitNodeCollector submitNameTag (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/phys/Vec3;ILnet/minecraft/network/chat/Component;ZILnet/minecraft/client/renderer/state/level/CameraRenderState;)V
+   param 5 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.DragonFireballRenderer vertex (Lcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;IFIIII)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.EnderDragonRenderer submitCrystalBeams (FFFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V
+   param 6 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.ExperienceOrbRenderer vertex (Lcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;FFIIIFFI)V
+   param 9 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.FishingHookRenderer vertex (Lcom/mojang/blaze3d/vertex/VertexConsumer;Lcom/mojang/blaze3d/vertex/PoseStack$Pose;IFIII)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.ItemFrameRenderer getLightCoords (ZII)I
+   param 1 lightmap_coordinates
+   param 2 lightmap_coordinates
+   return lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.AbstractMinecartRenderer submitMinecartContents (Lnet/minecraft/client/renderer/entity/state/MinecartRenderState;Lnet/minecraft/client/renderer/block/BlockModelRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V
+   param 4 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.PaintingRenderer vertex (Lcom/mojang/blaze3d/vertex/PoseStack$Pose;Lcom/mojang/blaze3d/vertex/VertexConsumer;FFFFFIIII)V
+   param 10 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.layers.RenderLayer submit (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/EntityRenderState;FF)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.layers.RenderLayer coloredCutoutModelCopyLayerRender (Lnet/minecraft/client/model/Model;Lnet/minecraft/resources/Identifier;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;II)V
+   param 4 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.layers.RenderLayer renderColoredCutoutModel (Lnet/minecraft/client/model/Model;Lnet/minecraft/resources/Identifier;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;II)V
+   param 4 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer renderArmorPiece (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;ILnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V
+   param 4 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.layers.ParrotOnShoulderLayer submitOnShoulder (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;Lnet/minecraft/world/entity/animal/parrot/Parrot$Variant;FFZ)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.entity.layers.StuckInBodyLayer submitStuckItem (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;IFFFI)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.renderer.item.ItemStackRenderState submit (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V
+   param 2 lightmap_coordinates
+
+target_field net.minecraft.client.renderer.entity.state.EntityRenderState lightCoords I lightmap_coordinates
