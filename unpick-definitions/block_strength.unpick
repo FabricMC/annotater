@@ -1,0 +1,18 @@
+unpick v4
+
+group float block_strength
+   net.minecraft.world.level.block.Block.INDESTRUCTIBLE
+   net.minecraft.world.level.block.Block.INSTANT
+
+target_method net.minecraft.world.level.block.state.BlockBehaviour$Properties strength (FF)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;
+   param 0 block_strength
+
+target_method net.minecraft.world.level.block.state.BlockBehaviour$Properties strength (F)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;
+   param 0 block_strength
+
+target_method net.minecraft.world.level.block.state.BlockBehaviour$Properties destroyTime (F)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;
+   param 0 block_strength
+
+group float
+   @scope method net.minecraft.world.level.block.state.BlockBehaviour getDestroyProgress (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F
+   net.minecraft.world.level.block.Block.INDESTRUCTIBLE
