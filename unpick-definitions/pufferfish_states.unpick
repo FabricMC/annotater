@@ -1,0 +1,15 @@
+unpick v4
+
+group int
+   @scope method net.minecraft.world.entity.animal.fish.Pufferfish readAdditionalSaveData (Lnet/minecraft/world/level/storage/ValueInput;)V
+   net.minecraft.world.entity.animal.fish.Pufferfish.DEFAULT_PUFF_STATE
+
+group int pufferfish_state
+   net.minecraft.world.entity.animal.fish.Pufferfish.STATE_SMALL
+   net.minecraft.world.entity.animal.fish.Pufferfish.STATE_MID
+   net.minecraft.world.entity.animal.fish.Pufferfish.STATE_FULL
+
+target_field net.minecraft.world.entity.animal.fish.Pufferfish DEFAULT_PUFF_STATE I pufferfish_state
+
+target_method net.minecraft.world.entity.animal.fish.Pufferfish setPuffState (I)V
+   param 0 pufferfish_state
