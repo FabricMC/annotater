@@ -119,3 +119,9 @@ target_method net.minecraft.client.renderer.item.ItemStackRenderState submit (Lc
    param 2 lightmap_coordinates
 
 target_field net.minecraft.client.renderer.entity.state.EntityRenderState lightCoords I lightmap_coordinates
+
+target_method net.minecraft.client.gui.font.TextRenderable render (Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IZ)V
+   param 2 lightmap_coordinates
+
+target_method net.minecraft.client.gui.font.PlainTextRenderable renderSprite (Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFI)V
+   param 2 lightmap_coordinates
