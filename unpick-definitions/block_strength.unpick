@@ -16,7 +16,3 @@ target_method net.minecraft.world.level.block.state.BlockBehaviour$Properties de
 group float
    @scope method net.minecraft.world.level.block.state.BlockBehaviour getDestroyProgress (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F
    net.minecraft.world.level.block.Block.INDESTRUCTIBLE
-
-group float
-   @scope method net.minecraft.world.level.block.Blocks <clinit> ()V
-   net.minecraft.SharedConstants.MAXIMUM_BLOCK_EXPLOSION_RESISTANCE
