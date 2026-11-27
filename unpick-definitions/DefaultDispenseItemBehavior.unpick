@@ -1,0 +1,6 @@
+unpick v4
+
+
+group int
+   @scope method net.minecraft.world.level.block.CrafterBlock <clinit> ()V
+   net.minecraft.core.dispenser.DefaultDispenseItemBehavior.DEFAULT_ACCURACY
