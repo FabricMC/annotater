@@ -1,0 +1,167 @@
+unpick v4
+
+# Miscellaneous small or uncommon unpicks in SharedConstants
+
+# WORLD_VERSION
+group int world_version
+   net.minecraft.SharedConstants.WORLD_VERSION
+
+# SNBT_NAG_VERSION
+group int
+   @scope method net.minecraft.data.structures.StructureUpdater update (Ljava/lang/String;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;
+   net.minecraft.SharedConstants.SNBT_NAG_VERSION
+
+# DATA_VERSION_TAG
+group String
+   @scope method net.minecraft.nbt.SnbtPrinterTagVisitor <clinit> ()V
+   @scope method net.minecraft.stats.ServerStatsCounter toJson ()Lcom/google/gson/JsonElement;
+   net.minecraft.SharedConstants.DATA_VERSION_TAG
+group String data_version_tag
+   net.minecraft.SharedConstants.DATA_VERSION_TAG
+target_method net.minecraft.nbt.CompoundTag put (Ljava/lang/String;Lnet/minecraft/nbt/Tag;)Lnet/minecraft/nbt/Tag;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putBoolean (Ljava/lang/String;Z)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putByte (Ljava/lang/String;B)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putByteArray (Ljava/lang/String;[B)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putDouble (Ljava/lang/String;D)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putFloat (Ljava/lang/String;F)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putInt (Ljava/lang/String;I)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putIntArray (Ljava/lang/String;[I)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putLong (Ljava/lang/String;J)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putLongArray (Ljava/lang/String;[J)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putShort (Ljava/lang/String;S)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag putString (Ljava/lang/String;Ljava/lang/String;)V
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag get (Ljava/lang/String;)Lnet/minecraft/nbt/Tag;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getBoolean (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getBooleanOr (Ljava/lang/String;Z)Z
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getByte (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getByteArray (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getByteOr (Ljava/lang/String;B)B
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getCompound (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getCompoundOrEmpty (Ljava/lang/String;)Lnet/minecraft/nbt/CompoundTag;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getDouble (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getDoubleOr (Ljava/lang/String;D)D
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getFloat (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getFloatOr (Ljava/lang/String;F)F
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getInt (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getIntArray (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getIntOr (Ljava/lang/String;I)I
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getList (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getListOrEmpty (Ljava/lang/String;)Lnet/minecraft/nbt/ListTag;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getLong (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getLongArray (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getLongOr (Ljava/lang/String;J)J
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getOptional (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getShort (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getShortOr (Ljava/lang/String;S)S
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getString (Ljava/lang/String;)Ljava/util/Optional;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.CompoundTag getStringOr (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putBoolean (Ljava/lang/String;Z)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putByte (Ljava/lang/String;B)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putDouble (Ljava/lang/String;D)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putFloat (Ljava/lang/String;F)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putInt (Ljava/lang/String;I)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putIntArray (Ljava/lang/String;[I)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putLong (Ljava/lang/String;J)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putShort (Ljava/lang/String;S)V
+   param 0 data_version_tag
+target_method net.minecraft.world.level.storage.ValueOutput putString (Ljava/lang/String;Ljava/lang/String;)V
+   param 0 data_version_tag
+target_method com.mojang.serialization.Dynamic set (Ljava/lang/String;Lcom/mojang/serialization/Dynamic;)Lcom/mojang/serialization/Dynamic;
+   param 0 data_version_tag
+target_method com.mojang.serialization.Dynamic get (Ljava/lang/String;)Lcom/mojang/serialization/OptionalDynamic;
+   param 0 data_version_tag
+target_method net.minecraft.nbt.visitors.FieldSelector <init> (Lnet/minecraft/nbt/TagType;Ljava/lang/String;)V
+   param 1 data_version_tag
+target_method net.minecraft.nbt.visitors.FieldSelector <init> (Ljava/lang/String;Lnet/minecraft/nbt/TagType;Ljava/lang/String;)V
+   param 2 data_version_tag
+target_method net.minecraft.nbt.visitors.FieldSelector <init> (Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/nbt/TagType;Ljava/lang/String;)V
+   param 3 data_version_tag
+target_method net.minecraft.nbt.visitors.FieldSelector <init> (Ljava/util/List;Lnet/minecraft/nbt/TagType;Ljava/lang/String;)V
+   param 2 data_version_tag
+target_method com.mojang.serialization.DynamicOps get (Ljava/lang/Object;Ljava/lang/String;)Lcom/mojang/serialization/DataResult;
+   param 1 data_version_tag
+target_method com.mojang.serialization.DynamicOps remove (Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
+   param 1 data_version_tag
+target_method com.mojang.serialization.DynamicOps createString (Ljava/lang/String;)Ljava/lang/Object;
+   param 0 data_version_tag
+
+# DEBUG_FLAG_PREFIX
+group String debug_flag_prefix
+   net.minecraft.SharedConstants.DEBUG_FLAG_PREFIX
+target_method net.minecraft.SharedConstants prefixDebugFlagName (Ljava/lang/String;)Ljava/lang/String;
+   return debug_flag_prefix
+
+# SERIES
+group String series
+   net.minecraft.SharedConstants.SERIES
+group String
+   @scope method net.minecraft.DetectedVersion createFromJson (Lcom/google/gson/JsonObject;)Lnet/minecraft/WorldVersion;
+   net.minecraft.SharedConstants.SERIES
+
+# RELEASE_NETWORK_PROTOCOL_VERSION
+group int release_network_protocol_version
+   net.minecraft.SharedConstants.RELEASE_NETWORK_PROTOCOL_VERSION
+target_method net.minecraft.SharedConstants getProtocolVersion ()I
+   return release_network_protocol_version
+
+# Datapack Version
+target_method net.minecraft.world.level.storage.DataVersion <init> (ILjava/lang/String;)V
+   param 0 world_version
+   param 1 series
+
+# Pack Format
+group int pack_format_major_version
+   net.minecraft.SharedConstants.DATA_PACK_FORMAT_MAJOR
+   net.minecraft.SharedConstants.RESOURCE_PACK_FORMAT_MAJOR
+group int pack_format_minor_version
+   net.minecraft.SharedConstants.DATA_PACK_FORMAT_MINOR
+   net.minecraft.SharedConstants.RESOURCE_PACK_FORMAT_MINOR
+target_method net.minecraft.server.packs.metadata.pack.PackFormat of (II)Lnet/minecraft/server/packs/metadata/pack/PackFormat;
+   param 0 pack_format_major_version
+   param 1 pack_format_minor_version
+target_method net.minecraft.server.packs.metadata.pack.PackFormat of (I)Lnet/minecraft/server/packs/metadata/pack/PackFormat;
+   param 0 pack_format_major_version

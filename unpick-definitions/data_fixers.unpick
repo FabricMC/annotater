@@ -1,0 +1,7 @@
+unpick v4
+
+# BLENDING_DATA
+group int
+   @scope method net.minecraft.util.datafix.DataFixers addFixers (Lcom/mojang/datafixers/DataFixerBuilder;Lnet/minecraft/util/filefix/FileFixerUpper$Builder;)V
+   @scope method net.minecraft.world.level.chunk.storage.IOWorker isOldChunk (Lnet/minecraft/nbt/CompoundTag;)Z
+   net.minecraft.util.datafix.DataFixers.BLENDING_VERSION
