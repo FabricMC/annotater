@@ -1,0 +1,22 @@
+unpick v4
+
+group long ticket_type_timeout
+   net.minecraft.server.level.TicketType.NO_TIMEOUT
+
+group int ticket_type_flags
+   @flags
+   net.minecraft.server.level.TicketType.FLAG_PERSIST
+   net.minecraft.server.level.TicketType.FLAG_LOADING
+   net.minecraft.server.level.TicketType.FLAG_SIMULATION
+   net.minecraft.server.level.TicketType.FLAG_KEEP_DIMENSION_ACTIVE
+   net.minecraft.server.level.TicketType.FLAG_CAN_EXPIRE_IF_UNLOADED
+
+target_annotation net.minecraft.server.level.TicketType$Flags ticket_type_flags
+
+target_method net.minecraft.server.level.TicketType register (Ljava/lang/String;JI)Lnet/minecraft/server/level/TicketType;
+   param 1 ticket_type_timeout
+   param 2 ticket_type_flags
+
+target_method net.minecraft.server.level.TicketType <init> (JI)V
+   param 0 ticket_type_timeout
+   param 1 ticket_type_flags

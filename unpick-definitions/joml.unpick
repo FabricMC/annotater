@@ -1,0 +1,18 @@
+unpick v4
+
+group int matrix4f_property
+	@flags
+	org.joml.Matrix4fc.PROPERTY_AFFINE
+	org.joml.Matrix4fc.PROPERTY_IDENTITY
+	org.joml.Matrix4fc.PROPERTY_ORTHONORMAL
+	org.joml.Matrix4fc.PROPERTY_PERSPECTIVE
+	org.joml.Matrix4fc.PROPERTY_TRANSLATION
+
+target_method org.joml.Matrix4fc properties ()I
+	return matrix4f_property
+
+target_method com.mojang.math.MatrixUtil checkPropertyRaw (Lorg/joml/Matrix4fc;I)Z
+   param 1 matrix4f_property
+
+target_method com.mojang.math.MatrixUtil checkProperty (Lorg/joml/Matrix4fc;I)Z
+   param 1 matrix4f_property
