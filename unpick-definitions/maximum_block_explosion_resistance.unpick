@@ -3,5 +3,5 @@ unpick v4
 # General MAXIMUM_BLOCK_EXPLOSION_RESISTANCE usage
 group float
    @scope method net.minecraft.world.level.SimpleExplosionDamageCalculator getBlockExplosionResistance (Lnet/minecraft/world/level/Explosion;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/material/FluidState;)Ljava/util/Optional;
-   @scope method net.minecraft.world.level.block.Block <clinit> ()V
+   @scope method net.minecraft.world.level.block.Blocks <clinit> ()V
    net.minecraft.SharedConstants.MAXIMUM_BLOCK_EXPLOSION_RESISTANCE
