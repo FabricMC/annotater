@@ -1,0 +1,21 @@
+unpick v4
+
+group int trial_spawner_light_level
+   net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState$LightLevel.UNLIT
+   net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState$LightLevel.HALF_LIT
+   net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState$LightLevel.LIT
+
+group int trial_spawner_spin_speed
+   net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState$SpinningMob.NONE
+   net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState$SpinningMob.SLOW
+   net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState$SpinningMob.FAST
+
+target_method net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState <init> (Ljava/lang/String;ILjava/lang/String;ILnet/minecraft/world/level/block/entity/trialspawner/TrialSpawnerState$ParticleEmission;DZ)V
+   param 3 trial_spawner_light_level
+   param 5 trial_spawner_spin_speed
+
+target_method net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState lightLevel ()I
+   return trial_spawner_light_level
+
+target_method net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState spinningMobSpeed ()D
+   return trial_spawner_spin_speed
