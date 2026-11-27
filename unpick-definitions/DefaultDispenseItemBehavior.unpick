@@ -1,6 +1,7 @@
 unpick v4
 
 
-group int
-   @scope method net.minecraft.world.level.block.CrafterBlock <clinit> ()V
+group int default_accuracy
    net.minecraft.core.dispenser.DefaultDispenseItemBehavior.DEFAULT_ACCURACY
+
+target_field net.minecraft.world.level.block.CrafterBlock MAX_CRAFTING_TICKS I default_accuracy
