@@ -1,0 +1,10 @@
+unpick v4
+
+group String
+   @scope method net.minecraft.server.jsonrpc.methods.DiscoveryService discover (Ljava/util/List;)Lnet/minecraft/server/jsonrpc/methods/DiscoveryService$DiscoverResponse;
+   net.minecraft.SharedConstants.RPC_MANAGEMENT_SERVER_API_VERSION
+   net.minecraft.server.jsonrpc.JsonRPCUtils.OPEN_RPC_VERSION
+
+group String
+   @scope class net.minecraft.server.jsonrpc.JsonRPCUtils
+   net.minecraft.server.jsonrpc.JsonRPCUtils.JSON_RPC_VERSION
