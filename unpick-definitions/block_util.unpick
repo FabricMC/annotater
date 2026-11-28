@@ -1,0 +1,6 @@
+unpick v4
+
+group int
+   @scope class net.minecraft.util.BlockUtil
+   net.minecraft.util.BlockUtil.MAX_POSITION_DIFFERENCE_PACKING_RADIUS
+   -net.minecraft.util.BlockUtil.MAX_POSITION_DIFFERENCE_PACKING_RADIUS
