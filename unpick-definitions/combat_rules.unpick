@@ -1,0 +1,9 @@
+unpick v4
+
+group float
+   @scope class net.minecraft.world.damagesource.CombatRules
+   net.minecraft.world.damagesource.CombatRules.MAX_ARMOR
+   net.minecraft.world.damagesource.CombatRules.ARMOR_PROTECTION_DIVIDER
+   net.minecraft.world.damagesource.CombatRules.BASE_ARMOR_TOUGHNESS
+   net.minecraft.world.damagesource.CombatRules.MIN_ARMOR_RATIO
+   net.minecraft.world.damagesource.CombatRules.NUM_ARMOR_ITEMS
