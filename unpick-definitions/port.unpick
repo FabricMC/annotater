@@ -1,0 +1,5 @@
+unpick v4
+
+# It's okay to do this globally as the Minecraft port is unique.
+group int
+   net.minecraft.SharedConstants.DEFAULT_MINECRAFT_PORT
