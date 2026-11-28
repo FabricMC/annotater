@@ -1,0 +1,34 @@
+unpick v4
+
+#: Public floats
+group float
+   @strict
+   net.minecraft.util.Mth.PI
+   -net.minecraft.util.Mth.PI
+   net.minecraft.util.Mth.HALF_PI
+   net.minecraft.util.Mth.TWO_PI
+   net.minecraft.util.Mth.DEG_TO_RAD
+   net.minecraft.util.Mth.RAD_TO_DEG
+   net.minecraft.util.Mth.EPSILON
+
+#: Private doubles
+group double
+   @scope class net.minecraft.util.Mth
+   net.minecraft.util.Mth.ONE_SIXTH
+   net.minecraft.util.Mth.SIN_SCALE
+
+#: Private ints
+group int
+   @scope class net.minecraft.util.Mth
+   net.minecraft.util.Mth.SIN_MASK
+   net.minecraft.util.Mth.COS_OFFSET
+   net.minecraft.util.Mth.SIN_QUANTIZATION
+   net.minecraft.util.Mth.LUT_SIZE
+
+#: UUID stuff
+group long
+   @scope method net.minecraft.util.Mth createInsecureUUID (Lnet/minecraft/util/RandomSource;)Ljava/util/UUID;
+   -(net.minecraft.util.Mth.UUID_VERSION + 1)
+   net.minecraft.util.Mth.UUID_VERSION_TYPE_4
+   -(net.minecraft.util.Mth.UUID_VARIANT + 1)
+   net.minecraft.util.Mth.UUID_VARIANT_2
