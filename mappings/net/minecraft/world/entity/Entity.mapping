@@ -1,16 +1,33 @@
 CLASS net/minecraft/world/entity/Entity
 	FIELD uuid Ljava/util/UUID;
 		COMMENT A [java.util.UUID] used to distinguish between different instances of Entity.
+	METHOD addDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
+		COMMENT Add the provided velocity vector to this entity's velocity.
+		COMMENT @see #markHurt()
+	METHOD defineSynchedData (Lnet/minecraft/network/syncher/SynchedEntityData$Builder;)V
+		COMMENT Defines the data that will be synchronized from the server to the client.
+		COMMENT @see net.minecraft.network.syncher.SynchedEntityData
 	METHOD discard ()V
 		COMMENT Removes this Entity from the [net.minecraft.world.level.Level] it is in.
 		COMMENT
 		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 	METHOD entityTags ()Ljava/util/Set;
-		COMMENT Returns this Entity's tags.
+		COMMENT Returns this entity's tags.
 		COMMENT @see net.minecraft.server.commands.TagCommand
+	METHOD fireImmune ()Z
+		COMMENT @return whether this entity is immune to fire and lava damage.
 	METHOD getTeamColor ()I
 		COMMENT Returns the color associated with the [net.minecraft.world.scores.Team] this Entity is part of in the `0xRRGGBB` format.
 		COMMENT @return the team color in the `0xRRGGBB` format, or [net.minecraft.util.CommonColors#WHITE] if the Entity is not part of a Team or the Team has no color
+	METHOD getViewVector (F)Lnet/minecraft/world/phys/Vec3;
+		COMMENT Return a vector representing the direction this entity is looking.
+		COMMENT @param a the partial ticks to use for interpolation, or `1` to not interpolate.
+	METHOD getXRot ()F
+		COMMENT Returns the rotation of the entity around the x-axis (its pitch) in degrees.
+	METHOD getYRot ()F
+		COMMENT Returns the rotation of the entity around the y-axis (its yaw) in degrees.
+	METHOD isSpectator ()Z
+		COMMENT @return whether this entity is in spectator mode. In a vanilla context, this will always return false for all entities that are not a type of [net.minecraft.world.entity.player.Player].
 	METHOD kill (Lnet/minecraft/server/level/ServerLevel;)V
 		COMMENT Kills this Entity.
 		COMMENT
@@ -18,5 +35,16 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT The Entity ceases all interactions with the rest of the Level and is not saved to Level data.
 		COMMENT
 		COMMENT Additionally, [net.minecraft.world.level.gameevent.GameEvent#ENTITY_DIE] is broadcast.
+	METHOD markHurt ()V
+		COMMENT Mark that this entity's velocity should be synchronized to the client.
+	METHOD setDeltaMovement (DDD)V
+		COMMENT Set the velocity of this entity on each axis.
+		COMMENT @see #markHurt()
+	METHOD setDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
+		COMMENT Set the velocity of this entity to the provided velocity vector.
+		COMMENT @see #markHurt()
+	METHOD setSharedFlag (IZ)V
+		COMMENT Sets a shared flag that is synchronized from the server to the client.
+		COMMENT @param flag the flag to set. The static variables in this class prefixed with `FLAG_`, such as [#FLAG_ONFIRE] show the meaning of different flag values.
 	CLASS RemovalReason
 		COMMENT Reasons an [net.minecraft.world.entity.Entity] is removed from a [net.minecraft.world.level.Level].
