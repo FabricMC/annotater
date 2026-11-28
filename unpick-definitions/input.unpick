@@ -1,0 +1,208 @@
+unpick v4
+
+group int input_key
+   com.mojang.blaze3d.platform.InputConstants.KEY_0
+   com.mojang.blaze3d.platform.InputConstants.KEY_1
+   com.mojang.blaze3d.platform.InputConstants.KEY_2
+   com.mojang.blaze3d.platform.InputConstants.KEY_3
+   com.mojang.blaze3d.platform.InputConstants.KEY_4
+   com.mojang.blaze3d.platform.InputConstants.KEY_5
+   com.mojang.blaze3d.platform.InputConstants.KEY_6
+   com.mojang.blaze3d.platform.InputConstants.KEY_7
+   com.mojang.blaze3d.platform.InputConstants.KEY_8
+   com.mojang.blaze3d.platform.InputConstants.KEY_9
+   com.mojang.blaze3d.platform.InputConstants.KEY_A
+   com.mojang.blaze3d.platform.InputConstants.KEY_B
+   com.mojang.blaze3d.platform.InputConstants.KEY_C
+   com.mojang.blaze3d.platform.InputConstants.KEY_D
+   com.mojang.blaze3d.platform.InputConstants.KEY_E
+   com.mojang.blaze3d.platform.InputConstants.KEY_F
+   com.mojang.blaze3d.platform.InputConstants.KEY_G
+   com.mojang.blaze3d.platform.InputConstants.KEY_H
+   com.mojang.blaze3d.platform.InputConstants.KEY_I
+   com.mojang.blaze3d.platform.InputConstants.KEY_J
+   com.mojang.blaze3d.platform.InputConstants.KEY_K
+   com.mojang.blaze3d.platform.InputConstants.KEY_L
+   com.mojang.blaze3d.platform.InputConstants.KEY_M
+   com.mojang.blaze3d.platform.InputConstants.KEY_N
+   com.mojang.blaze3d.platform.InputConstants.KEY_O
+   com.mojang.blaze3d.platform.InputConstants.KEY_P
+   com.mojang.blaze3d.platform.InputConstants.KEY_Q
+   com.mojang.blaze3d.platform.InputConstants.KEY_R
+   com.mojang.blaze3d.platform.InputConstants.KEY_S
+   com.mojang.blaze3d.platform.InputConstants.KEY_T
+   com.mojang.blaze3d.platform.InputConstants.KEY_U
+   com.mojang.blaze3d.platform.InputConstants.KEY_V
+   com.mojang.blaze3d.platform.InputConstants.KEY_W
+   com.mojang.blaze3d.platform.InputConstants.KEY_X
+   com.mojang.blaze3d.platform.InputConstants.KEY_Y
+   com.mojang.blaze3d.platform.InputConstants.KEY_Z
+   com.mojang.blaze3d.platform.InputConstants.KEY_F1
+   com.mojang.blaze3d.platform.InputConstants.KEY_F2
+   com.mojang.blaze3d.platform.InputConstants.KEY_F3
+   com.mojang.blaze3d.platform.InputConstants.KEY_F4
+   com.mojang.blaze3d.platform.InputConstants.KEY_F5
+   com.mojang.blaze3d.platform.InputConstants.KEY_F6
+   com.mojang.blaze3d.platform.InputConstants.KEY_F7
+   com.mojang.blaze3d.platform.InputConstants.KEY_F8
+   com.mojang.blaze3d.platform.InputConstants.KEY_F9
+   com.mojang.blaze3d.platform.InputConstants.KEY_F10
+   com.mojang.blaze3d.platform.InputConstants.KEY_F11
+   com.mojang.blaze3d.platform.InputConstants.KEY_F12
+   com.mojang.blaze3d.platform.InputConstants.KEY_F13
+   com.mojang.blaze3d.platform.InputConstants.KEY_F14
+   com.mojang.blaze3d.platform.InputConstants.KEY_F15
+   com.mojang.blaze3d.platform.InputConstants.KEY_F16
+   com.mojang.blaze3d.platform.InputConstants.KEY_F17
+   com.mojang.blaze3d.platform.InputConstants.KEY_F18
+   com.mojang.blaze3d.platform.InputConstants.KEY_F19
+   com.mojang.blaze3d.platform.InputConstants.KEY_F20
+   com.mojang.blaze3d.platform.InputConstants.KEY_F21
+   com.mojang.blaze3d.platform.InputConstants.KEY_F22
+   com.mojang.blaze3d.platform.InputConstants.KEY_F23
+   com.mojang.blaze3d.platform.InputConstants.KEY_F24
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMLOCK
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD0
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD1
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD2
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD3
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD4
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD5
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD6
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD7
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD8
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPAD9
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPADCOMMA
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPADENTER
+   com.mojang.blaze3d.platform.InputConstants.KEY_NUMPADEQUALS
+   com.mojang.blaze3d.platform.InputConstants.KEY_DOWN
+   com.mojang.blaze3d.platform.InputConstants.KEY_LEFT
+   com.mojang.blaze3d.platform.InputConstants.KEY_RIGHT
+   com.mojang.blaze3d.platform.InputConstants.KEY_UP
+   com.mojang.blaze3d.platform.InputConstants.KEY_ADD
+   com.mojang.blaze3d.platform.InputConstants.KEY_APOSTROPHE
+   com.mojang.blaze3d.platform.InputConstants.KEY_BACKSLASH
+   com.mojang.blaze3d.platform.InputConstants.KEY_COMMA
+   com.mojang.blaze3d.platform.InputConstants.KEY_EQUALS
+   com.mojang.blaze3d.platform.InputConstants.KEY_GRAVE
+   com.mojang.blaze3d.platform.InputConstants.KEY_LBRACKET
+   com.mojang.blaze3d.platform.InputConstants.KEY_MINUS
+   com.mojang.blaze3d.platform.InputConstants.KEY_MULTIPLY
+   com.mojang.blaze3d.platform.InputConstants.KEY_PERIOD
+   com.mojang.blaze3d.platform.InputConstants.KEY_RBRACKET
+   com.mojang.blaze3d.platform.InputConstants.KEY_SEMICOLON
+   com.mojang.blaze3d.platform.InputConstants.KEY_SLASH
+   com.mojang.blaze3d.platform.InputConstants.KEY_SPACE
+   com.mojang.blaze3d.platform.InputConstants.KEY_TAB
+   com.mojang.blaze3d.platform.InputConstants.KEY_LALT
+   com.mojang.blaze3d.platform.InputConstants.KEY_LCONTROL
+   com.mojang.blaze3d.platform.InputConstants.KEY_LSHIFT
+   com.mojang.blaze3d.platform.InputConstants.KEY_LGUI
+   com.mojang.blaze3d.platform.InputConstants.KEY_RALT
+   com.mojang.blaze3d.platform.InputConstants.KEY_RCONTROL
+   com.mojang.blaze3d.platform.InputConstants.KEY_RSHIFT
+   com.mojang.blaze3d.platform.InputConstants.KEY_RGUI
+   com.mojang.blaze3d.platform.InputConstants.KEY_RETURN
+   com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE
+   com.mojang.blaze3d.platform.InputConstants.KEY_BACKSPACE
+   com.mojang.blaze3d.platform.InputConstants.KEY_DELETE
+   com.mojang.blaze3d.platform.InputConstants.KEY_END
+   com.mojang.blaze3d.platform.InputConstants.KEY_HOME
+   com.mojang.blaze3d.platform.InputConstants.KEY_INSERT
+   com.mojang.blaze3d.platform.InputConstants.KEY_PAGEDOWN
+   com.mojang.blaze3d.platform.InputConstants.KEY_PAGEUP
+   com.mojang.blaze3d.platform.InputConstants.KEY_CAPSLOCK
+   com.mojang.blaze3d.platform.InputConstants.KEY_PAUSE
+   com.mojang.blaze3d.platform.InputConstants.KEY_SCROLLLOCK
+   com.mojang.blaze3d.platform.InputConstants.KEY_PRINTSCREEN
+
+group int input_state
+   com.mojang.blaze3d.platform.InputConstants.PRESS
+   com.mojang.blaze3d.platform.InputConstants.RELEASE
+   com.mojang.blaze3d.platform.InputConstants.REPEAT
+
+group int input_mouse
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_MIDDLE
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_RIGHT
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_4
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_5
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_6
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_7
+   com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_8
+
+group int input_modifier
+   com.mojang.blaze3d.platform.InputConstants.MOD_SHIFT
+   com.mojang.blaze3d.platform.InputConstants.MOD_CONTROL
+   com.mojang.blaze3d.platform.InputConstants.MOD_ALT
+   com.mojang.blaze3d.platform.InputConstants.MOD_SUPER
+   com.mojang.blaze3d.platform.InputConstants.MOD_CAPS_LOCK
+   com.mojang.blaze3d.platform.InputConstants.MOD_NUM_LOCK
+
+group int input_keycode
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_A
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_B
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_C
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_E
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_F
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_L
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_M
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_O
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_R
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_U
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_V
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_W
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_X
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_Y
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_Z
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_RETURN
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_NUMPADENTER
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_PAGEUP
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_PAGEDOWN
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_BACKSPACE
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_UP
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_DOWN
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_LEFT
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_RIGHT
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_NUMPAD9
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_NUMPAD3
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_DELETE
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_HOME
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_END
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_F5
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_TAB
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_LCONTROL
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_RCONTROL
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_SPACE
+
+# The duplicates in input_keycode called KEYCODE_FORWARD and KEYCODE_BACKWARD
+# in place of KEYCODE_UP and KEYCODE_DOWN. Consider not using these.
+group int input_keycode_depth
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_FORWARD
+   com.mojang.blaze3d.platform.InputConstants.KEYCODE_BACKWARD
+
+group String
+   @scope class com.mojang.blaze3d.platform.InputConstants$Type
+   com.mojang.blaze3d.platform.InputConstants$Type.KEY_KEYBOARD_UNKNOWN
+
+# Target Applications
+
+# TODO: Once you can match expressions in unpick, target InputConstants#addKey
+
+target_method net.minecraft.client.input.KeyEvent key ()I
+   return input_key
+target_method net.minecraft.client.input.KeyEvent keycode ()I
+   return input_keycode
+# Ignore this warning. The parent class has no concept of keycode vs. key.
+target_method net.minecraft.client.input.KeyEvent input ()I
+   return input_key
+target_method net.minecraft.client.input.KeyEvent shortcutKey ()I
+   return input_keycode
+
+# TODO: Once you can match expressions in unpick, target the other <init> with type argument
+target_method net.minecraft.client.KeyMapping <init> (Ljava/lang/String;ILnet/minecraft/client/KeyMapping$Category;)V
+   param 1 input_key
+
+# TODO: Once you can match expressions in unpick, target the other <init> with type argument
+target_method net.minecraft.client.ToggleKeyMapping <init> (Ljava/lang/String;ILnet/minecraft/client/KeyMapping$Category;Ljava/util/function/BooleanSupplier;Z)V
+   param 1 input_key
