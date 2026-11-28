@@ -46,9 +46,6 @@ target_method net.minecraft.world.inventory.AbstractContainerMenu getQuickCraftP
 target_method net.minecraft.world.inventory.AbstractContainerMenu isContainerClickButton (I)Z
    param 0 container_click
 
-target_method net.minecraft.world.inventory.AbstractContainerMenu getRedstoneSignalFromContainer (Lnet/minecraft/world/Container;)I
-   return redstone_signal
-
 group int
    @scope method net.minecraft.world.inventory.AbstractContainerMenu incrementStateId ()I
    java.lang.Short.MAX_VALUE
