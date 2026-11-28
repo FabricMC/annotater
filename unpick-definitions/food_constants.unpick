@@ -1,0 +1,92 @@
+unpick v4
+
+#: Specific levels of food on the hunger bar
+group int foodLevels
+   net.minecraft.world.food.FoodConstants.MAX_FOOD
+   net.minecraft.world.food.FoodConstants.HEAL_LEVEL
+   net.minecraft.world.food.FoodConstants.SPRINT_LEVEL
+   net.minecraft.world.food.FoodConstants.STARVE_LEVEL
+
+target_field net.minecraft.world.food.FoodData foodLevel I foodLevels
+target_method net.minecraft.world.food.FoodData getFoodLevel ()I
+   return foodLevels
+target_method net.minecraft.world.food.FoodData setFoodLevel (I)V
+   param 0 foodLevels
+
+#: Specific amounts of saturation
+group float saturationLevels
+   net.minecraft.world.food.FoodConstants.MAX_SATURATION
+   net.minecraft.world.food.FoodConstants.START_SATURATION
+   net.minecraft.world.food.FoodConstants.SATURATION_FLOOR
+
+target_field net.minecraft.world.food.FoodData saturationLevel F saturationLevels
+target_method net.minecraft.world.food.FoodData getSaturationLevel ()F
+   return saturationLevels
+target_method net.minecraft.world.food.FoodData setSaturation (F)V
+   param 0 saturationLevels
+
+#: Levels of exhaustion
+group float exhaustionLevels
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_DROP
+
+target_field net.minecraft.world.food.FoodData exhaustionLevel F exhaustionLevels
+
+# Health tick timer counts, for both natural regeneration and starvation
+group int healthTickCounts
+   net.minecraft.world.food.FoodConstants.HEALTH_TICK_COUNT
+   net.minecraft.world.food.FoodConstants.HEALTH_TICK_COUNT_SATURATED
+
+target_field net.minecraft.world.food.FoodData tickTimer I healthTickCounts
+
+#: Saturation values of foods
+group float foodSaturationModifiers
+   net.minecraft.world.food.FoodConstants.FOOD_SATURATION_POOR
+   net.minecraft.world.food.FoodConstants.FOOD_SATURATION_LOW
+   net.minecraft.world.food.FoodConstants.FOOD_SATURATION_NORMAL
+   net.minecraft.world.food.FoodConstants.FOOD_SATURATION_GOOD
+   net.minecraft.world.food.FoodConstants.FOOD_SATURATION_MAX
+   net.minecraft.world.food.FoodConstants.FOOD_SATURATION_SUPERNATURAL
+
+target_method net.minecraft.world.food.FoodProperties$Builder saturationModifier (F)Lnet/minecraft/world/food/FoodProperties$Builder;
+   param 0 foodSaturationModifiers
+target_method net.minecraft.world.food.FoodData eat (IF)V
+   param 1 foodSaturationModifiers
+target_method net.minecraft.world.food.FoodConstants saturationByModifier (IF)F
+   param 1 foodSaturationModifiers
+
+# Exhaustion values, split and scoped due to overlapping values
+
+#: Healing exhaustion value
+group float actionExhaustionValues
+   @scope method net.minecraft.world.food.FoodData tick (Lnet/minecraft/server/level/ServerPlayer;)V
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_HEAL
+
+#: Attack exhaustion value
+group float actionExhaustionValues
+   @scope method net.minecraft.world.entity.player.Player attack (Lnet/minecraft/world/entity/Entity;)V
+   @scope method net.minecraft.world.entity.player.Player stabAttack (Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/entity/Entity;FZZZ)Z
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_ATTACK
+
+#: Mining exhaustion value
+group float actionExhaustionValues
+   @scope method net.minecraft.world.level.block.Block playerDestroy (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/item/ItemStack;)V
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_MINE
+
+#: Jumping exhaustion values
+group float actionExhaustionValues
+   @scope method net.minecraft.server.level.ServerPlayer jumpFromGround ()V
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_JUMP
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_SPRINT_JUMP
+
+#: Movement exhaustion values
+group float actionExhaustionValues
+   @scope method net.minecraft.server.level.ServerPlayer checkMovementStatistics (DDD)V
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_WALK
+   #net.minecraft.world.food.FoodConstants.EXHAUSTION_CROUCH - identical value to walk, need to leave out
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_SPRINT
+   net.minecraft.world.food.FoodConstants.EXHAUSTION_SWIM
+
+target_method net.minecraft.world.food.FoodData addExhaustion (F)V
+   param 0 actionExhaustionValues
+target_method net.minecraft.world.entity.player.Player causeFoodExhaustion (F)V
+   param 0 actionExhaustionValues
