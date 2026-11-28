@@ -1,0 +1,11 @@
+unpick v4
+
+group int baked_quad_flag
+   @flags
+   net.minecraft.client.resources.model.geometry.BakedQuad.FLAG_TRANSLUCENT
+   net.minecraft.client.resources.model.geometry.BakedQuad.FLAG_ANIMATED
+
+target_annotation net.minecraft.client.resources.model.geometry.BakedQuad$MaterialFlags baked_quad_flag
+
+target_method net.minecraft.client.resources.model.geometry.BakedQuad$MaterialInfo flags ()I
+   return baked_quad_flag
