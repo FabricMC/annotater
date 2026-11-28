@@ -1,0 +1,23 @@
+unpick v4
+
+group String
+    net.minecraft.resources.Identifier.DEFAULT_NAMESPACE
+    net.minecraft.resources.Identifier.REALMS_NAMESPACE
+    net.minecraft.resources.Identifier.ALLOWED_NAMESPACE_CHARACTERS
+
+# most fields named similar to 'colonPosition' have deliberately been excluded as they don't always refer to identifiers
+group int
+    @scope method net.minecraft.client.gui.screens.Screen isValidCharacterForName (Ljava/lang/String;II)Z
+    @scope method net.minecraft.client.gui.screens.achievement.StatsScreen getTranslationKey (Lnet/minecraft/stats/Stat;)Ljava/lang/String;
+    @scope method net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen updateVisibleTags (Ljava/lang/String;)V
+    @scope method net.minecraft.client.searchtree.IdSearchTree search (Ljava/lang/String;)Ljava/util/List;
+    @scope method net.minecraft.commands.SharedSuggestionProvider filterResources (Ljava/lang/Iterable;Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Consumer;)V
+    @scope method net.minecraft.gametest.framework.TestCommand outputTestCoordinates (Lnet/minecraft/commands/CommandSourceStack;Ljava/util/Set;)V
+    @scope method net.minecraft.gametest.framework.TestCommand outputPlayerCoordinates (Lnet/minecraft/commands/CommandSourceStack;Ljava/util/Set;)V
+    @scope class net.minecraft.resources.Identifier
+    @scope method net.minecraft.server.Bootstrap getMissingTranslations (Lnet/minecraft/locale/Language;)Ljava/util/Set;
+    @scope method net.minecraft.stats.Stat locationToKey (Lnet/minecraft/resources/Identifier;)Ljava/lang/String;
+    @scope method net.minecraft.util.datafix.fixes.LevelFlatGeneratorInfoFix <clinit> ()V
+    @scope method net.minecraft.util.datafix.fixes.StatsCounterFix unpackLegacyKey (Ljava/lang/String;)Lnet/minecraft/util/datafix/fixes/StatsCounterFix$StatType;
+    @scope method net.minecraft.world.scores.criteria.ObjectiveCriteria byName (Ljava/lang/String;)Ljava/util/Optional;
+    net.minecraft.resources.Identifier.NAMESPACE_SEPARATOR
