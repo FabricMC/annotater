@@ -1,0 +1,13 @@
+unpick v4
+
+# Explicitly using en_us means it is referring to the DEFAULT language.
+# Therefore, a global unpick is safe.
+group String
+   net.minecraft.locale.Language.DEFAULT
+
+
+# String Concatenation
+
+group String
+   @scope method net.minecraft.locale.Language loadDefault ()Lnet/minecraft/locale/Language;
+   "/assets/minecraft/lang/" + net.minecraft.locale.Language.DEFAULT + ".json"
