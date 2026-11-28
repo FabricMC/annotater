@@ -4,6 +4,7 @@ unpick v4
 group float
    @strict
    net.minecraft.util.Mth.PI
+   -net.minecraft.util.Mth.PI
    net.minecraft.util.Mth.HALF_PI
    net.minecraft.util.Mth.TWO_PI
    net.minecraft.util.Mth.DEG_TO_RAD
