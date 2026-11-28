@@ -36,6 +36,7 @@ group int
    @scope method net.minecraft.world.timeline.Timelines bootstrap (Lnet/minecraft/data/worldgen/BootstrapContext;)V
    net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
    net.minecraft.SharedConstants.TICKS_PER_GAME_DAY / 2
+   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY * 3
 
 # Methods taking tick durations
 group int set_walk_target_from_block_memory_unreachable_duration
