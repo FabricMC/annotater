@@ -1,0 +1,16 @@
+unpick v4
+
+group int max_crafting_ticks
+   @scope method net.minecraft.world.level.block.CrafterBlock dispenseFrom (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;)V
+   net.minecraft.world.level.block.CrafterBlock.MAX_CRAFTING_TICKS
+
+group int crafting_tick_delay
+   # Class scope is okay due to the narrow target_method
+   @scope class net.minecraft.world.level.block.CrafterBlock
+   net.minecraft.world.level.block.CrafterBlock.CRAFTING_TICK_DELAY
+
+target_method net.minecraft.world.level.ScheduledTickAccess scheduleTick(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;I)V
+   param 2 crafting_tick_delay
+
+target_method net.minecraft.world.level.block.entity.CrafterBlockEntity setCraftingTicksRemaining (I)V
+   param 0 max_crafting_ticks
