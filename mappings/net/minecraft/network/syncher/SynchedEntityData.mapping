@@ -1,4 +1,4 @@
 CLASS net/minecraft/network/syncher/SynchedEntityData
 	METHOD defineId (Ljava/lang/Class;Lnet/minecraft/network/syncher/EntityDataSerializer;)Lnet/minecraft/network/syncher/EntityDataAccessor;
-		COMMENT Returns a new [net.minecraft.network.syncher.EntityDataAccessor] from a class that holds synched data, such as an [net.minecraft.world.entity.Entity] class.
+		COMMENT Returns a new [net.minecraft.network.syncher.EntityDataAccessor] from a class that holds synchronized data, such as an [net.minecraft.world.entity.Entity] class.
 		COMMENT @see net.minecraft.world.entity.Entity#defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder)
