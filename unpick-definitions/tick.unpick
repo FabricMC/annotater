@@ -8,6 +8,10 @@ group int
    @scope method net.minecraft.client.gui.Hud extractEffects (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V
    @scope method net.minecraft.commands.arguments.TimeArgument <clinit> ()V
    net.minecraft.SharedConstants.TICKS_PER_SECOND
+group int
+   @scope method net.minecraft.server.level.DemoMode tick ()V
+   net.minecraft.SharedConstants.TICKS_PER_SECOND
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 25
 
 # Ticks Per Minute
 group int
@@ -37,6 +41,10 @@ group int
    net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
    net.minecraft.SharedConstants.TICKS_PER_GAME_DAY / 2
    net.minecraft.SharedConstants.TICKS_PER_GAME_DAY * 3
+group long
+   @scope class net.minecraft.server.level.DemoMode
+   @scope method net.minecraft.client.renderer.GlobalSettingsUniform update (IIDJFILnet/minecraft/world/phys/Vec3;Z)V
+   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
 
 # Methods taking tick durations
 group int set_walk_target_from_block_memory_unreachable_duration
@@ -211,7 +219,3 @@ group long
    @scope method net.minecraft.client.gui.Hud extractDemoOverlay (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V
    @scope class net.minecraft.server.level.DemoMode
    net.minecraft.server.level.DemoMode.TOTAL_PLAY_TICKS
-
-group long
-   @scope method net.minecraft.client.renderer.GlobalSettingsUniform update (IIDJFILnet/minecraft/world/phys/Vec3;Z)V
-   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
