@@ -1,0 +1,62 @@
+unpick v4
+
+#: Names the data of Entity is stored under
+group String
+    @scope method net.minecraft.world.entity.Entity saveAsPassenger (Lnet/minecraft/world/level/storage/ValueOutput;)Z
+    @scope method net.minecraft.world.entity.Entity saveWithoutId (Lnet/minecraft/world/level/storage/ValueOutput;)V
+    @scope method net.minecraft.world.entity.Entity load (Lnet/minecraft/world/level/storage/ValueInput;)V
+    net.minecraft.world.entity.Entity.TAG_ID
+    net.minecraft.world.entity.Entity.TAG_UUID
+    net.minecraft.world.entity.Entity.TAG_PASSENGERS
+    net.minecraft.world.entity.Entity.TAG_DATA
+    net.minecraft.world.entity.Entity.TAG_POS
+    net.minecraft.world.entity.Entity.TAG_MOTION
+    net.minecraft.world.entity.Entity.TAG_ROTATION
+    net.minecraft.world.entity.Entity.TAG_PORTAL_COOLDOWN
+    net.minecraft.world.entity.Entity.TAG_NO_GRAVITY
+    net.minecraft.world.entity.Entity.TAG_AIR
+    net.minecraft.world.entity.Entity.TAG_ON_GROUND
+    net.minecraft.world.entity.Entity.TAG_FALL_DISTANCE
+    net.minecraft.world.entity.Entity.TAG_FIRE
+    net.minecraft.world.entity.Entity.TAG_SILENT
+    net.minecraft.world.entity.Entity.TAG_GLOWING
+    net.minecraft.world.entity.Entity.TAG_INVULNERABLE
+    net.minecraft.world.entity.Entity.TAG_INVULNERABLE_TIME
+    net.minecraft.world.entity.Entity.TAG_CUSTOM_NAME
+
+#: Numbers that represent at which digit of a binary number the data is stored
+group int shared_entity_flags
+    net.minecraft.world.entity.Entity.FLAG_ONFIRE
+    net.minecraft.world.entity.Entity.FLAG_SHIFT_KEY_DOWN
+    net.minecraft.world.entity.Entity.FLAG_SPRINTING
+    net.minecraft.world.entity.Entity.FLAG_SWIMMING
+    net.minecraft.world.entity.Entity.FLAG_INVISIBLE
+    net.minecraft.world.entity.Entity.FLAG_GLOWING
+
+group int
+    @scope method net.minecraft.world.entity.Entity addTag (Ljava/lang/String;)Z
+    @scope method net.minecraft.world.entity.Entity <clinit> ()V
+    net.minecraft.world.entity.Entity.MAX_ENTITY_TAG_COUNT
+
+group int entity_boarding_cooldown
+    net.minecraft.world.entity.Entity.BOARDING_COOLDOWN
+
+group int
+    @scope method net.minecraft.world.entity.Entity checkInsideBlocks (Ljava/util/List;Lnet/minecraft/world/entity/InsideBlockEffectApplier$StepBasedCollector;)V
+    net.minecraft.world.entity.Entity.MAX_BLOCK_ITERATIONS_ALONG_TRAVEL_PER_TICK
+
+group int
+    @scope method net.minecraft.world.entity.Entity addMovementThisTick (Lnet/minecraft/world/entity/Entity$Movement;)V
+    net.minecraft.world.entity.Entity.MAX_MOVEMENTS_HANDELED_PER_TICK
+
+group int entity_id
+  net.minecraft.world.entity.Entity.INVALID_ENTITY_ID
+
+target_method net.minecraft.world.entity.Entity getId ()I
+  return entity_id
+
+target_field net.minecraft.world.entity.Entity id I entity_id
+
+target_field net.minecraft.world.entity.Entity boardingCooldown I entity_boarding_cooldown
+
+target_annotation net.minecraft.world.entity.Entity$Flags shared_entity_flags

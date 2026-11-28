@@ -1,0 +1,7 @@
+unpick v4
+
+#: Numbers describing what Entity event has occurred
+group int entity_events
+    net.minecraft.world.entity.EntityEvent.*
+
+target_annotation net.minecraft.world.entity.EntityEvent$Value entity_events
