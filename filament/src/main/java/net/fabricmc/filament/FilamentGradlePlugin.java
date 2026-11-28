@@ -27,6 +27,7 @@ import net.fabricmc.filament.task.DropJavadocErrorsTask;
 import net.fabricmc.filament.task.FixMappingsTask;
 import net.fabricmc.filament.task.FormatMappingsTask;
 import net.fabricmc.filament.task.JavaRuntimeJarTask;
+import net.fabricmc.filament.task.http.AnnotaterServerTask;
 import net.fabricmc.filament.task.unpick.CheckUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.CombineUnpickDefinitionsTask;
 import net.fabricmc.filament.task.unpick.UnpickJarTask;
@@ -67,15 +68,16 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.getJavaHome().set(javaLauncher.map(launcher -> launcher.getMetadata().getInstallationPath()));
 			task.getOutput().set(buildDir.file("javaRuntime/java-runtime.jar"));
 		});
+		var runtimeLibsDir = buildDir.dir("runtime_libs");
 		var syncRuntimeLibs = tasks.register("syncRuntimeLibs", Sync.class, task -> {
 			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Syncs Minecraft dependencies and Java runtime classes, excluding the Minecraft jars.");
 			task.from(decompileClasspath);
 			task.from(javaRuntimeJar.flatMap(JavaRuntimeJarTask::getOutput));
 			task.include("*.jar");
-			task.into(buildDir.dir("runtime_libs"));
+			task.into(runtimeLibsDir);
 		});
-		tasks.register("prepareMcSrc", task -> {
+		var prepareMcSrc = tasks.register("prepareMcSrc", task -> {
 			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Prepares the project for mcsrc.");
 			task.dependsOn(syncRuntimeLibs);
@@ -204,6 +206,14 @@ public final class FilamentGradlePlugin implements Plugin<Project> {
 			task.setGroup(ANNOTATER_TASK_GROUP);
 			task.setDescription("Drops everything failing the checks.");
 			task.dependsOn(dropInvalidMappings);
+		});
+
+		tasks.register("serve", AnnotaterServerTask.class, task -> {
+			task.setGroup(ANNOTATER_TASK_GROUP);
+			task.dependsOn(prepareMcSrc);
+			task.getMappingsDir().set(mappings);
+			task.getUnpickDir().set(unpickDefinitions);
+			task.getRuntimeLibrariesDir().set(runtimeLibsDir);
 		});
 	}
 }
