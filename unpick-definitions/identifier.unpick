@@ -7,7 +7,6 @@ group String
 
 # most fields named similar to 'colonPosition' have deliberately been excluded as they don't always refer to identifiers
 group int
-    @format char
     @scope method net.minecraft.client.gui.screens.Screen isValidCharacterForName (Ljava/lang/String;II)Z
     @scope method net.minecraft.client.gui.screens.achievement.StatsScreen getTranslationKey (Lnet/minecraft/stats/Stat;)Ljava/lang/String;
     @scope method net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen updateVisibleTags (Ljava/lang/String;)V
