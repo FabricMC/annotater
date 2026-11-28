@@ -10,19 +10,14 @@ group int
     @scope method net.minecraft.client.gui.screens.Screen isValidCharacterForName (Ljava/lang/String;II)Z
     @scope method net.minecraft.client.gui.screens.achievement.StatsScreen getTranslationKey (Lnet/minecraft/stats/Stat;)Ljava/lang/String;
     @scope method net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen updateVisibleTags (Ljava/lang/String;)V
+    @scope method net.minecraft.client.searchtree.IdSearchTree search (Ljava/lang/String;)Ljava/util/List;
     @scope method net.minecraft.commands.SharedSuggestionProvider filterResources (Ljava/lang/Iterable;Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Consumer;)V
     @scope method net.minecraft.gametest.framework.TestCommand outputTestCoordinates (Lnet/minecraft/commands/CommandSourceStack;Ljava/util/Set;)V
     @scope method net.minecraft.gametest.framework.TestCommand outputPlayerCoordinates (Lnet/minecraft/commands/CommandSourceStack;Ljava/util/Set;)V
-    @scope method net.minecraft.nbt.SnbtGrammar createParser (Lcom/mojang/serialization/DynamicOps;)Lnet/minecraft/util/parsing/packrat/commands/Grammar;
-    @scope method net.minecraft.nbt.SnbtPrinterTagVisitor <clinit> ()V
-    @scope method net.minecraft.nbt.StringTagVisitor visitCompound (Lnet/minecraft/nbt/CompoundTag;)V
-    @scope method net.minecraft.resources.Identifier parse (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-    @scope method net.minecraft.resources.Identifier tryParse (Ljava/lang/String;)Lnet/minecraft/resources/Identifier;
-    @scope method net.minecraft.resources.Identifier toDebugFileName ()Ljava/lang/String;
-    @scope method net.minecraft.resources.Identifier isAllowedInIdentifier (C)Z
+    @scope class net.minecraft.resources.Identifier
     @scope method net.minecraft.server.Bootstrap getMissingTranslations (Lnet/minecraft/locale/Language;)Ljava/util/Set;
     @scope method net.minecraft.stats.Stat locationToKey (Lnet/minecraft/resources/Identifier;)Ljava/lang/String;
     @scope method net.minecraft.util.datafix.fixes.LevelFlatGeneratorInfoFix <clinit> ()V
     @scope method net.minecraft.util.datafix.fixes.StatsCounterFix unpackLegacyKey (Ljava/lang/String;)Lnet/minecraft/util/datafix/fixes/StatsCounterFix$StatType;
-    @scope method net.minecraft.util.parsing.packrat.Scope toString ()Ljava/lang/String;
+    @scope method net.minecraft.world.scores.criteria.ObjectiveCriteria byName (Ljava/lang/String;)Ljava/util/Optional;
     net.minecraft.resources.Identifier.NAMESPACE_SEPARATOR
