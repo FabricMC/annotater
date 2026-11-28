@@ -211,3 +211,7 @@ group long
    @scope method net.minecraft.client.gui.Hud extractDemoOverlay (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V
    @scope class net.minecraft.server.level.DemoMode
    net.minecraft.server.level.DemoMode.TOTAL_PLAY_TICKS
+
+group long
+   @scope method net.minecraft.client.renderer.GlobalSettingsUniform update (IIDJFILnet/minecraft/world/phys/Vec3;Z)V
+   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
