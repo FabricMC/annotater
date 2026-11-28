@@ -21,7 +21,7 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT @return the team color in the `0xRRGGBB` format, or [net.minecraft.util.CommonColors#WHITE] if the Entity is not part of a Team or the Team has no color
 	METHOD getViewVector (F)Lnet/minecraft/world/phys/Vec3;
 		COMMENT Return a vector representing the direction this entity is looking.
-		COMMENT @param a The partial ticks to use for interpolation, or `1` to not interpolate.
+		COMMENT @param a the partial ticks to use for interpolation, or `1` to not interpolate.
 	METHOD getXRot ()F
 		COMMENT Returns the rotation of the entity around the x-axis (its pitch) in degrees.
 	METHOD getYRot ()F
@@ -45,6 +45,6 @@ CLASS net/minecraft/world/entity/Entity
 		COMMENT @see #markHurt()
 	METHOD setSharedFlag (IZ)V
 		COMMENT Sets a shared flag that is synchronized from the server to the client.
-		COMMENT @param flag The flag to set. The static variables in this class prefixed with `FLAG_`, such as [#FLAG_ONFIRE] show the meaning of different flag values.
+		COMMENT @param flag the flag to set. The static variables in this class prefixed with `FLAG_`, such as [#FLAG_ONFIRE] show the meaning of different flag values.
 	CLASS RemovalReason
 		COMMENT Reasons an [net.minecraft.world.entity.Entity] is removed from a [net.minecraft.world.level.Level].
