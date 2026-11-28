@@ -1,0 +1,8 @@
+unpick v4
+
+group int redstone_signal
+   net.minecraft.world.level.redstone.Redstone.SIGNAL_MAX
+   net.minecraft.world.level.redstone.Redstone.SIGNAL_NONE
+
+target_method net.minecraft.world.inventory.AbstractContainerMenu getRedstoneSignalFromContainer (Lnet/minecraft/world/Container;)I
+   return redstone_signal
