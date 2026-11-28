@@ -1,0 +1,202 @@
+unpick v4
+
+#: Integers in ARGB color format.
+
+group int argb_color
+   @format hex
+   net.minecraft.util.CommonColors.*
+   net.minecraft.realms.RealmsScreen.COLOR_DARK_GRAY
+   net.minecraft.realms.RealmsScreen.COLOR_GREEN
+   net.minecraft.realms.RealmsScreen.COLOR_LINK
+   net.minecraft.realms.RealmsScreen.COLOR_LINK_HOVER
+
+target_method com.mojang.blaze3d.vertex.VertexConsumer setColor (I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+   param 0 argb_color
+
+target_method net.minecraft.util.ARGB red (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB green (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB blue (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB alpha (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB redFloat (I)F
+   param 0 argb_color
+target_method net.minecraft.util.ARGB greenFloat (I)F
+   param 0 argb_color
+target_method net.minecraft.util.ARGB blueFloat (I)F
+   param 0 argb_color
+target_method net.minecraft.util.ARGB alphaFloat (I)F
+   param 0 argb_color
+target_method net.minecraft.util.ARGB multiply (II)I
+   param 0 argb_color
+   param 1 argb_color
+target_method net.minecraft.util.ARGB addRgb (II)I
+   param 0 argb_color
+   param 1 argb_color
+target_method net.minecraft.util.ARGB multiplyAlpha (IF)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB scaleRGB (IF)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB scaleRGB (IFFF)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB scaleRGB (II)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB greyscale (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB alphaBlend (II)I
+   param 0 argb_color
+   param 1 argb_color
+target_method net.minecraft.util.ARGB opaque (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB transparent (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB vector4fFromARGB32 (I)Lorg/joml/Vector4f;
+   param 0 argb_color
+target_method net.minecraft.util.ARGB average (II)I
+   param 0 argb_color
+   param 1 argb_color
+target_method net.minecraft.util.ARGB toABGR (I)I
+   param 0 argb_color
+target_method net.minecraft.util.ARGB setBrightness (IF)I
+   param 0 argb_color
+
+target_method net.minecraft.client.color.block.BlockTintSources constant (I)Lnet/minecraft/client/color/block/BlockTintSource;
+   param 0 argb_color
+target_method net.minecraft.client.color.block.BlockTintSources constant (II)Lnet/minecraft/client/color/block/BlockTintSource;
+   param 0 argb_color
+   param 1 argb_color
+
+target_method net.minecraft.client.color.item.Constant <init> (I)V
+   param 0 argb_color
+
+target_method net.minecraft.client.color.item.CustomModelDataSource <init> (II)V
+   param 1 argb_color
+
+target_method net.minecraft.client.color.item.Dye <init> (I)V
+   param 0 argb_color
+
+target_method net.minecraft.client.color.item.Firework <init> (I)V
+   param 0 argb_color
+
+target_method net.minecraft.client.color.item.Potion <init> (I)V
+   param 0 argb_color
+
+target_method net.minecraft.client.color.item.TeamColor <init> (I)V
+   param 0 argb_color
+
+target_method net.minecraft.client.gui.GuiGraphicsExtractor horizontalLine (IIII)V
+   param 3 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor verticalLine (IIII)V
+   param 3 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor fill (IIIII)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor fill (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;IIIII)V
+   param 5 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor fillGradient (IIIIII)V
+   param 4 argb_color
+   param 5 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor innerFill (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/client/gui/render/TextureSetup;IIIIILjava/lang/Integer;)V
+   param 6 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor outline (IIIII)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor text (Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor text (Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor text (Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor text (Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;IIIZ)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor text (Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor text (Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIIZ)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor centeredText (Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor centeredText (Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor centeredText (Lnet/minecraft/client/gui/Font;Lnet/minecraft/util/FormattedCharSequence;III)V
+   param 4 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor textWithWordWrap (Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/FormattedText;IIII)I
+   param 5 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor textWithWordWrap (Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/FormattedText;IIIIZ)I
+   param 5 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor textWithBackdrop (Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;IIII)V
+   param 5 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blit (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIII)V
+   param 10 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blit (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIIIIII)V
+   param 12 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blitSprite (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIII)V
+   param 6 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blitSprite (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIIIIIII)V
+   param 10 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blitSprite (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;IIIII)V
+   param 6 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blitSprite (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;IIIIIIIII)V
+   param 10 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blitNineSlicedSprite (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;Lnet/minecraft/client/resources/metadata/gui/GuiSpriteScaling$NineSlice;IIIII)V
+   param 7 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor blitNineSliceInnerSegment (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/client/resources/metadata/gui/GuiSpriteScaling$NineSlice;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;IIIIIIIIIII)V
+   param 13 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor innerBlit (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIIIFFFFI)V
+   param 10 argb_color
+target_method net.minecraft.client.gui.GuiGraphicsExtractor innerTiledBlit (Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lcom/mojang/renderpearl/api/textures/GpuTextureView;Lcom/mojang/renderpearl/api/textures/GpuSampler;IIIIIIFFFFI)V
+   param 13 argb_color
+
+target_method net.minecraft.client.gui.components.debugchart.AbstractDebugChart getSampleColor (DDIDIDI)I
+   param 2 argb_color
+   param 4 argb_color
+   param 6 argb_color
+
+target_method net.minecraft.client.gui.font.glyphs.BakedGlyph createGlyph (FFIILnet/minecraft/network/chat/Style;FF)Lnet/minecraft/client/gui/font/TextRenderable$Styled;
+   param 2 argb_color
+   param 3 argb_color
+
+target_method net.minecraft.client.gui.font.glyphs.EffectGlyph createEffect (FFFFFIIF)Lnet/minecraft/client/gui/font/TextRenderable;
+   param 5 argb_color
+   param 6 argb_color
+
+target_method net.minecraft.client.gui.font.PlainTextRenderable renderSprite (Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/vertex/VertexConsumer;IFFFI)V
+   param 6 argb_color
+
+target_method net.minecraft.gizmos.ArrowGizmo <init> (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;IF)V
+   param 2 argb_color
+
+target_method net.minecraft.gizmos.LineGizmo <init> (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;IF)V
+   param 2 argb_color
+
+target_method net.minecraft.gizmos.PointGizmo <init> (Lnet/minecraft/world/phys/Vec3;IF)V
+   param 1 argb_color
+
+target_method net.minecraft.gizmos.TextGizmo$Style <init> (IFLjava/util/OptionalDouble;)V
+   param 0 argb_color
+
+target_method net.minecraft.gizmos.GizmoStyle stroke (I)Lnet/minecraft/gizmos/GizmoStyle;
+   param 0 argb_color
+target_method net.minecraft.gizmos.GizmoStyle stroke (IF)Lnet/minecraft/gizmos/GizmoStyle;
+   param 0 argb_color
+target_method net.minecraft.gizmos.GizmoStyle fill (I)Lnet/minecraft/gizmos/GizmoStyle;
+   param 0 argb_color
+target_method net.minecraft.gizmos.GizmoStyle strokeAndFill (IFI)Lnet/minecraft/gizmos/GizmoStyle;
+   param 0 argb_color
+   param 2 argb_color
+
+target_method net.minecraft.network.chat.TextColor <init> (ILjava/lang/String;)V
+   param 0 argb_color
+target_method net.minecraft.network.chat.TextColor <init> (I)V
+   param 0 argb_color
+target_method net.minecraft.network.chat.TextColor named (Ljava/lang/String;I)Lnet/minecraft/network/chat/TextColor;
+   param 1 argb_color
+target_method net.minecraft.network.chat.TextColor fromRgb (I)Lnet/minecraft/network/chat/TextColor;
+   param 0 argb_color
+
+target_method net.minecraft.network.chat.Style withColor (I)Lnet/minecraft/network/chat/Style;
+   param 0 argb_color
+target_method net.minecraft.network.chat.Style withShadowColor (I)Lnet/minecraft/network/chat/Style;
+   param 0 argb_color
+
+target_method net.minecraft.network.chat.MutableComponent withColor (I)Lnet/minecraft/network/chat/MutableComponent;
+   param 0 argb_color

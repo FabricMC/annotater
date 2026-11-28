@@ -1,0 +1,21 @@
+unpick v4
+
+group int nbt_tag_type
+   net.minecraft.nbt.Tag.TAG_END
+   net.minecraft.nbt.Tag.TAG_BYTE
+   net.minecraft.nbt.Tag.TAG_SHORT
+   net.minecraft.nbt.Tag.TAG_INT
+   net.minecraft.nbt.Tag.TAG_LONG
+   net.minecraft.nbt.Tag.TAG_DOUBLE
+   net.minecraft.nbt.Tag.TAG_BYTE_ARRAY
+   net.minecraft.nbt.Tag.TAG_STRING
+   net.minecraft.nbt.Tag.TAG_LIST
+   net.minecraft.nbt.Tag.TAG_COMPOUND
+   net.minecraft.nbt.Tag.TAG_INT_ARRAY
+   net.minecraft.nbt.Tag.TAG_LONG_ARRAY
+
+target_method net.minecraft.nbt.Tag getId ()B
+   return nbt_tag_type
+
+target_method net.minecraft.nbt.TagTypes getType (I)Lnet/minecraft/nbt/TagType;
+   param 0 nbt_tag_type

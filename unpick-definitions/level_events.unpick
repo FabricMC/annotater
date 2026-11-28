@@ -1,0 +1,21 @@
+unpick v4
+
+group int level_event
+    net.minecraft.world.level.block.LevelEvent.*
+	
+target_annotation net.minecraft.world.level.block.LevelEvent$Value level_event
+
+target_method net.minecraft.world.level.LevelAccessor levelEvent (Lnet/minecraft/world/entity/Entity;ILnet/minecraft/core/BlockPos;I)V
+	param 1 level_event
+target_method net.minecraft.world.level.LevelAccessor levelEvent (ILnet/minecraft/core/BlockPos;I)V
+	param 0 level_event
+target_method net.minecraft.client.renderer.LevelEventHandler globalLevelEvent (ILnet/minecraft/core/BlockPos;I)V
+	param 0 level_event
+target_method net.minecraft.client.renderer.LevelEventHandler levelEvent (ILnet/minecraft/core/BlockPos;I)V
+	param 0 level_event
+target_method net.minecraft.world.level.Level globalLevelEvent (ILnet/minecraft/core/BlockPos;I)V
+	param 0 level_event
+target_method net.minecraft.network.protocol.game.ClientboundLevelEventPacket <init> (ILnet/minecraft/core/BlockPos;IZ)V
+	param 0 level_event
+target_method net.minecraft.network.protocol.game.ClientboundLevelEventPacket getType ()I
+	return level_event

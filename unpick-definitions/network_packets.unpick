@@ -1,0 +1,71 @@
+unpick v4
+
+group int move_player_flag
+   @flags
+   net.minecraft.network.protocol.game.ServerboundMovePlayerPacket.FLAG_ON_GROUND
+   net.minecraft.network.protocol.game.ServerboundMovePlayerPacket.FLAG_HORIZONTAL_COLLISION
+
+target_method net.minecraft.network.protocol.game.ServerboundMovePlayerPacket packFlags (ZZ)I
+   return move_player_flag
+target_method net.minecraft.network.protocol.game.ServerboundMovePlayerPacket unpackOnGround (I)Z
+   param 0 move_player_flag
+target_method net.minecraft.network.protocol.game.ServerboundMovePlayerPacket unpackHorizontalCollision (I)Z
+   param 0 move_player_flag
+
+group int animation_id
+   net.minecraft.network.protocol.game.ClientboundAnimatePacket.WAKE_UP
+   net.minecraft.network.protocol.game.ClientboundAnimatePacket.CRITICAL_HIT
+   net.minecraft.network.protocol.game.ClientboundAnimatePacket.MAGIC_CRITICAL_HIT
+
+target_method net.minecraft.network.protocol.game.ClientboundAnimatePacket <init> (Lnet/minecraft/world/entity/Entity;I)V
+   param 1 animation_id
+target_method net.minecraft.network.protocol.game.ClientboundAnimatePacket getAction ()I
+   return animation_id
+
+group int demo_param
+   @scope class net.minecraft.server.level.DemoMode
+   net.minecraft.network.protocol.game.ClientboundGameEventPacket.DEMO_PARAM_INTRO
+   net.minecraft.network.protocol.game.ClientboundGameEventPacket.DEMO_PARAM_HINT_1
+   net.minecraft.network.protocol.game.ClientboundGameEventPacket.DEMO_PARAM_HINT_2
+   net.minecraft.network.protocol.game.ClientboundGameEventPacket.DEMO_PARAM_HINT_3
+   net.minecraft.network.protocol.game.ClientboundGameEventPacket.DEMO_PARAM_HINT_4
+
+target_method net.minecraft.network.protocol.game.ClientboundGameEventPacket <init> (Lnet/minecraft/network/protocol/game/ClientboundGameEventPacket$Type;F)V
+   param 1 demo_param
+target_method net.minecraft.network.protocol.game.ClientboundGameEventPacket getParam ()F
+   return demo_param
+
+group int respawn_kept_data
+   net.minecraft.network.protocol.game.ClientboundRespawnPacket.KEEP_ATTRIBUTE_MODIFIERS
+   net.minecraft.network.protocol.game.ClientboundRespawnPacket.KEEP_ENTITY_DATA
+   net.minecraft.network.protocol.game.ClientboundRespawnPacket.KEEP_ALL_DATA
+
+target_method net.minecraft.network.protocol.game.ClientboundRespawnPacket <init> (Lnet/minecraft/network/protocol/game/CommonPlayerSpawnInfo;B)V
+   param 1 respawn_kept_data
+target_method net.minecraft.network.protocol.game.ClientboundRespawnPacket shouldKeep (B)Z
+   param 0 respawn_kept_data
+
+group int set_objective_method
+   net.minecraft.network.protocol.game.ClientboundSetObjectivePacket.METHOD_ADD
+   net.minecraft.network.protocol.game.ClientboundSetObjectivePacket.METHOD_REMOVE
+   net.minecraft.network.protocol.game.ClientboundSetObjectivePacket.METHOD_CHANGE
+
+target_method net.minecraft.network.protocol.game.ClientboundSetObjectivePacket <init> (Lnet/minecraft/world/scores/Objective;I)V
+   param 1 set_objective_method
+target_method net.minecraft.network.protocol.game.ClientboundSetObjectivePacket getMethod ()I
+   return set_objective_method
+
+group int set_player_team_method
+   net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.METHOD_ADD
+   net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.METHOD_REMOVE
+   net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.METHOD_CHANGE
+   net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.METHOD_JOIN
+   net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.METHOD_LEAVE
+
+target_field net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket method I set_player_team_method
+target_method net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket <init> (Ljava/lang/String;ILjava/util/Optional;Ljava/util/Collection;)V
+   param 1 set_player_team_method
+target_method net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket shouldHavePlayerList (I)Z
+   param 0 set_player_team_method
+target_method net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket shouldHaveParameters (I)Z
+   param 0 set_player_team_method
