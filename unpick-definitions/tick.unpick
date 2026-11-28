@@ -1,0 +1,221 @@
+unpick v4
+
+# Ticks Per Second
+group float
+   @scope method net.minecraft.client.gui.Hud extractOverlayMessage (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V
+   net.minecraft.SharedConstants.TICKS_PER_SECOND
+group int
+   @scope method net.minecraft.client.gui.Hud extractEffects (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V
+   @scope method net.minecraft.commands.arguments.TimeArgument <clinit> ()V
+   net.minecraft.SharedConstants.TICKS_PER_SECOND
+group int
+   @scope method net.minecraft.server.level.DemoMode tick ()V
+   net.minecraft.SharedConstants.TICKS_PER_SECOND
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 25
+
+# Ticks Per Minute
+group int
+   @scope method net.minecraft.client.sounds.MusicManager$MusicFrequency <init> (Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;I)V
+   @scope method net.minecraft.world.entity.projectile.arrow.AbstractArrow tickDespawn ()V
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE
+group int
+   @scope method net.minecraft.world.entity.projectile.FishingHook catchingFish (Lnet/minecraft/core/BlockPos;)V
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 30
+group int
+   @scope method net.minecraft.world.level.levelgen.PatrolSpawner tick (Lnet/minecraft/server/level/ServerLevel;Z)V
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE * 10
+group int
+   @scope method net.minecraft.world.entity.animal.goat.GoatAi <clinit> ()V
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 30
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE * 5
+
+# Ticks Per Game Day
+group int
+   @scope method net.minecraft.commands.arguments.TimeArgument <clinit> ()V
+   @scope method net.minecraft.server.level.ServerLevel <clinit> ()V
+   @scope method net.minecraft.util.datafix.fixes.LevelDatToSavedDataPreparationFix fixWanderingTrader (Lcom/mojang/serialization/Dynamic;)Lcom/mojang/serialization/Dynamic;
+   @scope method net.minecraft.world.level.levelgen.PhantomSpawner tick (Lnet/minecraft/server/level/ServerLevel;Z)V
+   @scope method net.minecraft.world.timeline.Timelines bootstrap (Lnet/minecraft/data/worldgen/BootstrapContext;)V
+   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
+   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY / 2
+   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY * 3
+group long
+   @scope class net.minecraft.server.level.DemoMode
+   @scope method net.minecraft.client.renderer.GlobalSettingsUniform update (IIDJFILnet/minecraft/world/phys/Vec3;Z)V
+   net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
+
+# Methods taking tick durations
+group int set_walk_target_from_block_memory_unreachable_duration
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 10
+target_method net.minecraft.world.entity.ai.behavior.SetWalkTargetFromBlockMemory create (Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;FIII)Lnet/minecraft/world/entity/ai/behavior/OneShot;
+   param 4 set_walk_target_from_block_memory_unreachable_duration
+group int mob_effect_instance_duration
+   net.minecraft.SharedConstants.TICKS_PER_SECOND / 2
+   net.minecraft.SharedConstants.TICKS_PER_SECOND
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 2
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 5
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 10
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 15
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 20
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 30
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 40
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 45
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE * 2
+   net.minecraft.SharedConstants.TICKS_PER_MINUTE * 5
+target_method net.minecraft.world.effect.MobEffectInstance <init> (Lnet/minecraft/core/Holder;II)V
+   param 1 mob_effect_instance_duration
+
+# Miscellaneous Related Classes
+
+group int
+   @scope class net.minecraft.world.level.block.SnifferEggBlock
+   net.minecraft.world.level.block.SnifferEggBlock.REGULAR_HATCH_TIME_TICKS
+   net.minecraft.world.level.block.SnifferEggBlock.BOOSTED_HATCH_TIME_TICKS
+   net.minecraft.world.level.block.SnifferEggBlock.RANDOM_HATCH_OFFSET_TICKS
+
+group int
+   @scope class net.minecraft.world.level.MoonPhase
+   net.minecraft.world.level.MoonPhase.PHASE_LENGTH
+
+group int
+   @scope class net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner
+   net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner.DEFAULT_TICK_DELAY
+   net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner.DEFAULT_SPAWN_DELAY
+group int
+   @scope class net.minecraft.world.level.saveddata.WanderingTraderData
+   net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner.DEFAULT_TICK_DELAY
+   net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner.DEFAULT_SPAWN_DELAY
+   net.minecraft.world.entity.npc.wanderingtrader.WanderingTraderSpawner.MIN_SPAWN_CHANCE
+
+group int
+   @scope method net.minecraft.client.tutorial.CraftPlanksTutorialStep tick ()V
+   net.minecraft.client.tutorial.CraftPlanksTutorialStep.HINT_DELAY
+
+group int
+   @scope method net.minecraft.world.entity.ai.behavior.CrossbowAttack <init> ()V
+   net.minecraft.world.entity.ai.behavior.CrossbowAttack.TIMEOUT
+
+group int
+   @scope method net.minecraft.world.entity.ai.behavior.GoToPotentialJobSite <init> (F)V
+   net.minecraft.world.entity.ai.behavior.GoToPotentialJobSite.TICKS_UNTIL_TIMEOUT
+
+group int
+   @scope method net.minecraft.world.entity.ai.goal.MoveToBlockGoal canContinueToUse ()Z
+   net.minecraft.world.entity.ai.goal.MoveToBlockGoal.GIVE_UP_TICKS
+group int
+   @scope method net.minecraft.world.entity.ai.goal.MoveToBlockGoal start ()V
+   net.minecraft.world.entity.ai.goal.MoveToBlockGoal.STAY_TICKS
+group int
+   @scope method net.minecraft.world.entity.ai.goal.MoveToBlockGoal nextStartTick (Lnet/minecraft/world/entity/PathfinderMob;)I
+   net.minecraft.world.entity.ai.goal.MoveToBlockGoal.INTERVAL_TICKS
+
+# Axolotl
+group int
+   @scope method net.minecraft.world.entity.animal.axolotl.Axolotl useRareVariant (Lnet/minecraft/util/RandomSource;)Z
+   net.minecraft.world.entity.animal.axolotl.Axolotl.RARE_VARIANT_CHANCE
+group int
+   @scope method net.minecraft.world.entity.animal.axolotl.Axolotl getMaxAirSupply ()I
+   net.minecraft.world.entity.animal.axolotl.Axolotl.AXOLOTL_TOTAL_AIR_SUPPLY
+group int
+   @scope method net.minecraft.world.entity.animal.axolotl.Axolotl rehydrate ()V
+   net.minecraft.world.entity.animal.axolotl.Axolotl.REHYDRATE_AIR_SUPPLY
+group int
+   @scope method net.minecraft.world.entity.animal.axolotl.Axolotl applySupportingEffects (Lnet/minecraft/world/entity/player/Player;)V
+   net.minecraft.world.entity.animal.axolotl.Axolotl.REGEN_BUFF_MAX_DURATION
+   net.minecraft.world.entity.animal.axolotl.Axolotl.REGEN_BUFF_BASE_DURATION
+group int
+   @scope method net.minecraft.world.entity.animal.axolotl.Axolotl hurtServer (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z
+   net.minecraft.world.entity.animal.axolotl.Axolotl.TOTAL_PLAYDEAD_TIME
+group int
+   @scope method net.minecraft.world.entity.animal.axolotl.Axolotl <clinit> ()V
+   net.minecraft.world.entity.animal.axolotl.Axolotl.POSE_ANIMATION_TICKS
+group int
+   @scope method net.minecraft.world.entity.animal.axolotl.Axolotl finalizeSpawn (Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/DifficultyInstance;Lnet/minecraft/world/entity/EntitySpawnReason;Lnet/minecraft/world/entity/SpawnGroupData;)Lnet/minecraft/world/entity/SpawnGroupData;
+   -net.minecraft.SharedConstants.TICKS_PER_GAME_DAY
+
+# Bee
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee$BeePollinateGoal tick ()V
+   net.minecraft.world.entity.animal.bee.Bee$BeePollinateGoal.MIN_POLLINATION_TICKS
+   net.minecraft.world.entity.animal.bee.Bee$BeePollinateGoal.MAX_POLLINATING_TICKS
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee$BeePollinateGoal tick ()V
+   @scope method net.minecraft.world.entity.animal.bee.Bee$BeePollinateGoal stop ()V
+   net.minecraft.world.entity.animal.bee.Bee.COOLDOWN_BEFORE_LOCATING_NEW_FLOWER
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee$BeeLocateHiveGoal start ()V
+   @scope method net.minecraft.world.entity.animal.bee.Bee dropHive ()V
+   net.minecraft.world.entity.animal.bee.Bee.COOLDOWN_BEFORE_LOCATING_NEW_HIVE
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee$BeeGoToKnownFlowerGoal tick ()V
+   net.minecraft.world.entity.animal.bee.Bee$BeeGoToKnownFlowerGoal.MAX_TRAVELLING_TICKS
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee$BeeGoToHiveGoal tick ()V
+   net.minecraft.world.entity.animal.bee.Bee$BeeGoToHiveGoal.MAX_TRAVELLING_TICKS
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee isTiredOfLookingForNectar ()Z
+   net.minecraft.world.entity.animal.bee.Bee.TICKS_WITHOUT_NECTAR_BEFORE_GOING_HOME
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee customServerAiStep (Lnet/minecraft/server/level/ServerLevel;)V
+   net.minecraft.world.entity.animal.bee.Bee.STING_DEATH_COUNTDOWN
+group int
+   @scope method net.minecraft.world.entity.animal.bee.Bee$BeeGoToKnownFlowerGoal wantsToGoToKnownFlower ()Z
+   net.minecraft.world.entity.animal.bee.Bee.TICKS_BEFORE_GOING_TO_KNOWN_FLOWER
+
+# Goat
+group int
+   @scope method net.minecraft.world.entity.animal.goat.GoatAi initRamActivity ()Lnet/minecraft/world/entity/ai/ActivityData;
+   net.minecraft.world.entity.animal.goat.GoatAi.RAM_PREPARE_TIME
+
+# Turtle
+group int
+   @scope method net.minecraft.world.entity.animal.turtle.Turtle$TurtleGoToWaterGoal canContinueToUse ()Z
+   net.minecraft.world.entity.animal.turtle.Turtle$TurtleGoToWaterGoal.GIVE_UP_TICKS
+group int
+   @scope method net.minecraft.world.entity.animal.turtle.Turtle$TurtleGoToWaterGoal shouldRecalculatePath ()Z
+   net.minecraft.SharedConstants.TICKS_PER_SECOND * 8
+
+# Elder Guardian
+group int
+   @scope method net.minecraft.world.entity.monster.ElderGuardian customServerAiStep (Lnet/minecraft/server/level/ServerLevel;)V
+   net.minecraft.world.entity.monster.ElderGuardian.EFFECT_INTERVAL
+   net.minecraft.world.entity.monster.ElderGuardian.EFFECT_DURATION
+group int elder_guardian_effect_display_limit
+   @scope method net.minecraft.world.entity.monster.ElderGuardian customServerAiStep (Lnet/minecraft/server/level/ServerLevel;)V
+   net.minecraft.world.entity.monster.ElderGuardian.EFFECT_DISPLAY_LIMIT
+target_method net.minecraft.world.effect.MobEffectUtil addEffectToPlayersAround (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;DLnet/minecraft/world/effect/MobEffectInstance;I)Ljava/util/List;
+   param 5 elder_guardian_effect_display_limit
+
+# Cat
+group int
+   @scope method net.minecraft.world.entity.npc.CatSpawner tick (Lnet/minecraft/server/level/ServerLevel;Z)V
+   net.minecraft.world.entity.npc.CatSpawner.TICK_DELAY
+
+# Spyglass
+group int
+   @scope method net.minecraft.world.item.SpyglassItem getUseDuration (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)I
+   net.minecraft.world.item.SpyglassItem.USE_DURATION
+
+# Ender Dragon Fight
+group int
+   @scope method net.minecraft.world.level.dimension.end.EnderDragonFight tick ()V
+   net.minecraft.world.level.dimension.end.EnderDragonFight.MAX_TICKS_BEFORE_DRAGON_RESPAWN
+
+# Musics
+group int
+   @scope class net.minecraft.sounds.Musics
+   net.minecraft.sounds.Musics.ONE_SECOND
+   net.minecraft.sounds.Musics.THIRTY_SECONDS
+   net.minecraft.sounds.Musics.TEN_MINUTES
+   net.minecraft.sounds.Musics.TWENTY_MINUTES
+   net.minecraft.sounds.Musics.FIVE_MINUTES
+
+# Demo Total Play Ticks
+group long
+   @scope method net.minecraft.client.gui.Hud extractDemoOverlay (Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V
+   @scope class net.minecraft.server.level.DemoMode
+   net.minecraft.server.level.DemoMode.TOTAL_PLAY_TICKS
